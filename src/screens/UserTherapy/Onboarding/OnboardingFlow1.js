@@ -1,0 +1,177 @@
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+
+import SafeAreaViewComponent from "../../../components/common/SafeAreaViewComponent";
+import HeaderTitle from "../../../components/common/HeaderTitle";
+import PickerSelect from "../../../components/pickerSelect/PickerSelect";
+import {
+  therapyQuestionOption4,
+  therapyQuestionOption5,
+  therapyQuestionsOptions,
+  therapyQuestionsOptions2,
+  therapyQuestionsOptions3,
+} from "../../../data/dummyData";
+import FixedBottomContainer from "../../../components/common/FixedBottomContainer";
+import FormButton from "../../../components/form/FormButton";
+import { COLORS } from "../../../themes/themes";
+import ScrollViewSpace from "../../../components/common/ScrollViewSpace";
+import verifyTokenWithoutApi from "../../../components/hoc/verifyToken";
+
+const UserTherapyOnboardingFlow1 = ({ navigation }) => {
+  const [previousExperience, setPreviousExperience] = useState("");
+  const [platforms, setPlatforms] = useState("");
+  const [skill, setSkill] = useState("");
+  const [priceRange, setPriceRange] = useState("");
+  const [yearsOfExperience, setYearsOfExperience] = useState("");
+
+  // Error states
+  const [formError, setFormError] = useState("");
+  const [previousExperienceError, setPreviousExperienceError] = useState("");
+  const [platformsError, setPlatformsError] = useState("");
+  const [skillError, setSkillError] = useState("");
+  const [priceRangeError, setPriceRangeError] = useState("");
+  const [yearsOfExperienceError, setYearsOfExperienceError] = useState("");
+
+  const Next = () => {
+    const userTherapyPreferenceData = {
+      previousExperience: previousExperience,
+      platform: platforms,
+      skill: skill,
+      priceRange: priceRange,
+      yearsOfExperience: yearsOfExperience,
+    };
+    console.log("userTherapyPreferenceData", userTherapyPreferenceData);
+
+    if (!previousExperience) {
+      setPreviousExperienceError("Please select from the options");
+    } else if (!platforms) {
+      setPlatformsError("Please select from the options");
+    } else if (!skill) {
+      setSkillError("Please select from the options");
+    } else if (!priceRange) {
+      setPriceRangeError("Please select from the options");
+    } else if (!yearsOfExperience) {
+      setYearsOfExperienceError("Please select from the options");
+    } else {
+      navigation.navigate(
+        "UserTherapyOnboardingFlow2",
+        userTherapyPreferenceData
+      );
+    }
+  };
+
+  return (
+    <SafeAreaViewComponent>
+      <HeaderTitle
+        leftIcon={"arrow-back-outline"}
+        progress={50}
+        onLeftIconPress={() => {
+          navigation.goBack();
+        }}
+      />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ padding: 10 }}
+      >
+        <View style={{ marginBottom: 20, padding: 10 }}>
+          <Text
+            style={{
+              color: COLORS.black,
+              fontSize: 24,
+              fontWeight: "600",
+              lineHeight: 24,
+            }}
+          >
+            Therapy Onboarding
+          </Text>
+          <Text style={{ color: "#1E1E1EB2", fontSize: 14, fontWeight: "400" }}>
+            Knowing your choice helps us better understand how to tailor your
+            experience. We won’t share your answer with anyone else, including
+            future therapist.
+          </Text>
+        </View>
+
+        <PickerSelect
+          formInputTitle={"Have you ever worked with a therapist before?"}
+          items={therapyQuestionsOptions}
+          placeholder={"Select an option"}
+          value={previousExperience}
+          onValueChange={(txt) => {
+            setPreviousExperience(txt);
+            setPreviousExperienceError("");
+            setFormError("");
+          }}
+          errorMessage={previousExperienceError}
+        />
+        <PickerSelect
+          formInputTitle={"What type of session format works best for you?"}
+          items={therapyQuestionsOptions2}
+          placeholder={"Select an option"}
+          value={platforms}
+          onValueChange={(txt) => {
+            setPlatforms(txt);
+            setPlatformsError("");
+            setFormError("");
+          }}
+          errorMessage={platformsError}
+        />
+        <PickerSelect
+          formInputTitle={"What’s most important to you in a therapist?"}
+          items={therapyQuestionsOptions3}
+          placeholder={"Select an option"}
+          value={skill}
+          onValueChange={(txt) => {
+            setSkill(txt);
+            setSkillError("");
+            setFormError("");
+          }}
+          errorMessage={skillError}
+        />
+        <PickerSelect
+          formInputTitle={
+            "What price range are you comfortable with for your therapist?"
+          }
+          items={therapyQuestionOption4}
+          placeholder={"Select an option"}
+          value={priceRange}
+          onValueChange={(txt) => {
+            setPriceRange(txt);
+            setPriceRangeError("");
+            setFormError("");
+          }}
+          errorMessage={priceRangeError}
+        />
+        <PickerSelect
+          formInputTitle={
+            "What level of experience would you prefer your therapist to have?"
+          }
+          items={therapyQuestionOption5}
+          placeholder={"Select an option"}
+          value={yearsOfExperience}
+          onValueChange={(txt) => {
+            setYearsOfExperience(txt);
+            setYearsOfExperienceError("");
+            setFormError("");
+          }}
+          errorMessage={yearsOfExperienceError}
+        />
+
+        <ScrollViewSpace />
+      </ScrollView>
+
+      {/* Buttons */}
+      <FixedBottomContainer top={1.1}>
+        <FormButton
+          title={"Next"}
+          width={1.1}
+          onPress={Next}
+          // formError={formError}
+        />
+      </FixedBottomContainer>
+    </SafeAreaViewComponent>
+  );
+};
+
+export default verifyTokenWithoutApi(UserTherapyOnboardingFlow1);
+
+const styles = StyleSheet.create({});
