@@ -4,7 +4,7 @@
     "slug": "rendezvouscare",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/newRendezvousLogo.png",
+    "icon": "./assets/adaptiveIcon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
@@ -18,7 +18,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/ic_launcher_round.png",
+        "foregroundImage": "./assets/adaptiveIcon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
