@@ -1,10 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
-import React, { useState } from "react";
-import { windowHeight, windowWidth } from "../../utils/Dimensions";
-import { COLORS } from "../../themes/themes";
-import { formatToUSD } from "../../Library/Common";
+import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
+import React, {useState} from 'react';
+import {windowHeight, windowWidth} from '../../utils/Dimensions';
+import {COLORS} from '../../themes/themes';
+import {formatToUSD} from '../../Library/Common';
 
-const GiftCard = ({ props, onPress }) => {
+const GiftCard = ({props, onPress}) => {
   const [loading, setloading] = useState(true);
   const onLoadEnd = () => {
     setloading(false);
@@ -14,23 +14,22 @@ const GiftCard = ({ props, onPress }) => {
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.9}
-      style={styles.giftcardContainer}
-    >
+      style={styles.giftcardContainer}>
       <Image
         style={styles.productImage}
-        source={{ uri: props?.logoUrls[0] }}
+        source={{uri: props?.logoUrls[0]}}
         onLoad={onLoadEnd}
         onLoadEnd={onLoadEnd}
       />
-      <View style={{ justifyContent: "space-between" }}>
+      <View style={{justifyContent: 'space-between'}}>
         <Text numberOfLines={1} style={styles.cardName}>
           {props?.name}
         </Text>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={styles.cardPrice}>
             {formatToUSD(props?.price?.length ? props?.price[0] : 0)}
           </Text>
-          <Text style={{ color: COLORS.rendezvousRed, fontSize: 14 }}>
+          <Text style={{color: COLORS.rendezvousRed, fontSize: 14}}>
             Purchase
           </Text>
         </View>
@@ -52,7 +51,7 @@ const styles = StyleSheet.create({
     marginBottom: 3,
     margin: 3,
     borderWidth: 1,
-    borderColor: "#eee",
+    borderColor: '#eee',
   },
   productImage: {
     width: windowWidth / 2.4,
@@ -62,12 +61,12 @@ const styles = StyleSheet.create({
   },
   cardName: {
     fontSize: 16,
-    fontWeight: "500",
+    fontWeight: '500',
     marginBottom: 10,
     color: COLORS.rendezvousBlack2,
   },
   cardPrice: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
   },
 });

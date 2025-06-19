@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
-
 import { useDispatch, useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
 
@@ -22,12 +21,14 @@ import axiosInstance from "../../../utils/api-client";
 import { checkUserProfile } from "../../../services/userServices";
 import { getUser } from "../../../redux/features/user/userSlice";
 import { RNToast } from "../../../Library/Common";
+import { useTheme } from "../../../Context/ThemeContext";
 
 const MAX_IMAGES = 7;
 
 const AdditionalImages = ({ navigation }) => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
+  const { theme } = useTheme();
 
   const userProfle = state?.user?.user?.profile;
   console.log("userProfle", userProfle);
@@ -157,10 +158,10 @@ const AdditionalImages = ({ navigation }) => {
                   height: 200,
                   borderRadius: 8,
                   borderWidth: 1,
-                  borderColor: "#ccc",
+                  borderColor: theme?.borderColor,
                   justifyContent: "center",
                   alignItems: "center",
-                  backgroundColor: "#f8f9fa",
+                  backgroundColor: theme?.background,
                 }}
               >
                 {image ? (
@@ -184,7 +185,7 @@ const AdditionalImages = ({ navigation }) => {
       </ScrollView>
 
       {/* Buttons */}
-      <FixedBottomContainer top={1.1}>
+      <FixedBottomContainer top={1.18}>
         <FormButton
           title={"Update Profile"}
           width={1.1}

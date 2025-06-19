@@ -1,6 +1,6 @@
 export function passwordValidator(inputtxt) {
   let strongPassword = new RegExp(
-    "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})"
+    '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})',
   );
   if (!strongPassword.test(inputtxt)) {
     return false;
@@ -13,7 +13,7 @@ export function checkPassword(password) {
   if (!/[a-z]/.test(password)) {
     return {
       isValid: false,
-      cause: "Password must contain at least 1 lowercase letter.",
+      cause: 'Password must contain at least 1 lowercase letter.',
     };
   }
 
@@ -21,7 +21,7 @@ export function checkPassword(password) {
   if (!/[A-Z]/.test(password)) {
     return {
       isValid: false,
-      cause: "Password must contain at least 1 uppercase letter.",
+      cause: 'Password must contain at least 1 uppercase letter.',
     };
   }
 
@@ -29,7 +29,7 @@ export function checkPassword(password) {
   if (!/\d/.test(password)) {
     return {
       isValid: false,
-      cause: "Password must contain at least 1 number.",
+      cause: 'Password must contain at least 1 number.',
     };
   }
 
@@ -64,7 +64,7 @@ export const customValidator = (text, lengthy, min) => {
   return true;
 };
 
-export const emailValidator = (text) => {
+export const emailValidator = text => {
   let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
   if (!reg.test(text)) {
     return false;
@@ -72,7 +72,7 @@ export const emailValidator = (text) => {
   return true;
 };
 
-export const nameValidator = (text) => {
+export const nameValidator = text => {
   let regName = /^[a-zA-Z0-9 ]+$/;
   let boolv = true;
   if (!regName.test(text)) {
@@ -87,7 +87,7 @@ export const nameValidator = (text) => {
   return boolv;
 };
 
-export const phoneValidator = (text) => {
+export const phoneValidator = text => {
   let regName = /^[0-9\+]+$/;
   let boolv = true;
   if (!regName.test(text)) {
@@ -137,7 +137,7 @@ export const registrationValidationCheck = (
   formattedValue,
   email,
   password,
-  nameError
+  nameError,
 ) => {
   if (
     !nameValidator(firstname) &&

@@ -5,98 +5,100 @@ import {
   View,
   FlatList,
   TouchableOpacity,
-} from "react-native";
-import React, { useEffect, useState } from "react";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { Calendar, CalendarList, Agenda } from "react-native-calendars";
-import moment from "moment";
-import Toast from "react-native-toast-message";
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import moment from 'moment';
+import Toast from 'react-native-toast-message';
 
-import SafeAreaViewComponent from "../../components/common/SafeAreaViewComponent";
-import HeaderTitle from "../../components/common/HeaderTitle";
-import ScrollViewSpace from "../../components/common/ScrollViewSpace";
-import { COLORS } from "../../themes/themes";
-import { generateTherapistAvailability, RNToast } from "../../Library/Common";
-import axiosInstance from "../../utils/api-client";
-import PickerSelect from "../../components/pickerSelect/PickerSelect";
-import FormInput from "../../components/form/FormInput";
-import FixedBottomContainer from "../../components/common/FixedBottomContainer";
-import FormButton from "../../components/form/FormButton";
+import SafeAreaViewComponent from '../../components/common/SafeAreaViewComponent';
+import HeaderTitle from '../../components/common/HeaderTitle';
+import ScrollViewSpace from '../../components/common/ScrollViewSpace';
+import {COLORS} from '../../themes/themes';
+import {generateTherapistAvailability, RNToast} from '../../Library/Common';
+import axiosInstance from '../../utils/api-client';
+import PickerSelect from '../../components/pickerSelect/PickerSelect';
+import FormInput from '../../components/form/FormInput';
+import FixedBottomContainer from '../../components/common/FixedBottomContainer';
+import FormButton from '../../components/form/FormButton';
+import {useTheme} from '../../Context/ThemeContext';
 
-const UserLifeCoachBooking = ({ navigation, route }) => {
+const UserLifeCoachBooking = ({navigation, route}) => {
   const item = route.params;
-  console.log("item", item);
+  console.log('item', item);
+  const {theme} = useTheme();
 
   const therapistSchedules = item?.scheduling;
   // console.log("therapistSchedules", therapistSchedules);
 
   // Parse the stringified objects into actual objects
   const weeklyAvailability = {};
-  therapistSchedules?.forEach((item) => {
+  therapistSchedules?.forEach(item => {
     const parsedItem = JSON.parse(item);
     weeklyAvailability[parsedItem.day] = parsedItem.time;
   });
 
-  const transformedTherapistData = item?.coaching_areas?.map((item) => ({
+  const transformedTherapistData = item?.coaching_areas?.map(item => ({
     label: item,
     value: item,
   }));
 
-  const today = moment().format("YYYY-MM-DD");
+  const today = moment().format('YYYY-MM-DD');
 
   const [loading, setLoading] = useState(false);
 
-  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedDate, setSelectedDate] = useState('');
   const [availableTimes, setAvailableTimes] = useState([]);
   const [bookedAppointments, setBookedAppointments] = useState([]);
 
   const [selectedTime, setSelectedTime] = useState(null);
-  const [counsellingArea, setCounsellingArea] = useState("");
-  const [description, setDescription] = useState("");
-  console.log("selectedDate", selectedDate, selectedTime);
+  const [counsellingArea, setCounsellingArea] = useState('');
+  const [description, setDescription] = useState('');
+  console.log('selectedDate', selectedDate, selectedTime);
 
   // Error states
-  const [formError, setFormError] = useState("");
-  const [counsellingAreaError, setCounsellingAreaError] = useState("");
-  const [descriptionError, setDescriptionError] = useState("");
+  const [formError, setFormError] = useState('');
+  const [counsellingAreaError, setCounsellingAreaError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
 
-  const handleTimePress = (time) => {
-    console.log("tt", time);
+  const handleTimePress = time => {
+    console.log('tt', time);
     setSelectedTime(time);
   };
 
   // Example therapist availability data
   const therapistAvailability = {
-    "2025-01-19": ["10:00 AM", "2:00 PM", "4:00 PM"],
-    "2025-01-11": ["11:00 AM", "1:00 PM", "3:00 PM"],
+    '2025-01-19': ['10:00 AM', '2:00 PM', '4:00 PM'],
+    '2025-01-11': ['11:00 AM', '1:00 PM', '3:00 PM'],
   };
 
   const updatedAvailabilityDates = generateTherapistAvailability(
     moment,
-    weeklyAvailability
+    weeklyAvailability,
   );
 
-  const handleDateSelect = (day) => {
+  const handleDateSelect = day => {
     const date = day.dateString;
     if (!moment(date)?.isBefore(today)) {
       setSelectedDate(date);
 
       const availableSlots = updatedAvailabilityDates[date] || [];
       const bookedTimesForDate = bookedAppointments
-        .filter((appt) => appt.date === date)
-        .map((appt) => appt.time);
+        .filter(appt => appt.date === date)
+        .map(appt => appt.time);
 
       // Mark booked times as disabled
-      const updatedSlots = availableSlots?.map((time) => ({
+      const updatedSlots = availableSlots?.map(time => ({
         time,
         disabled: bookedTimesForDate?.includes(time),
       }));
 
-      console.log("updatedSlots", updatedSlots);
+      console.log('updatedSlots', updatedSlots);
 
       setAvailableTimes(updatedSlots);
     } else {
-      setSelectedDate("");
+      setSelectedDate('');
       setAvailableTimes([]);
     }
   };
@@ -107,15 +109,15 @@ const UserLifeCoachBooking = ({ navigation, route }) => {
       if (!moment(date).isBefore(today)) {
         acc[date] = {
           marked: true,
-          dotColor: "#BC0D35", // Color for future available dates
+          dotColor: '#BC0D35', // Color for future available dates
           selected: date === selectedDate,
-          selectedColor: "#BC0D35",
-          selectedTextColor: "#ffffff",
+          selectedColor: '#BC0D35',
+          selectedTextColor: '#ffffff',
         };
       }
       return acc;
     },
-    {}
+    {},
   );
 
   const getAllAppointmentsFortherapist = async () => {
@@ -123,21 +125,21 @@ const UserLifeCoachBooking = ({ navigation, route }) => {
     try {
       const response = await axiosInstance({
         url: `appointment/provider-upcoming/${item?.LifeCoach_id}`,
-        method: "GET",
+        method: 'GET',
       });
 
-      console.log("ddd", response);
+      console.log('ddd', response);
 
       const bookedAppointmentsResponse = response?.data?.data?.appointments;
 
-      const bookedData = bookedAppointmentsResponse?.map((appt) => ({
+      const bookedData = bookedAppointmentsResponse?.map(appt => ({
         date: appt.appointmentTime.date,
         time: appt.appointmentTime.time,
       }));
 
       setBookedAppointments(bookedData || []);
     } catch (error) {
-      console.log("Error fetching appointments", error?.response);
+      console.log('Error fetching appointments', error?.response);
     } finally {
       setLoading(false);
     }
@@ -146,7 +148,7 @@ const UserLifeCoachBooking = ({ navigation, route }) => {
   const bookAppointment = async () => {
     const appointmentData = {
       providerId: item?.LifeCoach_id,
-      type: "life_coach",
+      type: 'life_coach',
       category: counsellingArea,
       appointmentTime: {
         date: selectedDate,
@@ -154,48 +156,48 @@ const UserLifeCoachBooking = ({ navigation, route }) => {
       },
       description: description,
       reminders: [15, 30],
-      action: "request",
+      action: 'request',
     };
 
     if (!description) {
-      setDescriptionError("Please fill your description");
+      setDescriptionError('Please fill your description');
     } else {
       setLoading(true);
 
       try {
         await axiosInstance({
-          url: "appointment",
-          method: "POST",
+          url: 'appointment',
+          method: 'POST',
           data: appointmentData,
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         })
-          .then((res) => {
-            console.log("bookAppointment res", res);
+          .then(res => {
+            console.log('bookAppointment res', res);
             setLoading(false);
 
-            RNToast(Toast, "Great, your appointment has been booked");
-            navigation.navigate("UserLifeCoach");
+            RNToast(Toast, 'Great, your appointment has been booked');
+            navigation.navigate('UserLifeCoach');
           })
-          .catch((err) => {
-            console.log("bookAppointment err", err?.response);
+          .catch(err => {
+            console.log('bookAppointment err', err?.response);
             setLoading(false);
 
             if (err?.response?.status == 400) {
               RNToast(
                 Toast,
-                "Please activate/fund your wallet before performing this action"
+                'Please activate/fund your wallet before performing this action',
               );
             } else if (err?.response?.status == 403) {
               RNToast(
                 Toast,
-                "Your subscription has expired, please renew to keep enjoying our services"
+                'Your subscription has expired, please renew to keep enjoying our services',
               );
             }
           });
       } catch (error) {
-        console.log("bookAppointment error", error?.response);
+        console.log('bookAppointment error', error?.response);
         setLoading(false);
       }
     }
@@ -208,42 +210,41 @@ const UserLifeCoachBooking = ({ navigation, route }) => {
   return (
     <SafeAreaViewComponent>
       <HeaderTitle
-        leftIcon={"arrow-back-outline"}
+        leftIcon={'arrow-back-outline'}
         onLeftIconPress={() => {
           navigation.goBack();
         }}
-        headerTitle={"Schedule Appointment"}
-        rightIcon={"calendar-outline"}
+        headerTitle={'Schedule Appointment'}
+        rightIcon={'calendar-outline'}
       />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingTop: 0 }}
-      >
+        contentContainerStyle={{paddingTop: 0}}>
         <Calendar
           onDayPress={handleDateSelect}
           markedDates={futureAvailability}
           theme={{
-            arrowColor: "#BC0D35",
-            todayTextColor: "#BC0D35",
-            selectedDayBackgroundColor: "#BC0D35",
-            selectedDayTextColor: "#ffffff",
-            dotColor: "#BC0D35",
-            textMonthFontWeight: "bold",
+            arrowColor: '#BC0D35',
+            todayTextColor: '#BC0D35',
+            selectedDayBackgroundColor: '#BC0D35',
+            selectedDayTextColor: '#ffffff',
+            dotColor: '#BC0D35',
+            textMonthFontWeight: 'bold',
             textMonthFontSize: 18,
           }}
-          monthFormat={"MMMM yyyy"}
+          monthFormat={'MMMM yyyy'}
         />
         {selectedDate ? (
           <View style={styles.timeContainer}>
-            <Text style={styles.heading}>
+            <Text style={[styles.heading, {color: theme?.text}]}>
               Available Times on {selectedDate}
             </Text>
             {availableTimes?.length ? (
               <FlatList
                 data={availableTimes}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => (
+                renderItem={({item}) => (
                   <TouchableOpacity
                     style={[
                       styles.timeSlot,
@@ -255,17 +256,16 @@ const UserLifeCoachBooking = ({ navigation, route }) => {
                     disabled={item.disabled}
                     onPress={() =>
                       !item.disabled && handleTimePress(item?.time)
-                    }
-                  >
+                    }>
                     <Text
                       style={[
                         styles.timeText,
                         item.time === selectedTime
                           ? styles.selectedTimeText
                           : null,
-                        item.disabled ? styles.disabledTimeText : null, // Apply disabled text style
-                      ]}
-                    >
+                        item.disabled ? styles.disabledTimeText : null,
+                        {color: theme?.text},
+                      ]}>
                       {item.time}
                     </Text>
                   </TouchableOpacity>
@@ -273,11 +273,13 @@ const UserLifeCoachBooking = ({ navigation, route }) => {
                 numColumns={3}
               />
             ) : (
-              <Text>No available times for the selected date.</Text>
+              <Text style={{color: theme?.text}}>
+                No available times for the selected date.
+              </Text>
             )}
           </View>
         ) : (
-          <Text style={styles.instruction}>
+          <Text style={[styles.instruction, {color: theme?.text}]}>
             Select a date to see available times.
           </Text>
         )}
@@ -286,25 +288,25 @@ const UserLifeCoachBooking = ({ navigation, route }) => {
           <View>
             <PickerSelect
               items={transformedTherapistData}
-              placeholder={"Select your counselling"}
-              formInputTitle={"Select the counselling area"}
-              onValueChange={(value) => {
+              placeholder={'Select your counselling'}
+              formInputTitle={'Select the counselling area'}
+              onValueChange={value => {
                 setCounsellingArea(value);
-                setFormError("");
-                setCounsellingAreaError("");
+                setFormError('');
+                setCounsellingAreaError('');
               }}
               errorMessage={counsellingAreaError}
             />
 
             <FormInput
-              formInputTitle={"Description"}
-              keyboardType={"default"}
+              formInputTitle={'Description'}
+              keyboardType={'default'}
               placeholder="Enter your brief description"
               value={description}
-              onChangeText={(txt) => {
+              onChangeText={txt => {
                 setDescription(txt);
-                setDescriptionError("");
-                setFormError("");
+                setDescriptionError('');
+                setFormError('');
               }}
               errorMessage={descriptionError}
               numberOfLines={5}
@@ -317,9 +319,9 @@ const UserLifeCoachBooking = ({ navigation, route }) => {
       </ScrollView>
 
       {/* Buttons */}
-      <FixedBottomContainer top={1.1}>
+      <FixedBottomContainer top={1.19}>
         <FormButton
-          title={"Book a Session"}
+          title={'Book a Session'}
           width={1.1}
           onPress={bookAppointment}
           disabled={!selectedTime || !counsellingArea || loading}
@@ -344,41 +346,41 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 10,
   },
 
   instruction: {
     marginTop: 20,
     fontSize: 16,
-    textAlign: "center",
+    textAlign: 'center',
   },
   timeSlot: {
     padding: 10,
     margin: 5,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: '#ccc',
     borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     flex: 1, // Ensures equal spacing
   },
   timeText: {
     fontSize: 16,
-    color: "#000",
+    color: '#000',
   },
   selectedTimeSlot: {
     backgroundColor: COLORS.rendezvousRed,
     borderColor: COLORS.rendezvousRed,
   },
   selectedTimeText: {
-    color: "#fff",
+    color: '#fff',
   },
   disabledTimeSlot: {
-    backgroundColor: "#ccc",
+    backgroundColor: '#ccc',
     opacity: 0.5,
   },
   disabledTimeText: {
-    color: "#888",
+    color: '#888',
   },
 });

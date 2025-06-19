@@ -5,24 +5,25 @@ import {
   StyleSheet,
   Text,
   View,
-} from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
-import SafeAreaViewComponent from "../../components/common/SafeAreaViewComponent";
-import { windowHeight, windowWidth } from "../../utils/Dimensions";
-import FormButton from "../../components/form/FormButton";
-import axiosInstance from "../../utils/api-client";
+import SafeAreaViewComponent from '../../components/common/SafeAreaViewComponent';
+import {windowHeight, windowWidth} from '../../utils/Dimensions';
+import FormButton from '../../components/form/FormButton';
+import axiosInstance from '../../utils/api-client';
 import {
   saveUserTherapists,
   saveUserTherapyPreference,
-} from "../../redux/features/user/userSlice";
-import verifyTokenWithoutApi from "../../components/hoc/verifyToken";
-import { COLORS } from "../../themes/themes";
-import AppointmentCard from "../../components/cards/AppointmentCard";
-import LifeCoachCard from "../../components/cards/LifeCoachCard";
-import TherapistHeaderTitle from "../../components/common/TherapistHeaderTitle";
+} from '../../redux/features/user/userSlice';
+import verifyTokenWithoutApi from '../../components/hoc/verifyToken';
+import {COLORS} from '../../themes/themes';
+import AppointmentCard from '../../components/cards/AppointmentCard';
+import LifeCoachCard from '../../components/cards/LifeCoachCard';
+import TherapistHeaderTitle from '../../components/common/TherapistHeaderTitle';
+import {useTheme} from '../../Context/ThemeContext';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -32,13 +33,15 @@ const TherapistComponent = ({
   navigation,
   onRefresh,
 }) => {
+  const {theme} = useTheme();
+
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{
         paddingTop: 10,
         padding: 10,
-        backgroundColor: "white",
+        backgroundColor: theme?.background,
         flex: 1,
       }}
       refreshControl={
@@ -46,10 +49,9 @@ const TherapistComponent = ({
           refreshing={loading}
           onRefresh={onRefresh}
           tintColor={COLORS.rendezvousRed}
-          style={{ zIndex: 999 }}
+          style={{zIndex: 999}}
         />
-      }
-    >
+      }>
       {loading ? (
         <Text style={styles.loadingText}>
           Please wait while we fetch your data
@@ -60,7 +62,7 @@ const TherapistComponent = ({
             key={i}
             props={cur}
             onPress={() => {
-              navigation.navigate("UserTherapistDetails", cur);
+              navigation.navigate('UserTherapistDetails', cur);
             }}
           />
         ))
@@ -86,7 +88,7 @@ const UserTherapistAppointmentsComponent = ({
       contentContainerStyle={{
         paddingTop: 10,
         padding: 10,
-        backgroundColor: "white",
+        backgroundColor: 'white',
         flex: 1,
       }}
       refreshControl={
@@ -94,10 +96,9 @@ const UserTherapistAppointmentsComponent = ({
           refreshing={loading}
           onRefresh={onRefresh}
           tintColor={COLORS.rendezvousRed}
-          style={{ zIndex: 999 }}
+          style={{zIndex: 999}}
         />
-      }
-    >
+      }>
       {loading ? (
         <Text style={styles.loadingText}>
           Please wait while we fetch your data
@@ -108,7 +109,7 @@ const UserTherapistAppointmentsComponent = ({
             key={i}
             props={cur}
             onPress={() => {
-              navigation.navigate("UserTherapyAppointmentDetails", cur);
+              navigation.navigate('UserTherapyAppointmentDetails', cur);
             }}
           />
         ))
@@ -122,35 +123,36 @@ const UserTherapistAppointmentsComponent = ({
   );
 };
 
-const UserTherapyHomeScreen = ({ navigation }) => {
+const UserTherapyHomeScreen = ({navigation}) => {
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
+  const state = useSelector(state => state);
+  const {theme} = useTheme();
 
   const userProfle = state?.user?.user?.profile;
   const reduxUserTherapyPreference = state?.user?.userTherapyPreference;
   const reduxUserTherapists = state?.user?.userTherapists;
 
-  console.log("userProfle", userProfle, reduxUserTherapists);
+  console.log('userProfle', userProfle, reduxUserTherapists);
 
   const [loading, setLoading] = useState(false);
   const [appointments, setAppointments] = useState([]);
 
   const [isOnboarded, setIsOnboarded] = useState(
-    reduxUserTherapyPreference ? true : false
+    reduxUserTherapyPreference ? true : false,
   );
 
   const getStarted = () => {
-    navigation.navigate("UserTherapyOnboardingFlow1");
+    navigation.navigate('UserTherapyOnboardingFlow1');
   };
 
   const getUserTherapyPreference = async () => {
     try {
       await axiosInstance({
-        url: "therapy/preferences",
-        method: "GET",
+        url: 'therapy/preferences',
+        method: 'GET',
       })
-        .then((res) => {
-          console.log("getUserTherapyPreference res", res);
+        .then(res => {
+          console.log('getUserTherapyPreference res', res);
 
           // if theres a data in the response, it means the user has onboarded his therapy preferences
           if (res?.data?.data) {
@@ -158,11 +160,11 @@ const UserTherapyHomeScreen = ({ navigation }) => {
             dispatch(saveUserTherapyPreference(res?.data?.data));
           }
         })
-        .catch((err) => {
-          console.log("getUserTherapyPreference err", err);
+        .catch(err => {
+          console.log('getUserTherapyPreference err', err);
         });
     } catch (error) {
-      console.log("getUserTherapyPreference error", error);
+      console.log('getUserTherapyPreference error', error);
     }
   };
 
@@ -170,23 +172,23 @@ const UserTherapyHomeScreen = ({ navigation }) => {
     setLoading(true);
     try {
       await axiosInstance({
-        url: "therapy/search/providers",
-        method: "GET",
+        url: 'therapy/search/providers',
+        method: 'GET',
       })
-        .then((res) => {
-          console.log("getAllTherapists res", res?.data);
+        .then(res => {
+          console.log('getAllTherapists res', res?.data);
           setLoading(false);
 
           if (res?.data?.data) {
             dispatch(saveUserTherapists(res?.data?.data?.matchedProviders));
           }
         })
-        .catch((err) => {
-          console.log("getAllTherapists err", err);
+        .catch(err => {
+          console.log('getAllTherapists err', err);
           setLoading(false);
         });
     } catch (error) {
-      console.log("getAllTherapists error", error);
+      console.log('getAllTherapists error', error);
       setLoading(false);
     }
   };
@@ -195,49 +197,49 @@ const UserTherapyHomeScreen = ({ navigation }) => {
     setLoading(true);
     try {
       const appointmentsResponse = await axiosInstance({
-        url: "appointment/user-upcoming",
-        method: "GET",
+        url: 'appointment/user-upcoming',
+        method: 'GET',
       });
 
-      console.log("appointmentsResponse", appointmentsResponse?.data);
+      console.log('appointmentsResponse', appointmentsResponse?.data);
 
       if (appointmentsResponse?.data?.data?.appointments) {
         const appointmentss = appointmentsResponse?.data?.data?.appointments;
 
         // Filter appointments to only include those of type 'therapy'
         const therapyAppointments = appointmentss.filter(
-          (appointment) => appointment?.type === "therapy"
+          appointment => appointment?.type === 'therapy',
         );
 
         const appointmentsWithProfiles = await Promise.all(
-          therapyAppointments?.map(async (appointment) => {
+          therapyAppointments?.map(async appointment => {
             const providerProfile = await getProvidersProfile(
-              appointment?.providerId
+              appointment?.providerId,
             );
-            return { ...appointment, providerProfile };
-          })
+            return {...appointment, providerProfile};
+          }),
         );
 
-        console.log("appointmentsWithProfiles", appointmentsWithProfiles);
+        console.log('appointmentsWithProfiles', appointmentsWithProfiles);
         setAppointments(appointmentsWithProfiles);
         setLoading(false);
       }
     } catch (error) {
-      console.log("getAllUserAppointments error", error);
+      console.log('getAllUserAppointments error', error);
       setLoading(false);
     }
   };
 
-  const getProvidersProfile = async (userId) => {
+  const getProvidersProfile = async userId => {
     try {
       const response = await axiosInstance({
         url: `profile/provider-profile/${userId}/therapist`,
-        method: "GET",
+        method: 'GET',
       });
-      console.log("getProvidersProfile res", response?.data);
+      console.log('getProvidersProfile res', response?.data);
       return response?.data?.profile;
     } catch (error) {
-      console.log(`getUserProfile error for userId ${userId}:`, error);
+      console.error(`getUserProfile error for userId ${userId}:`, error);
 
       return null;
     }
@@ -270,11 +272,11 @@ const UserTherapyHomeScreen = ({ navigation }) => {
       {isOnboarded ? (
         <>
           <TherapistHeaderTitle
-            headerTitle={"Therapists"}
+            headerTitle={'Therapists'}
             therapistIcon
             appointmentsArray={appointments}
             onRightIconPress3={() => {
-              navigation.navigate("UserTherapyAppointments", appointments);
+              navigation.navigate('UserTherapyAppointments', appointments);
             }}
           />
           {/* <HeaderTitle headerTitle={'Browse Therapist'} /> */}
@@ -331,18 +333,18 @@ const UserTherapyHomeScreen = ({ navigation }) => {
           />
         </>
       ) : (
-        <View style={{ padding: 20, marginTop: 20 }}>
-          <Text style={styles.onboardingText}>
+        <View style={{padding: 20, marginTop: 20}}>
+          <Text style={[styles.onboardingText, {color: theme?.text}]}>
             Hey {userProfle?.username}, Ready to find the best Therapist for
             you?
           </Text>
 
           <Image
-            source={require("../../assets/onboard.gif")}
+            source={require('../../assets/onboard.gif')}
             style={styles.onboardingImage}
           />
 
-          <FormButton title={"Get Started"} onPress={getStarted} />
+          <FormButton title={'Get Started'} onPress={getStarted} />
         </View>
       )}
     </SafeAreaViewComponent>
@@ -353,27 +355,27 @@ export default verifyTokenWithoutApi(UserTherapyHomeScreen);
 
 const styles = StyleSheet.create({
   onboardingText: {
-    color: "black",
+    color: 'black',
     fontSize: 22,
-    fontWeight: "700",
-    alignSelf: "center",
+    fontWeight: '700',
+    alignSelf: 'center',
   },
   onboardingImage: {
     width: windowWidth / 1.1,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
   noData: {
-    fontWeight: "700",
-    justifyContent: "center",
-    alignItems: "center",
-    alignContent: "center",
-    alignSelf: "center",
+    fontWeight: '700',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    alignSelf: 'center',
   },
   loadingText: {
-    textAlign: "center",
-    justifyContent: "center",
-    alignItems: "center",
-    alignContent: "center",
-    alignSelf: "center",
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    alignSelf: 'center',
   },
 });

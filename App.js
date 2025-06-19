@@ -9,18 +9,21 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import MainNavigator from "./src/navigation/MainNavigator";
 import AppNavigation from "./src/navigation/AppNavigator";
+import { ThemeProvider } from "./src/Context/ThemeContext";
 
 export default function App() {
   return (
-    <SafeAreaProvider>
-      <ReduxStoreProvider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <NavigationContainer>
-            <AppNavigation />
-          </NavigationContainer>
-        </PersistGate>
-      </ReduxStoreProvider>
-    </SafeAreaProvider>
+    <ThemeProvider>
+      <SafeAreaProvider>
+        <ReduxStoreProvider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <NavigationContainer>
+              <AppNavigation />
+            </NavigationContainer>
+          </PersistGate>
+        </ReduxStoreProvider>
+      </SafeAreaProvider>
+    </ThemeProvider>
   );
 }
 

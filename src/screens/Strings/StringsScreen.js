@@ -1,5 +1,4 @@
 import {
-  Alert,
   FlatList,
   Image,
   RefreshControl,
@@ -7,31 +6,35 @@ import {
   StyleSheet,
   Text,
   View,
-} from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Toast from "react-native-toast-message";
+} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import Toast from 'react-native-toast-message';
 
-import SafeAreaViewComponent from "../../components/common/SafeAreaViewComponent";
-import StringsHeaderTitle from "../../components/common/StringsHeaderTitle";
-import axiosInstance from "../../utils/api-client";
-import { COLORS } from "../../themes/themes";
-import ScrollViewSpace from "../../components/common/ScrollViewSpace";
-import StringsCard from "../../components/cards/StringsCard";
-import { RNToast } from "../../Library/Common";
-import verifyTokenWithoutApi from "../../components/hoc/verifyToken";
-import FormButton from "../../components/form/FormButton";
-import { windowWidth } from "../../utils/Dimensions";
+import SafeAreaViewComponent from '../../components/common/SafeAreaViewComponent';
+import StringsHeaderTitle from '../../components/common/StringsHeaderTitle';
+import axiosInstance from '../../utils/api-client';
+import {COLORS} from '../../themes/themes';
+import ScrollViewSpace from '../../components/common/ScrollViewSpace';
+import StringsCard from '../../components/cards/StringsCard';
+import {RNToast} from '../../Library/Common';
+import verifyTokenWithoutApi from '../../components/hoc/verifyToken';
+import FormButton from '../../components/form/FormButton';
+import {windowWidth} from '../../utils/Dimensions';
+import {useFocusEffect} from '@react-navigation/native';
+import {useTheme} from '../../Context/ThemeContext';
 
-const StringsScreen = ({ navigation }) => {
+const StringsScreen = ({navigation}) => {
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
+  const state = useSelector(state => state);
+
+  const {theme} = useTheme();
 
   const userProfle = state?.user?.user?.profile;
   const userId = userProfle?.user_id;
   const reduxUserPreferences = state?.user?.userPreferences;
 
-  console.log("userProfle", userProfle);
+  console.log('userProfle', userProfle);
 
   const [loading, setLoading] = useState(false);
   const [stringLoading, setStringLoading] = useState(null);
@@ -39,21 +42,21 @@ const StringsScreen = ({ navigation }) => {
   const [matchesWithProfiles, setMatchesWithProfiles] = useState([]);
 
   const [isOnboarded, setIsOnboarded] = useState(
-    reduxUserPreferences ? true : false
+    reduxUserPreferences ? true : false,
   );
 
   const getStarted = () => {
-    navigation.navigate("PreferenceFlow1");
+    navigation.navigate('PreferenceFlow1');
   };
 
   const getUserPreferences = async () => {
     try {
       await axiosInstance({
         url: `matchmaking/preference/${userId}`,
-        method: "GET",
+        method: 'GET',
       })
-        .then((res) => {
-          console.log("getUserPreference res", res?.data);
+        .then(res => {
+          console.log('getUserPreference res', res?.data);
 
           // if theres a data in the response, it means the user has onboarded his therapy preferences
           if (res?.data) {
@@ -61,11 +64,11 @@ const StringsScreen = ({ navigation }) => {
             dispatch(saveUserPreferences(res?.data));
           }
         })
-        .catch((err) => {
-          console.log("getUserPreferences err", err);
+        .catch(err => {
+          console.log('getUserPreferences err', err);
         });
     } catch (error) {
-      console.log("getUserPreferences error", error);
+      console.log('getUserPreferences error', error);
     }
   };
 
@@ -73,46 +76,75 @@ const StringsScreen = ({ navigation }) => {
     setLoading(true);
     try {
       const matchesResponse = await axiosInstance({
-        url: "matchmaking/matches",
-        method: "GET",
+        url: 'matchmaking/matches',
+        method: 'GET',
       });
 
-      console.log("matchesResponse", matchesResponse?.data);
+      console.log('matchesResponse', matchesResponse?.data);
 
       if (matchesResponse?.data?.data?.matches) {
         const matchedResponses = matchesResponse?.data?.data?.matches;
 
         const matchedResponseWithProfiles = await Promise.all(
-          matchedResponses?.map(async (match) => {
+          matchedResponses?.map(async match => {
             const matchedUserProfile = await getMatchedUsersProfile(
-              match?.match?.userId
+              match?.match?.userId,
             );
-            return { ...match, matchedUserProfile };
-          })
+            return {...match, matchedUserProfile};
+          }),
         );
 
-        console.log("matchedResponseWithProfiles", matchedResponseWithProfiles);
+        console.log('matchedResponseWithProfiles', matchedResponseWithProfiles);
         setMatchesWithProfiles(matchedResponseWithProfiles);
         setLoading(false);
       }
     } catch (error) {
-      console.log("getAllStringMatches error", error?.response);
+      console.log('getAllStringMatches error', error?.response);
       setLoading(false);
     }
   };
 
-  const getMatchedUsersProfile = async (userId) => {
+  const updateAllStringMatches = async () => {
+    try {
+      const matchesResponse = await axiosInstance({
+        url: 'matchmaking/matches',
+        method: 'GET',
+      });
+
+      console.log('matchesResponse', matchesResponse?.data);
+
+      if (matchesResponse?.data?.data?.matches) {
+        const matchedResponses = matchesResponse?.data?.data?.matches;
+
+        const matchedResponseWithProfiles = await Promise.all(
+          matchedResponses?.map(async match => {
+            const matchedUserProfile = await getMatchedUsersProfile(
+              match?.match?.userId,
+            );
+            return {...match, matchedUserProfile};
+          }),
+        );
+
+        console.log('matchedResponseWithProfiles', matchedResponseWithProfiles);
+        setMatchesWithProfiles(matchedResponseWithProfiles);
+      }
+    } catch (error) {
+      console.log('updateAllStringMatches error', error?.response);
+    }
+  };
+
+  const getMatchedUsersProfile = async userId => {
     try {
       const response = await axiosInstance({
         url: `profile/public/${userId}`,
-        method: "GET",
+        method: 'GET',
       });
-      console.log("getMatchedUsersProfile res", response?.data);
+      console.log('getMatchedUsersProfile res', response?.data);
       return response?.data?.data?.profile;
     } catch (error) {
-      console.log(
+      console.error(
         `getMatchedUsersProfile error for userId ${userId}:`,
-        error?.response
+        error?.response,
       );
 
       return null;
@@ -121,7 +153,7 @@ const StringsScreen = ({ navigation }) => {
 
   // Function to handle match actions (like, favorite, etc.)
   const matchAction = async (matchId, receiverId, action) => {
-    console.log("action matched", matchId, receiverId, action);
+    console.log('action matched', matchId, receiverId, action);
     if (!matchId) {
       return;
     }
@@ -136,23 +168,23 @@ const StringsScreen = ({ navigation }) => {
 
     try {
       const response = await axiosInstance({
-        url: "matchmaking/match/action",
-        method: "POST",
+        url: 'matchmaking/match/action',
+        method: 'POST',
         data: matchActionData,
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       });
-      console.log("matchAction response", response?.data);
+      console.log('matchAction response', response?.data);
 
-      setMatchesWithProfiles((prevMatches) =>
-        prevMatches?.filter((match) => match?.match?.id !== matchId)
+      setMatchesWithProfiles(prevMatches =>
+        prevMatches?.filter(match => match?.match?.id !== matchId),
       );
 
-      action == "request" && RNToast(Toast, "String request sent");
+      action == 'request' && RNToast(Toast, 'String request sent');
       setStringLoading(null);
     } catch (error) {
-      console.log("Error matching user:", error?.response);
+      console.error('Error matching user:', error?.response);
     } finally {
       setStringLoading(null);
     }
@@ -173,27 +205,33 @@ const StringsScreen = ({ navigation }) => {
     };
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      updateAllStringMatches();
+    }, []),
+  );
+
   const onRefresh = useCallback(() => {
     setLoading(true);
     getAllStringMatches();
   }, []);
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({item}) => (
     <StringsCard
       props={item}
       matchedUserProfile={item?.matchedUserProfile}
       matchAccuracy={item?.accuracy}
       matchesInfo={item?.match}
-      onPress={() => navigation.navigate("StringsProfile", item)}
+      onPress={() => navigation.navigate('StringsProfile', item)}
       onStringBtnPress={() => {
-        matchAction(item?.match?.id, item?.match?.userId, "request");
+        matchAction(item?.match?.id, item?.match?.userId, 'request');
       }}
       onStringBtnDisabled={stringLoading === item?.match?.id}
       onStringCloseBtnPress={() => {
-        matchAction(item?.match?.id, item?.match?.userId, "decline");
+        matchAction(item?.match?.id, item?.match?.userId, 'decline');
       }}
       onStringAcceptBtnPress={() => {
-        matchAction(item?.match?.id, item?.match?.userId, "request");
+        matchAction(item?.match?.id, item?.match?.userId, 'request');
       }}
     />
   );
@@ -203,12 +241,12 @@ const StringsScreen = ({ navigation }) => {
       {isOnboarded ? (
         <>
           <StringsHeaderTitle
-            headerTitle={"Strings of Connections"}
+            headerTitle={'Strings of Connections'}
             onRightIconPress2={() => {
-              navigation.navigate("StringsFriendRequest");
+              navigation.navigate('StringsFriendRequest');
             }}
             onRightIconPress3={() => {
-              navigation.navigate("StringsMessagingScreen");
+              navigation.navigate('StringsMessagingScreen');
             }}
           />
           <ScrollView
@@ -217,30 +255,29 @@ const StringsScreen = ({ navigation }) => {
             contentContainerStyle={{
               paddingTop: 10,
               padding: 10,
-              backgroundColor: "white",
+              backgroundColor: theme?.background,
             }}
             refreshControl={
               <RefreshControl
                 refreshing={loading}
                 onRefresh={onRefresh}
                 tintColor={COLORS.rendezvousRed}
-                style={{ zIndex: 999 }}
+                style={{zIndex: 999}}
               />
-            }
-          >
+            }>
             {loading ? (
-              <Text style={styles.noData}>
+              <Text style={[styles.noData, {color: theme?.text}]}>
                 Please wait while we aggregate your data
               </Text>
             ) : matchesWithProfiles?.length ? (
               <FlatList
                 data={matchesWithProfiles}
                 renderItem={renderItem}
-                keyExtractor={(item) => item?.match?.id}
+                keyExtractor={item => item?.match?.id}
                 contentContainerStyle={styles.products}
               />
             ) : (
-              <Text style={styles.noData}>
+              <Text style={[styles.noData, {color: theme?.text}]}>
                 You do not have any strings of connection at the moment, please
                 check back some other time
               </Text>
@@ -249,18 +286,23 @@ const StringsScreen = ({ navigation }) => {
           </ScrollView>
         </>
       ) : (
-        <View style={{ padding: 20, marginTop: 20 }}>
-          <Text style={styles.onboardingText}>
+        <View
+          style={{
+            padding: 20,
+            marginTop: 20,
+            backgroundColor: theme?.background,
+          }}>
+          <Text style={[styles.onboardingText, {color: theme?.text}]}>
             Hey {userProfle?.username}, Ready to find the best connections for
             you?
           </Text>
 
           <Image
-            source={require("../../assets/onboard.gif")}
+            source={require('../../assets/onboard.gif')}
             style={styles.onboardingImage}
           />
 
-          <FormButton title={"Get Started"} onPress={getStarted} />
+          <FormButton title={'Get Started'} onPress={getStarted} />
         </View>
       )}
     </SafeAreaViewComponent>
@@ -271,36 +313,36 @@ export default verifyTokenWithoutApi(StringsScreen);
 
 const styles = StyleSheet.create({
   products: {
-    flexDirection: "row",
-    alignContent: "center",
-    alignItems: "center",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center',
+    flexWrap: 'wrap',
     padding: 10,
     // backgroundColor: 'green',
   },
   noData: {
-    fontWeight: "700",
-    justifyContent: "center",
-    alignItems: "center",
-    alignContent: "center",
-    alignSelf: "center",
-    textAlign: "center",
+    fontWeight: '700',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    alignSelf: 'center',
+    textAlign: 'center',
   },
   onboardingText: {
-    color: "black",
+    color: 'black',
     fontSize: 22,
-    fontWeight: "700",
-    alignSelf: "center",
+    fontWeight: '700',
+    alignSelf: 'center',
   },
   onboardingImage: {
     width: windowWidth / 1.1,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
   loadingText: {
-    textAlign: "center",
-    justifyContent: "center",
-    alignItems: "center",
-    alignContent: "center",
-    alignSelf: "center",
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    alignSelf: 'center',
   },
 });

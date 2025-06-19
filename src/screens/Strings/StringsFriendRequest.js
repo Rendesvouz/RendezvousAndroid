@@ -6,22 +6,24 @@ import {
   StyleSheet,
   Text,
   View,
-} from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Toast from "react-native-toast-message";
+} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import Toast from 'react-native-toast-message';
 
-import axiosInstance from "../../utils/api-client";
-import SafeAreaViewComponent from "../../components/common/SafeAreaViewComponent";
-import HeaderTitle from "../../components/common/HeaderTitle";
-import { COLORS } from "../../themes/themes";
-import ScrollViewSpace from "../../components/common/ScrollViewSpace";
-import StringsCard from "../../components/cards/StringsCard";
-import { RNToast } from "../../Library/Common";
+import axiosInstance from '../../utils/api-client';
+import SafeAreaViewComponent from '../../components/common/SafeAreaViewComponent';
+import HeaderTitle from '../../components/common/HeaderTitle';
+import {COLORS} from '../../themes/themes';
+import ScrollViewSpace from '../../components/common/ScrollViewSpace';
+import StringsCard from '../../components/cards/StringsCard';
+import {RNToast} from '../../Library/Common';
+import {useTheme} from '../../Context/ThemeContext';
 
-const StringsFriendRequest = ({ navigation }) => {
+const StringsFriendRequest = ({navigation}) => {
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
+  const state = useSelector(state => state);
+  const {theme} = useTheme();
 
   const userProfle = state?.user?.user?.profile;
 
@@ -34,37 +36,37 @@ const StringsFriendRequest = ({ navigation }) => {
     setLoading(true);
     try {
       const matchesResponse = await axiosInstance({
-        url: "matchmaking/actions",
-        method: "GET",
+        url: 'matchmaking/actions',
+        method: 'GET',
       });
 
-      console.log("matchesResponse", matchesResponse?.data);
+      console.log('matchesResponse', matchesResponse?.data);
       if (matchesResponse?.data?.data?.actions) {
         const matchedResponses = matchesResponse?.data?.data?.actions;
 
         const matchedResponseWithProfiles = await Promise.all(
-          matchedResponses?.map(async (matchh) => {
+          matchedResponses?.map(async matchh => {
             const [matchedUserProfile, match] = await Promise.all([
               getMatchedUsersProfile(matchh),
               getMatchedPreferences(matchh),
             ]);
-            return { ...matchh, matchedUserProfile, match };
-          })
+            return {...matchh, matchedUserProfile, match};
+          }),
         );
 
-        console.log("matchedResponseWithProfiles", matchedResponseWithProfiles);
+        console.log('matchedResponseWithProfiles', matchedResponseWithProfiles);
         setMatchesWithProfiles(matchedResponseWithProfiles);
         setLoading(false);
       }
     } catch (error) {
-      console.log("getAllStringMatches error", error?.response);
+      console.log('getAllStringMatches error', error?.response);
       setLoading(false);
     }
   };
 
-  const getMatchedUsersProfile = async (matchh) => {
+  const getMatchedUsersProfile = async matchh => {
     const matchedUser = matchh;
-    console.log("getMatchedUsersProfilematchedUserrrr", matchedUser);
+    console.log('getMatchedUsersProfilematchedUserrrr', matchedUser);
 
     const matchedUserId =
       matchedUser?.receiverId == userProfle?.user_id
@@ -74,23 +76,23 @@ const StringsFriendRequest = ({ navigation }) => {
     try {
       const response = await axiosInstance({
         url: `profile/public/${matchedUserId}`,
-        method: "GET",
+        method: 'GET',
       });
-      console.log("getMatchedUsersProfile res", response?.data);
+      console.log('getMatchedUsersProfile res', response?.data);
       return response?.data?.data?.profile;
     } catch (error) {
-      console.log(
+      console.error(
         `getMatchedUsersProfile error for userId ${matchedUserId}:`,
-        error?.response
+        error?.response,
       );
 
       return null;
     }
   };
 
-  const getMatchedPreferences = async (matchh) => {
+  const getMatchedPreferences = async matchh => {
     const matchedUser = matchh;
-    console.log("matchedUserrrr", matchedUser);
+    console.log('matchedUserrrr', matchedUser);
 
     const matchedUserId =
       matchedUser?.receiverId == userProfle?.user_id
@@ -100,41 +102,41 @@ const StringsFriendRequest = ({ navigation }) => {
     try {
       const response = await axiosInstance({
         url: `matchmaking/preference/${matchedUserId}`,
-        method: "GET",
+        method: 'GET',
       });
-      console.log("getMatchedPreferences res", response?.data);
+      console.log('getMatchedPreferences res', response?.data);
       return response?.data;
     } catch (error) {
-      console.log(
+      console.error(
         `getMatchedPreferences error for matchId ${matchedUserId}:`,
-        error?.response
+        error?.response,
       );
 
       return null;
     }
   };
 
-  const getAllRooms = async (item) => {
+  const getAllRooms = async item => {
     // console.log('fff', item);
     // setLoading(true);
     try {
       const getAllChatRooms = await axiosInstance({
         url: `/chat/rooms/${userProfle?.user_id}`,
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       });
 
-      console.log("getAllChatRooms", getAllChatRooms?.data);
+      console.log('getAllChatRooms', getAllChatRooms?.data);
 
       const existingRoom = getAllChatRooms?.data?.data?.rooms?.find(
-        (room) =>
+        room =>
           room?.user1Id === userProfle?.user_id ||
-          room?.user2Id === userProfle?.user_id
+          room?.user2Id === userProfle?.user_id,
       );
 
-      console.log("existingRoom", existingRoom);
+      console.log('existingRoom', existingRoom);
       setLoading(false);
 
       if (existingRoom) {
@@ -142,7 +144,7 @@ const StringsFriendRequest = ({ navigation }) => {
           ...item,
           chatRoom: existingRoom,
         };
-        navigation.navigate("StringsChattingScreen", updatedItem);
+        navigation.navigate('StringsChattingScreen', updatedItem);
       } else {
         startChat(item);
       }
@@ -155,16 +157,16 @@ const StringsFriendRequest = ({ navigation }) => {
       //   navigation.navigate('StringsChattingScreen', updatedItem);
       // }
     } catch (error) {
-      console.log("startChat error", error?.response);
+      console.log('startChat error', error?.response);
       setLoading(false);
     }
   };
 
-  const startChat = async (item) => {
+  const startChat = async item => {
     // create new room first, if it exist just navigate
     // if it doesnt and it works regardless, still navigate with the proper data
 
-    console.log("check", item);
+    console.log('check', item);
     // setLoading(true);
 
     const matchedUserId =
@@ -174,27 +176,27 @@ const StringsFriendRequest = ({ navigation }) => {
 
     try {
       const startChatResponse = await axiosInstance({
-        url: "chat/create-or-get-room",
-        method: "POST",
+        url: 'chat/create-or-get-room',
+        method: 'POST',
         data: {
           user2Id: matchedUserId,
         },
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       });
 
-      console.log("startChatResponse", startChatResponse?.data);
+      console.log('startChatResponse', startChatResponse?.data);
       setLoading(false);
       if (startChatResponse?.data?.data?.chatRoom) {
         const updatedItem = {
           ...item,
           chatRoom: startChatResponse?.data?.data?.chatRoom,
         };
-        navigation.navigate("StringsChattingScreen", updatedItem);
+        navigation.navigate('StringsChattingScreen', updatedItem);
       }
     } catch (error) {
-      console.log("startChat error", error?.response);
+      console.log('startChat error', error?.response);
       setLoading(false);
     }
   };
@@ -209,49 +211,49 @@ const StringsFriendRequest = ({ navigation }) => {
 
     try {
       const updateMatchActionResponse = await axiosInstance({
-        url: "matchmaking/match/action/",
-        method: "PUT",
+        url: 'matchmaking/match/action/',
+        method: 'PUT',
         data: {
           matchId: item?.matchId,
           receiverId: matchedUserId,
           action: action,
         },
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       });
 
-      console.log("updateMatchActionResponse", updateMatchActionResponse?.data);
+      console.log('updateMatchActionResponse', updateMatchActionResponse?.data);
       setStringLoading(null);
       RNToast(
         Toast,
-        `You have been stringed with ${item?.matchedUserProfile?.username}`
+        `You have been stringed with ${item?.matchedUserProfile?.username}`,
       );
 
       const updatedActionData =
         updateMatchActionResponse?.data?.data?.actionLog;
       console.log(
-        "updatedActionData before",
+        'updatedActionData before',
         updatedActionData,
-        matchesWithProfiles
+        matchesWithProfiles,
       );
 
       // ✅ Update the specific item in the matchesWithProfiles list
-      setMatchesWithProfiles((prev) =>
-        prev?.map((match) =>
+      setMatchesWithProfiles(prev =>
+        prev?.map(match =>
           match?.matchId === updatedActionData?.matchId
             ? {
                 ...match,
                 action: updatedActionData?.action,
                 updatedAt: updatedActionData?.updatedAt,
               }
-            : match
-        )
+            : match,
+        ),
       );
 
-      console.log("matchesWithProfiles after", matchesWithProfiles);
+      console.log('matchesWithProfiles after', matchesWithProfiles);
     } catch (error) {
-      console.log("startChat error", error?.response);
+      console.log('startChat error', error?.response);
       setStringLoading(null);
     }
   };
@@ -272,10 +274,10 @@ const StringsFriendRequest = ({ navigation }) => {
     getAllStringMatches();
   }, []);
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({item}) => {
     const isLoggedInUserReceiver = item?.receiverId === userProfle?.user_id;
-    const isRequest = item?.action === "request";
-    const isAccept = item?.action === "accept";
+    const isRequest = item?.action === 'request';
+    const isAccept = item?.action === 'accept';
 
     if (isRequest && isLoggedInUserReceiver) {
       return (
@@ -285,16 +287,16 @@ const StringsFriendRequest = ({ navigation }) => {
           matchAccuracy={item?.accuracy}
           matchesInfo={item?.match}
           onPress={() => {
-            navigation.navigate("StringsProfile", item);
+            navigation.navigate('StringsProfile', item);
           }}
           onStringBtnDisabled={stringLoading === item?.match?.id}
           onStringCloseBtnPress={() => {
-            console.log("cloooseee");
-            updateMatchAction(item, "decline");
+            console.log('cloooseee');
+            updateMatchAction(item, 'decline');
           }}
           onStringAcceptBtnPress={() => {
-            console.log("acceptttt");
-            updateMatchAction(item, "accept");
+            console.log('acceptttt');
+            updateMatchAction(item, 'accept');
           }}
         />
       );
@@ -306,11 +308,11 @@ const StringsFriendRequest = ({ navigation }) => {
           matchAccuracy={item?.accuracy}
           matchesInfo={item?.match}
           onPress={() => {
-            navigation.navigate("StringsProfile", item);
+            navigation.navigate('StringsProfile', item);
           }}
           onStringBtnDisabled={stringLoading === item?.match?.id}
           onStringMessageBtnPress={() => {
-            console.log("ppp");
+            console.log('ppp');
             getAllRooms(item);
           }}
         />
@@ -322,8 +324,8 @@ const StringsFriendRequest = ({ navigation }) => {
   return (
     <SafeAreaViewComponent>
       <HeaderTitle
-        headerTitle={"Strings Requests"}
-        leftIcon={"arrow-back-outline"}
+        headerTitle={'Strings Requests'}
+        leftIcon={'arrow-back-outline'}
         onLeftIconPress={() => {
           navigation.goBack();
         }}
@@ -334,30 +336,29 @@ const StringsFriendRequest = ({ navigation }) => {
         contentContainerStyle={{
           paddingTop: 10,
           padding: 10,
-          backgroundColor: "white",
+          backgroundColor: theme?.background,
         }}
         refreshControl={
           <RefreshControl
             refreshing={loading}
             onRefresh={onRefresh}
             tintColor={COLORS.rendezvousRed}
-            style={{ zIndex: 999 }}
+            style={{zIndex: 999}}
           />
-        }
-      >
+        }>
         {loading ? (
-          <Text style={styles.noData}>
+          <Text style={[styles.noData, {color: theme?.text}]}>
             Please wait while we aggregate your data
           </Text>
         ) : matchesWithProfiles?.length ? (
           <FlatList
             data={matchesWithProfiles}
             renderItem={renderItem}
-            keyExtractor={(item) => item?.match?.id}
+            keyExtractor={item => item?.match?.id}
             contentContainerStyle={styles.products}
           />
         ) : (
-          <Text style={styles.noData}>
+          <Text style={[styles.noData, {color: theme?.text}]}>
             You do not have any strings requests at the moment, please check
             back some other time
           </Text>
@@ -372,19 +373,19 @@ export default StringsFriendRequest;
 
 const styles = StyleSheet.create({
   products: {
-    flexDirection: "row",
-    alignContent: "center",
-    alignItems: "center",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center',
+    flexWrap: 'wrap',
     padding: 10,
     // backgroundColor: 'green',
   },
   noData: {
-    fontWeight: "700",
-    justifyContent: "center",
-    alignItems: "center",
-    alignContent: "center",
-    alignSelf: "center",
-    textAlign: "center",
+    fontWeight: '700',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    alignSelf: 'center',
+    textAlign: 'center',
   },
 });

@@ -1,11 +1,11 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { windowHeight, windowWidth } from "../../utils/Dimensions";
-import { COLORS } from "../../themes/themes";
-import FormButton from "../form/FormButton";
-import TransparentBtn from "../form/TransparentBtn";
+import {windowHeight, windowWidth} from '../../utils/Dimensions';
+import {COLORS} from '../../themes/themes';
+import FormButton from '../form/FormButton';
+import TransparentBtn from '../form/TransparentBtn';
 
 const SubscriptionCard = ({
   props,
@@ -26,25 +26,23 @@ const SubscriptionCard = ({
           borderColor: borderColor || COLORS.appGrey4,
           // opacity: isDisabled ? 0.5 : 1,
         },
-      ]}
-    >
+      ]}>
       <Text style={styles.subPlan}>{props?.subType} </Text>
       <Text
         style={{
           fontSize: 16,
-          fontWeight: "500",
+          fontWeight: '500',
           color: COLORS.rendezvousRed,
           marginBottom: 20,
-          textDecorationLine: "line-through",
-        }}
-      >
+          textDecorationLine: 'line-through',
+        }}>
         {props?.oldPrice}/month
       </Text>
 
       <Text style={styles.subPlanPrice}>
-        <Text style={{ fontSize: 14 }}>Current: </Text>
-        {props?.price}{" "}
-        <Text style={{ fontSize: 18, fontWeight: "400" }}>/month</Text>
+        <Text style={{fontSize: 14}}>Current: </Text>
+        {props?.price}{' '}
+        <Text style={{fontSize: 18, fontWeight: '400'}}>/month</Text>
       </Text>
 
       {props?.subFeatures?.map((cur, i) => (
@@ -54,7 +52,7 @@ const SubscriptionCard = ({
             size={20}
             color={COLORS.rendezvousRed}
           />
-          <Text style={{ fontSize: 16, fontWeight: "500", marginLeft: 10 }}>
+          <Text style={{fontSize: 16, fontWeight: '500', marginLeft: 10}}>
             {cur}
           </Text>
         </View>
@@ -64,18 +62,17 @@ const SubscriptionCard = ({
       <View
         style={{
           bottom: 0,
-          position: "relative",
+          position: 'relative',
           width: windowWidth / 1.5,
           // padding: 20,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
         {isSubscribed ? (
-          <TransparentBtn title={"Subscribed"} width={2} disabled={true} />
+          <TransparentBtn title={'Subscribed'} width={2} disabled={true} />
         ) : (
           <FormButton
-            title={"Subscribe"}
+            title={'Subscribe'}
             width={2}
             disabled={loading || isSubscribed || isDisabled}
             onPress={onSubscriptionPressed}
@@ -106,14 +103,14 @@ const styles = StyleSheet.create({
     padding: 10,
     // backgroundColor: 'red',
     borderRadius: 10,
-    width: "100%",
+    width: '100%',
   },
   subPlanPrice: {
     fontSize: 24,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   subFeatures: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 20,
   },
 });

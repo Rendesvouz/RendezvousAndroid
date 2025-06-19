@@ -4,28 +4,28 @@ export const mediaSelectAndCrop = (
   width,
   setCameraImage2,
   selectImage2,
-  type = 1
+  type = 1,
 ) => {
   if (type == 2) {
-    ImagePicker.launchImageLibraryAsync({
+    ImagePicker.openPicker({
       width: width,
       height: height,
       cropping: true,
-      mediaType: "photo",
+      mediaType: 'photo',
       multiple: false,
-    }).then((image) => {
-      setCameraImage2("file://" + image?.path);
+    }).then(image => {
+      setCameraImage2('file://' + image?.path);
       selectImage2.current.close();
     });
   } else {
-    ImagePicker.launchImageLibraryAsync({
+    ImagePicker.openCamera({
       width: width,
       height: height,
       cropping: true,
-      mediaType: "photo",
+      mediaType: 'photo',
       multiple: false,
-    }).then((image) => {
-      setCameraImage2("file://" + image?.path);
+    }).then(image => {
+      setCameraImage2('file://' + image?.path);
       selectImage2.current.close();
     });
   }

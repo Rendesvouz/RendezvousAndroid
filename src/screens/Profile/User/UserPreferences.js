@@ -303,7 +303,7 @@ const UserPreferences = ({ navigation }) => {
       </ScrollView>
 
       {/* Buttons */}
-      <FixedBottomContainer top={1.1}>
+      <FixedBottomContainer top={1.2}>
         <FormButton
           title={"Update Preferences"}
           width={1.1}

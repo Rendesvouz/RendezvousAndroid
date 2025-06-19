@@ -4,11 +4,11 @@ import {
   TouchableOpacity,
   View,
   ActivityIndicator,
-} from "react-native";
-import React from "react";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { windowHeight, windowWidth } from "../../utils/Dimensions";
-import { COLORS } from "../../themes/themes";
+} from 'react-native';
+import React from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {windowHeight, windowWidth} from '../../utils/Dimensions';
+import {COLORS} from '../../themes/themes';
 
 const UploadButtons = ({
   loading,
@@ -26,7 +26,7 @@ const UploadButtons = ({
   borderColor,
 }) => {
   return (
-    <View style={{ marginTop: 20 }}>
+    <View style={{marginTop: 20}}>
       <TouchableOpacity
         activeOpacity={0.9}
         style={[
@@ -36,14 +36,13 @@ const UploadButtons = ({
             marginTop: marginTop,
             marginBottom: marginBottom,
             height: height ? height : 60,
-            backgroundColor: backgroundColor ? backgroundColor : "white",
+            backgroundColor: backgroundColor ? backgroundColor : 'white',
             borderWidth: borderWidth ? borderWidth : null,
             borderColor: borderColor ? borderColor : null,
           },
         ]}
         onPress={onPress}
-        disabled={disabled}
-      >
+        disabled={disabled}>
         {leftIcon ? (
           <Ionicons
             name={leftIcon}
@@ -54,7 +53,7 @@ const UploadButtons = ({
         ) : null}
 
         {loading ? (
-          <ActivityIndicator size={20} color={"white"} />
+          <ActivityIndicator size={20} color={'white'} />
         ) : (
           <Text style={styles.buttonText}>{title}</Text>
         )}
@@ -71,49 +70,49 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15,
     borderRadius: 60,
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   buttonText: {
     fontSize: 15,
-    textAlign: "center",
+    textAlign: 'center',
     margin: 10,
     color: COLORS.rendezvousRed,
-    fontWeight: "600",
+    fontWeight: '600',
     zIndex: 1000,
   },
   btn: {
     height: 48,
-    alignSelf: "center",
+    alignSelf: 'center',
     borderWidth: 1,
     borderColor: COLORS.rendezvousRed,
-    justifyContent: "center",
-    alignContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
     // marginBottom: 20,
     // marginTop: 5,
-    flexDirection: "row",
+    flexDirection: 'row',
     // backgroundColor: COLORS.rendezvousRed,
     borderRadius: 8,
   },
   btnText: {
-    alignSelf: "center",
-    color: "white",
+    alignSelf: 'center',
+    color: 'white',
     fontSize: 16,
-    fontWeight: "700",
-    alignContent: "center",
+    fontWeight: '700',
+    alignContent: 'center',
   },
   disabledBtn: {
     height: 48,
     borderRadius: 8,
-    alignSelf: "center",
-    flexDirection: "row",
-    alignItems: "center",
+    alignSelf: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
     borderWidth: 1,
     borderColor: COLORS.rendezvousRed,
-    justifyContent: "center",
-    alignContent: "center",
+    justifyContent: 'center',
+    alignContent: 'center',
     // marginBottom: 20,
     // backgroundColor: COLORS.rendezvousRed,
     opacity: 0.25,
@@ -122,9 +121,9 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   error: {
-    color: "red",
-    fontWeight: "500",
-    alignSelf: "center",
+    color: 'red',
+    fontWeight: '500',
+    alignSelf: 'center',
     marginBottom: 7,
     fontSize: 13,
   },

@@ -5,44 +5,45 @@ import {
   View,
   Image,
   TouchableOpacity,
-} from "react-native";
-import React, { useState } from "react";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import ImageView from "react-native-image-viewing";
+} from 'react-native';
+import React, {useState} from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import ImageView from 'react-native-image-viewing';
 
-import SafeAreaViewComponent from "../../components/common/SafeAreaViewComponent";
-import HeaderTitle from "../../components/common/HeaderTitle";
-import ScrollViewSpace from "../../components/common/ScrollViewSpace";
-import { windowHeight, windowWidth } from "../../utils/Dimensions";
-import FixedBottomContainer from "../../components/common/FixedBottomContainer";
-import FormButton from "../../components/form/FormButton";
-import { COLORS } from "../../themes/themes";
-import TransparentBtn from "../../components/form/TransparentBtn";
+import SafeAreaViewComponent from '../../components/common/SafeAreaViewComponent';
+import HeaderTitle from '../../components/common/HeaderTitle';
+import ScrollViewSpace from '../../components/common/ScrollViewSpace';
+import {windowHeight, windowWidth} from '../../utils/Dimensions';
+import FixedBottomContainer from '../../components/common/FixedBottomContainer';
+import FormButton from '../../components/form/FormButton';
+import {COLORS} from '../../themes/themes';
+import TransparentBtn from '../../components/form/TransparentBtn';
+import {useTheme} from '../../Context/ThemeContext';
 
-const ToursDetailsScreen = ({ navigation, route }) => {
+const ToursDetailsScreen = ({navigation, route}) => {
   const item = route?.params;
-  console.log("eee", item);
+  console.log('eee', item);
+  const {theme} = useTheme();
 
   const [visible, setIsVisible] = useState(false);
 
-  const transformedData = item?.pictures?.map((item) => ({
+  const transformedData = item?.pictures?.map(item => ({
     uri: item,
   }));
 
   return (
     <SafeAreaViewComponent>
       <HeaderTitle
-        leftIcon={"arrow-back-outline"}
+        leftIcon={'arrow-back-outline'}
         onLeftIconPress={() => {
           navigation.goBack();
         }}
-        rightIcon={"heart-outline"}
-        headerTitle={""}
+        rightIcon={'heart-outline'}
+        headerTitle={''}
       />
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ padding: 20 }}
-      >
+        contentContainerStyle={{padding: 20}}>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -50,18 +51,20 @@ const ToursDetailsScreen = ({ navigation, route }) => {
             padding: 10,
             // flexDirection: 'row',
             // backgroundColor: 'green',
-          }}
-        >
+          }}>
           {item?.pictures?.map((cur, i) => (
-            <View key={i}>
+            <View>
               <TouchableOpacity
                 activeOpacity={0.9}
-                style={{ flexDirection: "row", marginRight: 10 }}
+                style={{flexDirection: 'row', marginRight: 10}}
                 onPress={() => {
                   setIsVisible(true);
-                }}
-              >
-                <Image source={{ uri: cur }} style={styles.tourdetailsImage} />
+                }}>
+                <Image
+                  key={i}
+                  source={{uri: cur}}
+                  style={styles.tourdetailsImage}
+                />
               </TouchableOpacity>
               <ImageView
                 images={transformedData}
@@ -74,32 +77,37 @@ const ToursDetailsScreen = ({ navigation, route }) => {
         </ScrollView>
 
         <View>
-          <Text numberOfLines={1} style={styles.detailsTitle}>
+          <Text
+            numberOfLines={1}
+            style={[styles.detailsTitle, {color: theme?.text}]}>
             {item?.title}
           </Text>
           <View style={styles.tourguideProfile2}>
             <Ionicons
               name="location-outline"
               size={15}
-              style={{ marginRight: 6 }}
+              color={theme?.text}
+              style={{marginRight: 6}}
             />
-            <Text>{item?.places}</Text>
+            <Text style={{color: theme?.text}}>{item?.places}</Text>
           </View>
           <View style={styles.tourguideProfile2}>
             <Ionicons
               name="people-outline"
               size={15}
-              style={{ marginRight: 6 }}
+              color={theme?.text}
+              style={{marginRight: 6}}
             />
-            <Text>7 people max</Text>
+            <Text style={{color: theme?.text}}>7 people max</Text>
           </View>
           <View style={styles.tourguideProfile2}>
             <Ionicons
               name="alarm-outline"
               size={15}
-              style={{ marginRight: 6 }}
+              color={theme?.text}
+              style={{marginRight: 6}}
             />
-            <Text>{item?.duration} hours</Text>
+            <Text style={{color: theme?.text}}>{item?.duration} hours</Text>
           </View>
           {/* <View style={styles.tourguideProfile2}>
             <Ionicons
@@ -110,34 +118,50 @@ const ToursDetailsScreen = ({ navigation, route }) => {
             <Text>Available on Monday form 9am - 12am UTC</Text>
           </View> */}
         </View>
-        <Text style={styles.detailsItenary}>Tour Itenary</Text>
-        <Text style={styles.detailsItenaryText}>{item?.tour_itinerary}</Text>
+        <Text style={[styles.detailsItenary, {color: theme?.text}]}>
+          Tour Itenary
+        </Text>
+        <Text
+          style={[styles.detailsItenaryText, {color: theme?.rendezvousText}]}>
+          {item?.tour_itinerary}
+        </Text>
 
         {/* Transportatio information */}
-        <Text style={styles.detailsItenary}>Tour Transportation Details</Text>
-        <Text style={styles.detailsItenaryText}>
+        <Text style={[styles.detailsItenary, {color: theme?.text}]}>
+          Tour Transportation Details
+        </Text>
+        <Text
+          style={[styles.detailsItenaryText, {color: theme?.rendezvousText}]}>
           {item?.transportation_detail[0]}
         </Text>
 
         {/* tour guide profile */}
-        <Text style={styles.detailsItenary}>Your Tourguide</Text>
+        <Text style={[styles.detailsItenary, {color: theme?.text}]}>
+          Your Tourguide
+        </Text>
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
             marginTop: 20,
-            alignItems: "center",
+            alignItems: 'center',
             width: windowWidth / 1.5,
-          }}
-        >
+          }}>
           <Image
-            source={{ uri: item?.tourguideProfile?.profile_pictures[0] }}
-            style={{ width: 80, height: 80, borderRadius: 40, marginRight: 20 }}
+            source={{uri: item?.tourguideProfile?.profile_pictures[0]}}
+            style={{width: 80, height: 80, borderRadius: 40, marginRight: 20}}
           />
           <View>
-            <Text numberOfLines={1} style={styles.tourguideProfileName}>
+            <Text
+              numberOfLines={1}
+              style={[styles.tourguideProfileName, {color: theme?.text}]}>
               {item?.tourguideProfile?.fullname}
             </Text>
-            <Text numberOfLines={3} style={styles.tourguideProfileBio}>
+            <Text
+              numberOfLines={3}
+              style={[
+                styles.tourguideProfileBio,
+                {color: theme?.rendezvousText},
+              ]}>
               {item?.tourguideProfile?.bio}
             </Text>
             {/* <TransparentBtn width={3} height={40} title={'View Profile'} /> */}
@@ -148,12 +172,12 @@ const ToursDetailsScreen = ({ navigation, route }) => {
       </ScrollView>
 
       {/* Buttons */}
-      <FixedBottomContainer top={1.1}>
+      <FixedBottomContainer top={1.19}>
         <FormButton
-          title={"Book Now"}
+          title={'Book Now'}
           width={1.1}
           onPress={() => {
-            navigation.navigate("TourguideBookingsScreen", item);
+            navigation.navigate('TourguideBookingsScreen', item);
           }}
         />
       </FixedBottomContainer>
@@ -172,32 +196,32 @@ const styles = StyleSheet.create({
   },
   tourguideProfileName: {
     fontSize: 18,
-    fontWeight: "500",
+    fontWeight: '500',
     color: COLORS.rendezvousBlack,
     marginBottom: 5,
   },
   tourguideProfileBio: {
     fontSize: 14,
-    fontWeight: "400",
+    fontWeight: '400',
     color: COLORS.rendezvousBlack2,
   },
   tourguideProfile2: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 10,
   },
   detailsTitle: {
     color: COLORS?.rendezvousBlack,
     fontSize: 18,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   detailsItenary: {
     marginTop: 40,
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   detailsItenaryText: {
     fontSize: 14,
-    fontWeight: "400",
+    fontWeight: '400',
     color: COLORS.rendezvousBlack,
     marginTop: 10,
   },

@@ -4,25 +4,23 @@ import {
   View,
   TouchableOpacity,
   ImageBackground,
-} from "react-native";
-import React from "react";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { LinearGradient } from "expo-linear-gradient";
+} from 'react-native';
+import React from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import LinearGradient from 'react-native-linear-gradient';
 
-import { windowHeight, windowWidth } from "../../utils/Dimensions";
-import OverlayCard from "./OverlayCard";
+import {windowHeight, windowWidth} from '../../utils/Dimensions';
+import OverlayCard from './OverlayCard';
 
-const TrendingLocationsCard = ({ props, onPress }) => {
+const TrendingLocationsCard = ({props, onPress}) => {
   return (
     <TouchableOpacity
       activeOpacity={0.9}
       onPress={onPress}
-      style={styles.trendingCard}
-    >
+      style={styles.trendingCard}>
       <ImageBackground
         source={props?.backgroundImage}
-        imageStyle={styles.trendingCardImage}
-      >
+        imageStyle={styles.trendingCardImage}>
         {/* Overlay */}
         <OverlayCard borderRadius={10} />
 
@@ -78,38 +76,38 @@ const styles = StyleSheet.create({
   },
   heartIcon: {
     // justifyContent: "flex-end",
-    backgroundColor: "#3D3D3D99",
-    alignItems: "flex-end",
+    backgroundColor: '#3D3D3D99',
+    alignItems: 'flex-end',
     width: 35,
     borderRadius: 40,
     padding: 6,
-    alignContent: "flex-end",
-    position: "absolute",
+    alignContent: 'flex-end',
+    position: 'absolute',
     top: 10,
     right: 10,
   },
   trandingInfo: {
     // backgroundColor: "red",
     padding: 6,
-    position: "absolute",
+    position: 'absolute',
     top: windowHeight / 4.4,
     left: 10,
   },
   trendingInfoTitle: {
     fontSize: 18,
-    fontWeight: "600",
-    color: "white",
+    fontWeight: '600',
+    color: 'white',
     marginBottom: 4,
   },
   trendinglocations: {
-    flexDirection: "row",
-    alignContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center',
     marginBottom: 20,
-    color: "white",
+    color: 'white',
   },
   gradient: {
-    position: "absolute",
+    position: 'absolute',
     // top: windowHeight / 3.35,
     bottom: 0,
     top: 0,
@@ -120,9 +118,9 @@ const styles = StyleSheet.create({
     // borderBottomRightRadius: 15,
     borderRadius: 20,
     padding: 15,
-    justifyContent: "flex-end",
+    justifyContent: 'flex-end',
   },
   trendinglocationsText: {
-    color: "white",
+    color: 'white',
   },
 });

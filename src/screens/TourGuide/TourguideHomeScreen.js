@@ -6,28 +6,29 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { useDispatch, useSelector } from "react-redux";
+} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useDispatch, useSelector} from 'react-redux';
 
-import SafeAreaViewComponent from "../../components/common/SafeAreaViewComponent";
-import SearchBar from "../../components/search/SearchBar";
-import TrendingLocationsCard from "../../components/cards/TrendingLocationsCard";
-import { windowHeight, windowWidth } from "../../utils/Dimensions";
-import ScrollViewSpace from "../../components/common/ScrollViewSpace";
-import axiosInstance from "../../utils/api-client";
-import { saveTourLocations } from "../../redux/features/user/userSlice";
-import { COLORS } from "../../themes/themes";
-import HeaderTitle from "../../components/common/HeaderTitle";
+import SafeAreaViewComponent from '../../components/common/SafeAreaViewComponent';
+import SearchBar from '../../components/search/SearchBar';
+import TrendingLocationsCard from '../../components/cards/TrendingLocationsCard';
+import {windowHeight, windowWidth} from '../../utils/Dimensions';
+import ScrollViewSpace from '../../components/common/ScrollViewSpace';
+import axiosInstance from '../../utils/api-client';
+import {saveTourLocations} from '../../redux/features/user/userSlice';
+import {COLORS} from '../../themes/themes';
+import HeaderTitle from '../../components/common/HeaderTitle';
+import {useTheme} from '../../Context/ThemeContext';
 
 const trendingLocations = [
   {
     id: 1,
-    location: "Paris",
-    country: "France",
-    visits: "3445",
-    backgroundImage: require("../../assets/paris.png"),
+    location: 'Paris',
+    country: 'France',
+    visits: '3445',
+    backgroundImage: require('../../assets/paris.png'),
   },
   // {
   //   id: 2,
@@ -38,10 +39,10 @@ const trendingLocations = [
   // },
   {
     id: 3,
-    location: "Dubai",
-    country: "Dubai",
-    visits: "3445",
-    backgroundImage: require("../../assets/dubai.png"),
+    location: 'Dubai',
+    country: 'Dubai',
+    visits: '3445',
+    backgroundImage: require('../../assets/dubai.png'),
   },
   // {
   //   id: 4,
@@ -52,14 +53,15 @@ const trendingLocations = [
   // },
 ];
 
-const TourguideHomeScreen = ({ navigation }) => {
+const TourguideHomeScreen = ({navigation}) => {
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
+  const state = useSelector(state => state);
+  const {theme} = useTheme();
 
   const userProfle = state?.user?.user?.profile;
   const reduxToursLocations = state?.user?.toursLocations;
 
-  console.log("userProfle", userProfle, reduxToursLocations);
+  console.log('userProfle', userProfle, reduxToursLocations);
 
   const [loading, setLoading] = useState(false);
   const [appointments, setAppointments] = useState([]);
@@ -67,50 +69,50 @@ const TourguideHomeScreen = ({ navigation }) => {
   // seasrch feature
   const [clicked, setClicked] = useState(false);
 
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState('');
   const [tourLocations, setTourLocations] = useState([]);
   const [filteredDataSource, setFilteredDataSource] = useState([]);
-  console.log("filteredDataSource", filteredDataSource);
+  console.log('filteredDataSource', filteredDataSource);
 
   const getAllTourLocations = async () => {
     setLoading(true);
     try {
-      const res = await axiosInstance.get("tour-guide/all-offerings");
-      console.log("getAllTourLocations res", res?.data);
+      const res = await axiosInstance.get('tour-guide/all-offerings');
+      console.log('getAllTourLocations res', res?.data);
 
       if (res?.data?.data) {
         const locations = res.data.data;
 
         // Fetch profiles for each tour location
         const enrichedLocations = await Promise.all(
-          locations.map(async (location) => {
+          locations.map(async location => {
             try {
               const profileRes = await axiosInstance.get(
-                `profile/tourguide-public/${location?.tourguide_id}`
+                `profile/tourguide-public/${location?.tourguide_id}`,
               );
-              console.log("ppp", profileRes?.data?.data);
+              console.log('ppp', profileRes?.data?.data);
               return {
                 ...location,
                 tourguideProfile: profileRes?.data?.data?.profile,
               };
             } catch (error) {
-              console.log(
+              console.error(
                 `Error fetching profile for user ${location?.tourguide_id}`,
-                error
+                error,
               );
-              return { ...location, tourguideProfile: null };
+              return {...location, tourguideProfile: null};
             }
-          })
+          }),
         );
 
-        console.log("enrichedLocations", enrichedLocations);
+        console.log('enrichedLocations', enrichedLocations);
 
         dispatch(saveTourLocations(enrichedLocations));
         setFilteredDataSource(enrichedLocations);
         setTourLocations(enrichedLocations);
       }
     } catch (error) {
-      console.log("getAllTourLocations error", error);
+      console.log('getAllTourLocations error', error);
     } finally {
       setLoading(false);
     }
@@ -120,40 +122,40 @@ const TourguideHomeScreen = ({ navigation }) => {
     setLoading(true);
     try {
       await axiosInstance({
-        url: "tour-guide/all-user-books",
-        method: "GET",
-      }).then(async (res) => {
-        console.log("getAllBookedTours res", res);
+        url: 'tour-guide/all-user-books',
+        method: 'GET',
+      }).then(async res => {
+        console.log('getAllBookedTours res', res);
         if (res?.data?.data) {
           const locations = res?.data?.data;
 
           // Fetch profiles for each tour location
           const enrichedLocations = await Promise.all(
-            locations?.map(async (location) => {
+            locations?.map(async location => {
               try {
                 const profileRes = await axiosInstance.get(
-                  `profile/tourguide-public/${location?.tourguide_id}`
+                  `profile/tourguide-public/${location?.tourguide_id}`,
                 );
-                console.log("ppp", profileRes?.data?.data);
+                console.log('ppp', profileRes?.data?.data);
                 return {
                   ...location,
                   tourguideProfile: profileRes?.data?.data?.profile,
                 };
               } catch (error) {
-                console.log(
+                console.error(
                   `Error fetching profile for user ${location?.tourguide_id}`,
-                  error
+                  error,
                 );
-                return { ...location, tourguideProfile: null };
+                return {...location, tourguideProfile: null};
               }
-            })
+            }),
           );
 
-          console.log("enrichedLocations", enrichedLocations);
+          console.log('enrichedLocations', enrichedLocations);
         }
       });
     } catch (error) {
-      console.log("getAllBookedTours error", error?.response);
+      console.log('getAllBookedTours error', error?.response);
     }
   };
 
@@ -170,10 +172,10 @@ const TourguideHomeScreen = ({ navigation }) => {
   }, []);
 
   // Filter locations based on search text
-  const searchFilterFunction = (text) => {
+  const searchFilterFunction = text => {
     if (text) {
-      const newData = tourLocations?.filter((cur) => {
-        const itemData = cur?.city ? cur?.city.toLowerCase() : "".toLowerCase();
+      const newData = tourLocations?.filter(cur => {
+        const itemData = cur?.city ? cur?.city.toLowerCase() : ''.toLowerCase();
         const textData = text.toLowerCase();
         return itemData?.indexOf(textData) > -1;
       });
@@ -193,29 +195,31 @@ const TourguideHomeScreen = ({ navigation }) => {
   return (
     <SafeAreaViewComponent>
       <HeaderTitle
-        leftIcon={"arrow-back-outline"}
+        leftIcon={'arrow-back-outline'}
         onLeftIconPress={() => {
           // navigation.navigate('Home', {screen: 'HomeScreen'});
-          navigation.goBack();
+          navigation.navigate("BookingScreen");
         }}
-        headerTitle={"Tours"}
-        rightIcon={"calendar-outline"}
+        headerTitle={'Tours'}
+        rightIcon={'calendar-outline'}
         onRightIconPress={() => {
-          navigation.navigate("BookedToursScreen", appointments);
+          navigation.navigate('BookedToursScreen', appointments);
         }}
       />
-      <View style={{ padding: 20 }}>
-        <Text style={styles.tourHeaderText}>Discover Your Next Adventure</Text>
-        <Text style={styles.toursubHeaderText}>
+      <View style={{padding: 20}}>
+        <Text style={[styles.tourHeaderText, {color: theme?.text}]}>
+          Discover Your Next Adventure
+        </Text>
+        <Text style={[styles.toursubHeaderText, {color: theme?.text}]}>
           Find the perfect guide for your journey
         </Text>
       </View>
       <SearchBar
-        searchPlaceholder={"Search locations"}
+        searchPlaceholder={'Search locations'}
         searchPhrase={searchText}
         clicked={clicked}
         setClicked={setClicked}
-        setSearchPhrase={(text) => {
+        setSearchPhrase={text => {
           setSearchText(text);
           searchFilterFunction(text);
         }}
@@ -223,10 +227,9 @@ const TourguideHomeScreen = ({ navigation }) => {
       <View
         style={{
           padding: 10,
-          justifyContent: "space-between",
-          flexDirection: "row",
-        }}
-      >
+          justifyContent: 'space-between',
+          flexDirection: 'row',
+        }}>
         <Text style={styles.trendingLocationText}>Trending locations</Text>
         <Ionicons name="ellipsis-vertical-outline" size={20} />
       </View>
@@ -238,10 +241,9 @@ const TourguideHomeScreen = ({ navigation }) => {
             refreshing={loading}
             onRefresh={onRefresh}
             tintColor={COLORS.rendezvousRed}
-            style={{ zIndex: 999 }}
+            style={{zIndex: 999}}
           />
-        }
-      >
+        }>
         {!searchText ? (
           trendingLocations?.map((cur, i) => (
             <TrendingLocationsCard
@@ -249,17 +251,18 @@ const TourguideHomeScreen = ({ navigation }) => {
               props={cur}
               onPress={() => {
                 const matchedData = tourLocations?.filter(
-                  (item) =>
+                  item =>
                     item?.city?.toLowerCase() ===
                       cur?.location?.toLowerCase() ||
-                    item?.places?.toLowerCase() === cur?.location?.toLowerCase()
+                    item?.places?.toLowerCase() ===
+                      cur?.location?.toLowerCase(),
                 );
 
                 // setSearchText(cur?.location);
                 // setClicked(true);
                 // searchFilterFunction(cur?.location);
 
-                navigation.navigate("TourPlaces", {
+                navigation.navigate('TourPlaces', {
                   place: cur?.location,
                   placesArrayData: matchedData,
                 });
@@ -274,13 +277,13 @@ const TourguideHomeScreen = ({ navigation }) => {
                 ...cur,
                 backgroundImage: cur.backgroundImage
                   ? cur.backgroundImage
-                  : require("../../assets/skyImage.png"),
+                  : require('../../assets/skyImage.png'),
                 location: cur?.places,
                 country: cur?.city,
                 visits: 1200,
               }}
               onPress={() => {
-                navigation.navigate("TourPlaces", {
+                navigation.navigate('TourPlaces', {
                   place: filteredDataSource[0]?.city,
                   placesArrayData: filteredDataSource,
                 });
@@ -301,7 +304,7 @@ export default TourguideHomeScreen;
 const styles = StyleSheet.create({
   tourHeaderText: {
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   toursubHeaderText: {
     fontSize: 14,
@@ -309,15 +312,15 @@ const styles = StyleSheet.create({
   },
   trendingLocationText: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     marginLeft: 10,
   },
   noData: {
-    fontWeight: "700",
-    justifyContent: "center",
-    alignItems: "center",
-    alignContent: "center",
-    alignSelf: "center",
+    fontWeight: '700',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    alignSelf: 'center',
     marginTop: 40,
   },
 });

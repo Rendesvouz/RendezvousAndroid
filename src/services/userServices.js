@@ -11,7 +11,7 @@ export const checkUserProfile = async (dispatch, getUser, axiosInstance) => {
       // navigation.navigate("OnboardingFlow1");
     }
   } catch (error) {
-    console.log("checkUserProfile check error:", error);
+    console.error("checkUserProfile check error:", error);
     // navigation.navigate("OnboardingFlow1");
   }
 };
@@ -33,6 +33,6 @@ export const checkUserPreferences = async (
       dispatch(saveUserPreferences(preferenceResponse?.data));
     }
   } catch (error) {
-    console.log("User preference check error:", error);
+    console.error("User preference check error:", error);
   }
 };

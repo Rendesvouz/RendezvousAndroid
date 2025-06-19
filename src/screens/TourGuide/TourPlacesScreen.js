@@ -4,43 +4,43 @@ import {
   View,
   ScrollView,
   ImageBackground,
-} from "react-native";
-import React from "react";
+} from 'react-native';
+import React from 'react';
 
-import SafeAreaViewComponent from "../../components/common/SafeAreaViewComponent";
-import ScrollViewSpace from "../../components/common/ScrollViewSpace";
-import HeaderTitle from "../../components/common/HeaderTitle";
-import { windowHeight, windowWidth } from "../../utils/Dimensions";
-import SearchBar from "../../components/search/SearchBar";
-import TourguideCard from "../../components/cards/TourguideCard";
-import OverlayCard from "../../components/cards/OverlayCard";
+import SafeAreaViewComponent from '../../components/common/SafeAreaViewComponent';
+import ScrollViewSpace from '../../components/common/ScrollViewSpace';
+import HeaderTitle from '../../components/common/HeaderTitle';
+import {windowHeight, windowWidth} from '../../utils/Dimensions';
+import SearchBar from '../../components/search/SearchBar';
+import TourguideCard from '../../components/cards/TourguideCard';
+import OverlayCard from '../../components/cards/OverlayCard';
+import {useTheme} from '../../Context/ThemeContext';
 
-const TourPlacesScreen = ({ navigation, route }) => {
+const TourPlacesScreen = ({navigation, route}) => {
   const item = route?.params;
+  const {theme} = useTheme();
 
   return (
     <SafeAreaViewComponent>
       <HeaderTitle
-        leftIcon={"arrow-back-outline"}
+        leftIcon={'arrow-back-outline'}
         onLeftIconPress={() => {
           navigation.goBack();
         }}
-        rightIcon={""}
+        rightIcon={''}
         headerTitle={item?.country}
       />
       <View
         style={{
           //   padding: 20,
-          justifyContent: "center",
-          alignContent: "center",
-          alignItems: "center",
-          alignSelf: "center",
-        }}
-      >
+          justifyContent: 'center',
+          alignContent: 'center',
+          alignItems: 'center',
+          alignSelf: 'center',
+        }}>
         <ImageBackground
           imageStyle={styles.placesImage}
-          source={require("../../assets/skyImage.png")}
-        >
+          source={require('../../assets/skyImage.png')}>
           {/* Overlay */}
           <OverlayCard borderRadius={10} />
 
@@ -59,17 +59,18 @@ const TourPlacesScreen = ({ navigation, route }) => {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingTop: 10, padding: 10 }}
-      >
+        contentContainerStyle={{paddingTop: 10, padding: 10}}>
         {!item?.placesArrayData ? (
-          <Text style={styles.noData}>No tourguides found</Text>
+          <Text style={[styles.noData, {color: theme?.text}]}>
+            No tourguides found
+          </Text>
         ) : (
           item?.placesArrayData?.map((cur, i) => (
             <TourguideCard
               key={i}
               props={cur}
               onPress={() => {
-                navigation.navigate("ToursDetailsScreen", cur);
+                navigation.navigate('ToursDetailsScreen', cur);
               }}
             />
           ))
@@ -90,25 +91,25 @@ const styles = StyleSheet.create({
     width: windowWidth / 1.1,
   },
   placesView: {
-    justifyContent: "center",
-    alignContent: "center",
-    alignItems: "center",
-    alignSelf: "center",
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
     height: windowHeight / 7,
     width: windowWidth / 1.1,
   },
   placesheader: {
     fontSize: 20,
-    fontWeight: "700",
-    color: "white",
+    fontWeight: '700',
+    color: 'white',
   },
   placessubheader: {
     fontSize: 12,
-    fontWeight: "600",
-    color: "white",
+    fontWeight: '600',
+    color: 'white',
   },
   gradient: {
-    position: "absolute",
+    position: 'absolute',
     // top: windowHeight / 3.35,
     bottom: 0,
     top: 0,
@@ -124,11 +125,11 @@ const styles = StyleSheet.create({
     // justifyContent: "flex-end",
   },
   noData: {
-    fontWeight: "700",
-    justifyContent: "center",
-    alignItems: "center",
-    alignContent: "center",
-    alignSelf: "center",
+    fontWeight: '700',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    alignSelf: 'center',
     marginTop: 40,
   },
 });

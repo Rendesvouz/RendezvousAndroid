@@ -5,86 +5,87 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-} from "react-native";
-import React, { useState } from "react";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import ImageView from "react-native-image-viewing";
+  ActivityIndicator,
+} from 'react-native';
+import React, {useState} from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import ImageView from 'react-native-image-viewing';
+import Toast from 'react-native-toast-message';
 
-import SafeAreaViewComponent from "../../components/common/SafeAreaViewComponent";
-import HeaderTitle from "../../components/common/HeaderTitle";
-import { windowHeight, windowWidth } from "../../utils/Dimensions";
-import PreferenceCard from "../../components/cards/PreferenceCard";
+import {windowHeight, windowWidth} from '../../utils/Dimensions';
+import PreferenceCard from '../../components/cards/PreferenceCard';
 import {
   capitalizeFirstLetter,
   convertCmToFeetInches,
   getAge,
   normalizeGender,
   RNToast,
-} from "../../Library/Common";
-import InterestsCard from "../../components/cards/InterestCard";
-import SVGIconCard from "../../components/cards/SVGIconCard";
-import { COLORS } from "../../themes/themes";
-import FixedBottomContainer from "../../components/common/FixedBottomContainer";
-import FormButton from "../../components/form/FormButton";
-import ScrollViewSpace from "../../components/common/ScrollViewSpace";
-import axiosInstance from "../../utils/api-client";
-import Toast from "react-native-toast-message";
-import StringsProfileCard from "../../components/cards/StringsProfileCard";
+} from '../../Library/Common';
+import InterestsCard from '../../components/cards/InterestCard';
+import SVGIconCard from '../../components/cards/SVGIconCard';
+import {COLORS} from '../../themes/themes';
+import FixedBottomContainer from '../../components/common/FixedBottomContainer';
+import FormButton from '../../components/form/FormButton';
+import ScrollViewSpace from '../../components/common/ScrollViewSpace';
+import axiosInstance from '../../utils/api-client';
+import StringsProfileCard from '../../components/cards/StringsProfileCard';
+import {useTheme} from '../../Context/ThemeContext';
 
-const StringsProfileScreen = ({ navigation, route }) => {
+const StringsProfileScreen = ({navigation, route}) => {
   const item = route?.params;
-  console.log("profileitem", item);
+  console.log('profileitem', item);
+
+  const {theme} = useTheme();
 
   const allPictures = [
     ...(item?.matchedUserProfile?.profile_pictures || []),
     ...(item?.matchedUserProfile?.additional_pictures || []),
   ];
 
-  const transformedData = allPictures?.map((picture) => ({
+  const transformedData = allPictures?.map(picture => ({
     uri: picture,
   }));
 
   const [visible, setIsVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [stringLoading, setStringLoading] = useState(null);
 
   const matchAction = async (matchId, receiverId, action) => {
-    console.log("action matched", matchId, receiverId, action);
+    console.log('action matched', matchId, receiverId, action);
     if (!matchId) {
       return;
     }
 
     const matchActionData = {
-      matchId: item?.match?.id,
-      action: "request",
-      receiverId: item?.match?.userId,
+      matchId: matchId,
+      action: action,
+      receiverId: receiverId,
     };
 
-    setLoading(true);
+    setStringLoading(matchId);
 
     try {
       const response = await axiosInstance({
-        url: "matchmaking/match/action",
-        method: "POST",
+        url: 'matchmaking/match/action',
+        method: 'POST',
         data: matchActionData,
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       });
-      console.log("matchAction response", response?.data);
-
+      console.log('matchAction response', response?.data);
       navigation.goBack();
 
-      RNToast(Toast, "String request sent");
-      setLoading(false);
+      action == 'request' && RNToast(Toast, 'String request sent');
+      setStringLoading(null);
     } catch (error) {
-      console.log("Error matching user:", error);
+      console.error('Error matching user:', error?.response);
     } finally {
-      setLoading(false);
+      setStringLoading(null);
     }
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1, backgroundColor: theme?.background}}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <StringsProfileCard
           item={item}
@@ -96,11 +97,10 @@ const StringsProfileScreen = ({ navigation, route }) => {
         <ScrollView
           vertical
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ padding: 20 }}
-        >
-          <View style={styles.profileInfo}>
+          contentContainerStyle={{padding: 20}}>
+          <View style={[styles.profileInfo, {color: theme?.background}]}>
             <Text style={styles.profileName}>
-              {item?.matchedUserProfile?.username},{" "}
+              {item?.matchedUserProfile?.username},{' '}
               {getAge(item?.matchedUserProfile?.dob)}
             </Text>
 
@@ -110,62 +110,73 @@ const StringsProfileScreen = ({ navigation, route }) => {
 
             <View style={styles.displaySection}>
               <PreferenceCard
-                iconName={"location-outline"}
+                iconName={'location-outline'}
                 title={item?.matchedUserProfile?.country}
               />
-              {item?.action !== "request" && (
+              {item?.action !== 'request' && (
                 <PreferenceCard
-                  iconName={"flash-outline"}
+                  iconName={'flash-outline'}
                   title={`Match Accuracy: ${item?.accuracy?.toFixed(2)}%`}
                 />
               )}
             </View>
           </View>
 
-          <View style={styles.cardSection}>
-            <Text style={styles.bioHeaders}>Bio</Text>
-            <Text style={styles.bioDescription}>
+          <View
+            style={[styles.cardSection, {backgroundColor: theme?.background}]}>
+            <Text style={[styles.bioHeaders, {color: theme?.text}]}>Bio</Text>
+            <Text style={[styles.bioDescription, {color: theme?.text}]}>
               {item?.matchedUserProfile?.bio}
             </Text>
-            <Text style={styles.bioHeaders}>About Me</Text>
+            <Text style={[styles.bioHeaders, {color: theme?.text}]}>
+              About Me
+            </Text>
 
             <View style={styles.displaySection}>
               <SVGIconCard
                 title={capitalizeFirstLetter(item?.match?.drinking_habits)}
-                svgName={"drink"}
+                svgName={'drink'}
                 iconColor={COLORS.rendezvousRed}
               />
               <SVGIconCard
                 title={normalizeGender(item?.matchedUserProfile?.gender)}
                 iconName={
-                  normalizeGender(item?.matchedUserProfile?.gender) == "Male"
-                    ? "man-outline"
-                    : "woman-outline"
+                  normalizeGender(item?.matchedUserProfile?.gender) == 'Male'
+                    ? 'man-outline'
+                    : 'woman-outline'
                 }
                 iconColor={COLORS.black}
               />
               <SVGIconCard
                 title={capitalizeFirstLetter(item?.match?.religion)}
-                iconName={"moon-outline"}
+                iconName={'moon-outline'}
                 iconColor={COLORS.black}
               />
               <SVGIconCard
                 title={capitalizeFirstLetter(
-                  item?.matchedUserProfile?.relationship_status
+                  item?.matchedUserProfile?.relationship_status,
                 )}
-                iconName={"person-add-outline"}
+                iconName={'person-add-outline'}
                 iconColor={COLORS.black}
               />
               <SVGIconCard
                 title={capitalizeFirstLetter(item?.match?.smoking_habits)}
-                svgName={"smoke"}
+                svgName={'smoke'}
                 iconColor={COLORS.black}
               />
+              {/* <SVGIconCard
+              title={capitalizeFirstLetter(item?.match?.kids)}
+              svgName={'kid'}
+              iconColor={COLORS.rendezvousRed}
+            /> */}
             </View>
           </View>
 
-          <View style={styles.cardSection}>
-            <Text style={styles.bioHeaders}>Interests</Text>
+          <View
+            style={[styles.cardSection, {backgroundColor: theme?.background}]}>
+            <Text style={[styles.bioHeaders, {color: theme?.text}]}>
+              Interests
+            </Text>
 
             <View style={styles.displaySection}>
               {item?.matchedUserProfile?.interest?.map((cur, i) => (
@@ -173,7 +184,9 @@ const StringsProfileScreen = ({ navigation, route }) => {
               ))}
             </View>
 
-            <Text style={styles.bioHeaders}>Hobbies</Text>
+            <Text style={[styles.bioHeaders, {color: theme?.text}]}>
+              Hobbies
+            </Text>
 
             <View style={styles.displaySection}>
               {item?.matchedUserProfile?.hobbies?.map((cur, i) => (
@@ -182,37 +195,40 @@ const StringsProfileScreen = ({ navigation, route }) => {
             </View>
           </View>
 
-          <View style={styles.cardSection}>
-            <Text style={styles.bioHeaders}>Background</Text>
+          <View
+            style={[styles.cardSection, {backgroundColor: theme?.background}]}>
+            <Text style={[styles.bioHeaders, {color: theme?.text}]}>
+              Background
+            </Text>
 
             <View style={styles.displaySection}>
               <SVGIconCard
                 title={capitalizeFirstLetter(item?.matchedUserProfile?.degree)}
-                iconName={"library-outline"}
+                iconName={'library-outline'}
                 iconColor={COLORS.black}
               />
 
               <SVGIconCard
                 title={capitalizeFirstLetter(
-                  item?.matchedUserProfile?.university
+                  item?.matchedUserProfile?.university,
                 )}
-                iconName={"school-outline"}
+                iconName={'school-outline'}
                 iconColor={COLORS.black}
               />
 
               <SVGIconCard
                 title={capitalizeFirstLetter(
-                  item?.matchedUserProfile?.employmentStatus
+                  item?.matchedUserProfile?.employmentStatus,
                 )}
-                iconName={"briefcase-outline"}
+                iconName={'briefcase-outline'}
                 iconColor={COLORS.black}
               />
 
               <SVGIconCard
                 title={capitalizeFirstLetter(
-                  item?.matchedUserProfile?.occupation
+                  item?.matchedUserProfile?.occupation,
                 )}
-                iconName={"business-outline"}
+                iconName={'business-outline'}
                 iconColor={COLORS.black}
               />
             </View>
@@ -229,16 +245,58 @@ const StringsProfileScreen = ({ navigation, route }) => {
       </ScrollView>
 
       {/* Buttons */}
-      {!item?.action == "request" && (
-        <FixedBottomContainer top={1.1}>
-          <FormButton
-            title={"String"}
-            width={1.1}
-            loading={loading}
-            disabled={loading}
-            onPress={matchAction}
-          />
-        </FixedBottomContainer>
+      {item?.action !== 'request' && (
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            top: windowHeight / 1.17,
+            position: 'absolute',
+            width: windowWidth,
+            padding: 30,
+            backgroundColor: theme?.background,
+          }}>
+          <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={() => {
+              matchAction(item?.match?.id, item?.match?.userId, 'decline');
+            }}
+            disabled={stringLoading === item?.match?.id}
+            style={[styles.hertless, {backgroundColor: COLORS.rendezvousRed}]}>
+            {stringLoading ? (
+              <ActivityIndicator size={'small'} color={'black'} />
+            ) : (
+              <Ionicons name="close" size={28} color={'white'} />
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={() => {
+              matchAction(item?.match?.id, item?.match?.userId, 'request');
+            }}
+            disabled={stringLoading === item?.match?.id}
+            style={[styles.hertless, {backgroundColor: 'gold'}]}>
+            {stringLoading ? (
+              <ActivityIndicator size={'small'} color={'black'} />
+            ) : (
+              <Ionicons name="star-outline" size={28} color={'white'} />
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={() => {
+              matchAction(item?.match?.id, item?.match?.userId, 'request');
+            }}
+            disabled={stringLoading === item?.match?.id}
+            style={[styles.hertless, {backgroundColor: COLORS.rendezvousBlue}]}>
+            {stringLoading ? (
+              <ActivityIndicator size={'small'} color={'black'} />
+            ) : (
+              <Ionicons name="heart" size={28} color={'white'} />
+            )}
+          </TouchableOpacity>
+        </View>
       )}
     </View>
   );
@@ -251,26 +309,26 @@ const styles = StyleSheet.create({
     width: windowWidth / 1.1,
     height: windowHeight / 2.8,
     borderRadius: 12,
-    overflow: "hidden",
-    backgroundColor: "white",
+    overflow: 'hidden',
+    backgroundColor: 'white',
   },
   imageWrapper: {
     flex: 1,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   imageBackground: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "contain",
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
   },
   heartIcon: {
-    backgroundColor: "#3D3D3D99",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#3D3D3D99',
+    alignItems: 'center',
+    justifyContent: 'center',
     width: 30,
     height: 30,
     borderRadius: 15,
-    position: "absolute",
+    position: 'absolute',
     top: 6,
     right: 6,
   },
@@ -279,34 +337,34 @@ const styles = StyleSheet.create({
     // bottom: 10,
     // left: 10,
     // right: 10,
-    backgroundColor: "#00000088",
+    backgroundColor: '#00000088',
     padding: 8,
     borderRadius: 6,
   },
   profileName: {
-    color: "#fff",
-    fontWeight: "bold",
+    color: '#fff',
+    fontWeight: 'bold',
     fontSize: 18,
     marginBottom: 5,
   },
   profileDetails: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 12,
   },
   infoCard: {
-    flexDirection: "row",
-    alignContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center',
   },
   bioHeaders: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 10,
   },
   cardSection: {
     padding: 20,
     borderRadius: 8,
-    backgroundColor: "whitesmoke",
+    backgroundColor: 'whitesmoke',
     marginTop: 10,
   },
   bioDescription: {
@@ -314,9 +372,19 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   displaySection: {
-    flexDirection: "row",
+    flexDirection: 'row',
     width: windowWidth / 1.2,
-    flexWrap: "wrap",
+    flexWrap: 'wrap',
     marginBottom: 10,
+  },
+  hertless: {
+    // backgroundColor: 'black',
+    // width: windowWidth / 2.5,
+    padding: 10,
+    alignContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+    // borderWidth: 1,
+    // borderColor: COLORS.appGrey,
   },
 });

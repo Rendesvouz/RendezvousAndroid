@@ -1,18 +1,20 @@
-import { StyleSheet, Text, Image, View, TouchableOpacity } from "react-native";
-import React from "react";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import {StyleSheet, Text, Image, View, TouchableOpacity} from 'react-native';
+import React from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { windowHeight, windowWidth } from "../../utils/Dimensions";
-import { dummyImageUrl } from "../../data/dummyData";
-import { COLORS } from "../../themes/themes";
+import {windowHeight, windowWidth} from '../../utils/Dimensions';
+import {dummyImageUrl} from '../../data/dummyData';
+import {COLORS} from '../../themes/themes';
+import {useTheme} from '../../Context/ThemeContext';
 
-const LifeCoachCard = ({ props, onPress }) => {
+const LifeCoachCard = ({props, onPress}) => {
+  const {theme} = useTheme();
+
   return (
     <TouchableOpacity
       activeOpacity={0.9}
       onPress={onPress}
-      style={styles.therapistCard}
-    >
+      style={[styles.therapistCard, {borderColor: theme?.borderColor}]}>
       <Image
         style={styles.therapistImage}
         source={{
@@ -24,43 +26,39 @@ const LifeCoachCard = ({ props, onPress }) => {
       <View
         style={{
           marginLeft: 10,
-          justifyContent: "space-around",
+          justifyContent: 'space-around',
           width: windowWidth / 1.5,
-        }}
-      >
-        <Text style={styles.therapistName}>{props?.fullname}</Text>
+        }}>
+        <Text style={[styles.therapistName, {color: theme.rendezvousText}]}>
+          {props?.fullname}
+        </Text>
         <View
           style={{
-            flexDirection: "row",
+            flexDirection: 'row',
             width: windowWidth / 2.4,
-            alignItems: "center",
-          }}
-        >
+            alignItems: 'center',
+          }}>
           <Text
             style={{
-              alignItems: "center",
-            }}
-          >
+              alignItems: 'center',
+            }}>
             <Ionicons
               name="star"
               size={12}
-              color={props?.therapist_id ? "#DBAA2F" : COLORS.rendezvousBlue}
+              color={props?.therapist_id ? '#DBAA2F' : COLORS.rendezvousBlue}
             />
           </Text>
           <Text
             style={{
               fontSize: 12,
-              fontWeight: "400",
+              fontWeight: '400',
               color: COLORS.appGrey2,
               marginLeft: 5,
-            }}
-          >
+            }}>
             {props?.years_of_experience} years experience
           </Text>
         </View>
-        <Text
-          style={{ fontSize: 12, fontWeight: "400", color: COLORS.appGrey2 }}
-        >
+        <Text style={{fontSize: 12, fontWeight: '400', color: COLORS.appGrey2}}>
           {props?.city}, {props?.country}
         </Text>
       </View>
@@ -75,7 +73,7 @@ const styles = StyleSheet.create({
     width: windowWidth / 1.05,
     height: windowHeight / 9,
     // backgroundColor: "red",
-    flexDirection: "row",
+    flexDirection: 'row',
     padding: 10,
     // borderBottomWidth: 1,
     // borderBottomColor: '#ccc',
@@ -92,10 +90,10 @@ const styles = StyleSheet.create({
   therapistName: {
     color: COLORS.rendezvousBlack,
     fontSize: 16,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   therapistExperienceNameValue: {
-    fontWeight: "600",
+    fontWeight: '600',
     fontSize: 14,
   },
 });

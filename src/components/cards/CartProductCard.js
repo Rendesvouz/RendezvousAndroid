@@ -5,31 +5,28 @@ import {
   View,
   Image,
   ScrollView,
-} from "react-native";
-import React, { useState } from "react";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { windowWidth } from "../../utils/Dimensions";
-import { setPriceTo2DecimalPlaces } from "../../Library/Common";
-import { useDispatch, useSelector } from "react-redux";
-import { COLORS } from "../../themes/themes";
+} from 'react-native';
+import React, {useState} from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {windowWidth} from '../../utils/Dimensions';
+import {setPriceTo2DecimalPlaces} from '../../Library/Common';
+import {useDispatch, useSelector} from 'react-redux';
+import {COLORS} from '../../themes/themes';
+import {useTheme} from '../../Context/ThemeContext';
 
-const CartProductCard = ({
-  props,
-  updateProductCount,
-  onRemoveItemFromCart,
-}) => {
-  console.log("proppp", props);
-
+const CartProductCard = ({props, updateProductCount, onRemoveItemFromCart}) => {
   const dispatch = useDispatch();
+  const state = useSelector(state => state);
 
-  const state = useSelector((state) => state);
+  const {theme} = useTheme();
+
   const reduxCartProducts = state?.user?.cartProducts;
 
   // Check if the product is in cart already
   const isProductInCart = reduxCartProducts?.some(
-    (savedProduct) => savedProduct?.id === props?.id
+    savedProduct => savedProduct?.id === props?.id,
   );
-  console.log("isProductInCart", isProductInCart);
+  console.log('isProductInCart', isProductInCart);
 
   const totalItemPrice =
     (props?.price - props?.discounted_price) * props?.count;
@@ -47,26 +44,29 @@ const CartProductCard = ({
   };
 
   return (
-    <TouchableOpacity activeOpacity={0.9} style={styles.productContainer}>
+    <TouchableOpacity
+      activeOpacity={0.9}
+      style={[styles.productContainer, {borderColor: theme?.borderColor}]}>
       <View style={styles.productInfo}>
         <Image
-          source={{ uri: props?.images_url[0] }}
+          source={{uri: props?.images_url[0]}}
           // source={require('../../assets/1.jpg')}
           style={styles.cartImageProduct}
         />
         <View
           style={{
-            justifyContent: "space-between",
+            justifyContent: 'space-between',
             marginLeft: 10,
-            flexDirection: "row",
+            flexDirection: 'row',
             // backgroundColor: 'red',
             width: windowWidth / 1.3,
-          }}
-        >
-          <Text numberOfLines={1} style={styles.productTitle}>
+          }}>
+          <Text
+            numberOfLines={1}
+            style={[styles.productTitle, {color: theme?.text}]}>
             {props?.title}
           </Text>
-          <Text style={styles.productPrice}>
+          <Text style={[styles.productPrice, {color: theme?.text}]}>
             {setPriceTo2DecimalPlaces(totalItemPrice)}
           </Text>
         </View>
@@ -74,32 +74,34 @@ const CartProductCard = ({
       <View
         style={{
           padding: 10,
-          flexDirection: "row",
-          alignItems: "center",
+          flexDirection: 'row',
+          alignItems: 'center',
           // backgroundColor: 'red',
           marginTop: 10,
-          justifyContent: "space-between",
-          alignContent: "center",
-        }}
-      >
+          justifyContent: 'space-between',
+          alignContent: 'center',
+        }}>
         <Ionicons
           name="trash-outline"
           size={20}
           color={COLORS.rendezvousRed}
           onPress={onRemoveItemFromCart}
         />
-        <View style={styles.counterContainer}>
+        <View
+          style={[styles.counterContainer, {borderColor: theme?.borderColor}]}>
           <Ionicons
             name="remove-outline"
             size={15}
-            color={"black"}
+            color={theme?.text}
             onPress={decreaseCount}
           />
-          <Text style={styles.countText}>{props?.count}</Text>
+          <Text style={[styles.countText, {color: theme?.text}]}>
+            {props?.count}
+          </Text>
           <Ionicons
             name="add-outline"
             size={15}
-            color={"black"}
+            color={theme?.text}
             onPress={increaseCount}
           />
         </View>
@@ -116,14 +118,14 @@ const styles = StyleSheet.create({
     padding: 10,
     width: windowWidth / 1.05,
     // flexDirection: 'row',
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
     marginBottom: 10,
     borderColor: COLORS.appGrey4,
     borderWidth: 1,
     borderRadius: 16,
   },
   productInfo: {
-    flexDirection: "row",
+    flexDirection: 'row',
     // alignItems: 'center',
   },
   cartImageProduct: {
@@ -132,28 +134,28 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   counterContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     // marginBottom: 20,
     borderWidth: 1,
     borderColor: COLORS.appGrey4,
     padding: 10,
     borderRadius: 10,
     width: windowWidth / 4,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   countText: {
     fontSize: 15,
     marginHorizontal: 10,
   },
   productPrice: {
-    fontWeight: "500",
+    fontWeight: '500',
     fontSize: 16,
     color: COLORS.rendezvousBlack,
   },
   productTitle: {
     fontSize: 16,
-    fontWeight: "400",
+    fontWeight: '400',
     color: COLORS.appGrey5,
     width: windowWidth / 1.7,
   },

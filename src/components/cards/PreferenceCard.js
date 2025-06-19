@@ -1,17 +1,16 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
-import React from "react";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+import React from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { windowHeight, windowWidth } from "../../utils/Dimensions";
-import { COLORS } from "../../themes/themes";
+import {windowHeight, windowWidth} from '../../utils/Dimensions';
+import {COLORS} from '../../themes/themes';
 
-const PreferenceCard = ({ title, onPress, iconName, iconColor }) => {
+const PreferenceCard = ({title, onPress, iconName, iconColor}) => {
   return (
     <TouchableOpacity
       activeOpacity={0.9}
       onPress={onPress}
-      style={styles.servicesCardContainer}
-    >
+      style={styles.servicesCardContainer}>
       <Ionicons name={iconName} size={15} color={COLORS.rendezvousRed} />
       <Text style={styles.servicesCardText}>{title}</Text>
     </TouchableOpacity>
@@ -29,8 +28,8 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     marginBottom: 4,
 
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     // alignContent: 'center',
     // alignSelf: 'center',
     backgroundColor: COLORS.declinedBgColor,
@@ -41,17 +40,17 @@ const styles = StyleSheet.create({
     height: 130,
     borderRadius: 12,
     marginBottom: 10,
-    objectFit: "cover",
+    objectFit: 'cover',
   },
   imageBackgroundContainer: {
-    width: "100%",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   servicesCardText: {
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: '500',
     color: COLORS.rendezvousRed,
     marginLeft: 5,
     // textAlign: "center",

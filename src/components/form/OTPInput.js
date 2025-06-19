@@ -5,14 +5,16 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
-import React, { useRef, useState } from "react";
-import { COLORS } from "../../themes/themes";
+} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {COLORS} from '../../themes/themes';
+import {useTheme} from '../../Context/ThemeContext';
 
-const OTPInput = ({ code, setCode, maxLength }) => {
+const OTPInput = ({code, setCode, maxLength}) => {
   const codeDigitArray = new Array(maxLength).fill(0);
 
   const textInputRef = useRef(null);
+  const {theme} = useTheme();
 
   // monitoring input focus
   const [inputContainerIsFocused, setinputContainerIsFocused] = useState(false);
@@ -27,7 +29,7 @@ const OTPInput = ({ code, setCode, maxLength }) => {
   };
 
   const toCodeDigitInput = (_value, index) => {
-    const emptyInputChar = " ";
+    const emptyInputChar = ' ';
     const digit = code[index] || emptyInputChar;
 
     // formatting
@@ -44,14 +46,17 @@ const OTPInput = ({ code, setCode, maxLength }) => {
 
     return (
       <View
-        style={
+        style={[
           inputContainerIsFocused && isDigitFocused
-            ? styles.otpInputFocused
-            : styles.singleInput
-        }
-        key={index}
-      >
-        <Text style={styles.otpText}>{digit}</Text>
+            ? [
+                styles.otpInputFocused,
+                {backgroundColor: '#444', color: theme?.text},
+              ]
+            : styles.singleInput,
+          {borderColor: theme?.borderColor},
+        ]}
+        key={index}>
+        <Text style={[styles.otpText, {color: theme?.text}]}>{digit}</Text>
       </View>
     );
   };
@@ -60,14 +65,14 @@ const OTPInput = ({ code, setCode, maxLength }) => {
       onPress={() => {
         Keyboard.dismiss();
       }}
-      style={styles.otpInputSection}
-    >
+      style={styles.otpInputSection}>
       <TouchableOpacity style={styles.container} onPress={handleOnPress}>
         {codeDigitArray?.map(toCodeDigitInput)}
       </TouchableOpacity>
-      <View style={styles.textInputContainer}>
+      <View
+        style={[styles.textInputContainer, {borderColor: theme?.borderColor}]}>
         <TextInput
-          style={styles.hiddenTextInput}
+          style={[styles.hiddenTextInput, {color: theme?.text}]}
           value={code}
           onChangeText={setCode}
           maxLength={maxLength}
@@ -85,46 +90,46 @@ export default OTPInput;
 const styles = StyleSheet.create({
   otpInputSection: {
     //   otpinputsection
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 20,
-    alignContent: "center",
-    alignSelf: "center",
+    alignContent: 'center',
+    alignSelf: 'center',
     // backgroundColor: 'green',
   },
   container: {
-    alignSelf: "center",
-    flexDirection: "row",
-    width: "90%",
-    justifyContent: "space-between",
-    alignItems: "center",
+    alignSelf: 'center',
+    flexDirection: 'row',
+    width: '90%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   singleInput: {
     //   otpinput
     borderWidth: 2,
     borderRadius: 5,
     padding: 10,
-    borderColor: "#ccc",
+    borderColor: '#ccc',
     width: 60,
     height: 60,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   otpText: {
     //   otpinputText
     fontSize: 20,
-    fontWeight: "700",
-    textAlign: "center",
-    color: "black",
+    fontWeight: '700',
+    textAlign: 'center',
+    color: 'black',
   },
   textInputContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginVertical: 30,
     marginRight: 20,
   },
   hiddenTextInput: {
-    position: "absolute",
+    position: 'absolute',
     width: 1,
     height: 1,
     opacity: 0,
@@ -137,7 +142,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.rendezvousRed,
     width: 60,
     height: 60,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

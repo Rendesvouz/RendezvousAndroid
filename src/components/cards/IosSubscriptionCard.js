@@ -1,12 +1,13 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { windowHeight, windowWidth } from "../../utils/Dimensions";
-import { COLORS } from "../../themes/themes";
-import FormButton from "../form/FormButton";
-import TransparentBtn from "../form/TransparentBtn";
-import { formatToUSD } from "../../Library/Common";
+import {windowHeight, windowWidth} from '../../utils/Dimensions';
+import {COLORS} from '../../themes/themes';
+import FormButton from '../form/FormButton';
+import TransparentBtn from '../form/TransparentBtn';
+import {formatToNaira, formatToUSD} from '../../Library/Common';
+import {useTheme} from '../../Context/ThemeContext';
 
 const IosSubscriptionCard = ({
   props,
@@ -17,6 +18,16 @@ const IosSubscriptionCard = ({
   loading,
   isDisabled,
 }) => {
+  const {theme} = useTheme();
+  // const countryCode = RNLocalize.getCountry();
+  // console.log('countryCode', countryCode);
+
+  // const isNigerian = countryCode === 'NG';
+
+  // const formattedPrice = isNigerian
+  //   ? formatToNaira(props?.localizedPrice)
+  //   : formatToUSD(props?.localizedPrice);
+
   return (
     <TouchableOpacity
       onPress={isDisabled ? null : onPress}
@@ -27,9 +38,10 @@ const IosSubscriptionCard = ({
           borderColor: borderColor || COLORS.appGrey4,
           // opacity: isDisabled ? 0.5 : 1,
         },
-      ]}
-    >
-      <Text style={styles.subPlan}>{props?.subType} </Text>
+      ]}>
+      <Text style={[styles.subPlan, {color: theme?.text}]}>
+        {props?.subType}{' '}
+      </Text>
       {/* <Text
         style={{
           fontSize: 16,
@@ -41,10 +53,13 @@ const IosSubscriptionCard = ({
         {props?.oldPrice}/month
       </Text> */}
 
-      <Text style={styles.subPlanPrice}>
-        <Text style={{ fontSize: 14 }}>Current: </Text>
-        {formatToUSD(props?.localizedPrice)}{" "}
-        <Text style={{ fontSize: 18, fontWeight: "400" }}>/month</Text>
+      <Text style={[styles.subPlanPrice, {color: theme?.text}]}>
+        <Text style={{fontSize: 14}}>Current: </Text>
+        {props?.localizedPrice}{' '}
+        <Text
+          style={{fontSize: 18, fontWeight: '400', color: theme?.borderColor}}>
+          /month
+        </Text>
       </Text>
 
       {props?.subFeatures?.map((cur, i) => (
@@ -54,7 +69,13 @@ const IosSubscriptionCard = ({
             size={20}
             color={COLORS.rendezvousRed}
           />
-          <Text style={{ fontSize: 16, fontWeight: "500", marginLeft: 10 }}>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: '500',
+              marginLeft: 10,
+              color: theme?.borderColor,
+            }}>
             {cur}
           </Text>
         </View>
@@ -64,18 +85,17 @@ const IosSubscriptionCard = ({
       <View
         style={{
           bottom: 0,
-          position: "relative",
+          position: 'relative',
           width: windowWidth / 1.5,
           // padding: 20,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
         {isSubscribed ? (
-          <TransparentBtn title={"Subscribed"} width={2} disabled={true} />
+          <TransparentBtn title={'Subscribed'} width={2} disabled={true} />
         ) : (
           <FormButton
-            title={"Subscribe"}
+            title={'Subscribe'}
             width={2}
             disabled={loading || isSubscribed || isDisabled}
             onPress={onSubscriptionPressed}
@@ -106,14 +126,14 @@ const styles = StyleSheet.create({
     padding: 10,
     // backgroundColor: 'red',
     borderRadius: 10,
-    width: "100%",
+    width: '100%',
   },
   subPlanPrice: {
     fontSize: 24,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   subFeatures: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 20,
   },
 });

@@ -1,26 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from 'react';
 import {
   View,
   FlatList,
   Text,
   TouchableOpacity,
   ActivityIndicator,
-} from "react-native";
-import debounce from "lodash.debounce";
-import BookingFormInput from "./BookingFormInput";
-import { COLORS } from "../../themes/themes";
-import axiosInstance from "../../utils/api-client";
+} from 'react-native';
+import debounce from 'lodash.debounce';
+import BookingFormInput from './BookingFormInput';
+import {COLORS} from '../../themes/themes';
+import axiosInstance from '../../utils/api-client';
+import {useTheme} from '../../Context/ThemeContext';
 
-const AirportSearchInput = ({ onSelect, formInputTitle }) => {
-  const [query, setQuery] = useState("");
+const AirportSearchInput = ({onSelect, formInputTitle}) => {
+  const {theme} = useTheme();
+
+  const [query, setQuery] = useState('');
   const [airports, setAirports] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const [isSelected, setIsSelected] = useState(false);
 
   // Call API when query changes
-  const fetchAirports = debounce(async (text) => {
-    console.log("eeee", text?.length);
+  const fetchAirports = debounce(async text => {
+    console.log('eeee', text?.length);
     if (!text || text.length < 3) {
       return;
     }
@@ -30,16 +33,16 @@ const AirportSearchInput = ({ onSelect, formInputTitle }) => {
 
       const res = await axiosInstance({
         url: `reservation/locations/search?keyword=${query}&subType=AIRPORT&subType=CITY`,
-        method: "GET",
+        method: 'GET',
       });
 
       //   const res = await axios.get(
       //     `https://api.example.com/airports?search=${text}`,
       //   );
-      console.log("airport search", res?.data);
+      console.log('airport search', res?.data);
       setAirports(res?.data?.data?.data || []);
     } catch (error) {
-      console.log("Airport search error:", error?.response);
+      console.error('Airport search error:', error?.response);
     } finally {
       setLoading(false);
     }
@@ -65,23 +68,22 @@ const AirportSearchInput = ({ onSelect, formInputTitle }) => {
       {loading && (
         <ActivityIndicator
           size="small"
-          color="#000"
-          style={{ marginTop: 10 }}
+          color={theme?.text}
+          style={{marginTop: 10}}
         />
       )}
 
       {airports?.length > 0 && (
         <View
           style={{
-            backgroundColor: "whitesmoke",
+            backgroundColor: theme?.borderColor,
             borderRadius: 4,
             marginTop: 10,
-          }}
-        >
+          }}>
           <FlatList
             data={airports}
             keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
+            renderItem={({item}) => (
               <TouchableOpacity
                 onPress={() => {
                   onSelect(item);
@@ -92,13 +94,12 @@ const AirportSearchInput = ({ onSelect, formInputTitle }) => {
                 style={{
                   padding: 10,
                   borderBottomWidth: 0.5,
-                  borderColor: "#ccc",
-                }}
-              >
-                <Text style={{ fontWeight: "bold" }}>
+                  borderColor: '#ccc',
+                }}>
+                <Text style={{fontWeight: 'bold', color: theme?.text}}>
                   {item?.address?.cityName}, {item?.address?.countryName}
                 </Text>
-                <Text style={{ color: "#666" }}>
+                <Text style={{color: theme?.text}}>
                   {item?.address?.cityName} ({item.iataCode})
                 </Text>
               </TouchableOpacity>

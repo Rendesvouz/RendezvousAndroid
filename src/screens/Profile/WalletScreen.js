@@ -23,6 +23,7 @@ import FormInput from "../../components/form/FormInput";
 import { COLORS } from "../../themes/themes";
 import ScrollViewSpace from "../../components/common/ScrollViewSpace";
 import TransactionsCard from "../../components/cards/TransactionsCard";
+import { useTheme } from "../../Context/ThemeContext";
 
 const WalletScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -32,6 +33,7 @@ const WalletScreen = ({ navigation }) => {
   const loggedinUserCountry = state?.user?.user?.profile?.country;
 
   const bottomSheetRef = useRef();
+  const { theme } = useTheme();
 
   const PAYSTACK_LIVE_SECRET_KEY =
     process.env.EXPO_PUBLIC_PAYSTACK_LIVE_SECRET_KEY;
@@ -49,7 +51,7 @@ const WalletScreen = ({ navigation }) => {
 
   let reverseTransactionList = [];
   if (transactionsList) {
-    reverseTransactionList = [...transactionsList]?.reverse();
+    reverseTransactionList = [...transactionsList].reverse();
   }
 
   // Error states
@@ -57,8 +59,7 @@ const WalletScreen = ({ navigation }) => {
   const [priceError, setPriceError] = useState("");
 
   // Paystack Integration
-  // const paystackWebViewRef = useRef(paystackProps?.PayStackRef);
-  const paystackWebViewRef = useRef();
+  const paystackWebViewRef = useRef(paystackProps.PayStackRef);
 
   const fetchWalletBalance = async () => {
     setLoading(true);
@@ -202,14 +203,19 @@ const WalletScreen = ({ navigation }) => {
         </Text>
       </View> */}
 
-      <View style={styles.walletBalanceContainer}>
+      <View
+        style={[
+          styles.walletBalanceContainer,
+          { borderBottomColor: theme?.borderColor },
+        ]}
+      >
         <View>
           <Text
             style={{ fontSize: 14, fontWeight: "400", color: COLORS.appGrey2 }}
           >
             Current Balance
           </Text>
-          <Text style={styles.walletBalance}>
+          <Text style={[styles.walletBalance, { color: theme?.text }]}>
             {loading ? (
               <ActivityIndicator color="white" />
             ) : walletBalance ? (
@@ -221,7 +227,7 @@ const WalletScreen = ({ navigation }) => {
         </View>
         <TouchableOpacity
           onPress={() => {
-            bottomSheetRef?.current?.open();
+            bottomSheetRef.current.open();
           }}
           style={{
             padding: 10,
@@ -254,7 +260,13 @@ const WalletScreen = ({ navigation }) => {
           }}
         >
           <Text style={{ color: COLORS.appGrey2 }}>Recent Transactions</Text>
-          <Text style={{ borderBottomWidth: 1, borderBottomColor: "black" }}>
+          <Text
+            style={{
+              borderBottomWidth: 1,
+              borderBottomColor: theme?.borderColor,
+              color: theme?.borderColor,
+            }}
+          >
             See all
           </Text>
         </View>
@@ -300,7 +312,7 @@ const WalletScreen = ({ navigation }) => {
                 if (!price) {
                   setPriceError("Please provide the amount for funding");
                 } else {
-                  paystackWebViewRef?.current?.startTransaction();
+                  paystackWebViewRef.current.startTransaction();
                 }
               }}
             />

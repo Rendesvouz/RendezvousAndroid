@@ -2,7 +2,6 @@ import { StyleSheet } from "react-native";
 import React, { useRef, useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import * as ImagePicker from "expo-image-picker";
-
 import Toast from "react-native-toast-message";
 import { useDispatch } from "react-redux";
 

@@ -10,7 +10,6 @@ import {
 import React, { useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import ImageView from "react-native-image-viewing";
-import SkeletonPlaceholder from "react-native-skeleton-placeholder-expo";
 import { useDispatch, useSelector } from "react-redux";
 
 import SafeAreaViewComponent from "../../components/common/SafeAreaViewComponent";
@@ -19,6 +18,7 @@ import ProfileOptionsDisplay from "../../components/common/ProfileOptionsDisplay
 import ScrollViewSpace from "../../components/common/ScrollViewSpace";
 import { COLORS } from "../../themes/themes";
 import axiosInstance from "../../utils/api-client";
+import { useTheme } from "../../Context/ThemeContext";
 
 const settings = [
   {
@@ -86,6 +86,7 @@ const settings = [
 const ProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
+  const { theme } = useTheme();
 
   const userProfle = state?.user?.user?.profile;
   console.log("userProfle", userProfle);
@@ -160,27 +161,21 @@ const ProfileScreen = ({ navigation }) => {
               setIsVisible(true);
             }}
           >
-            {loading ? (
-              <SkeletonPlaceholder
-                highlightColor={COLORS.skeletonBgColor}
-                backgroundColor={COLORS.skeletonHighlightColor}
-                speed={1900}
-              >
-                <Image style={styles.image} source={""} />
-              </SkeletonPlaceholder>
-            ) : (
-              <Image
-                source={{ uri: userProfle?.profile_pictures[0] }}
-                style={styles.image}
-                onPress={() => {
-                  setIsVisible(true);
-                }}
-              />
-            )}
+            <Image
+              source={{ uri: userProfle?.profile_pictures[0] }}
+              style={styles.image}
+              onPress={() => {
+                setIsVisible(true);
+              }}
+            />
           </TouchableOpacity>
           <View style={styles.profileDetails}>
-            <Text style={styles.profileName}>{userProfle?.fullname}</Text>
-            <Text style={styles.profileEmail}>{userProfle?.User?.email}</Text>
+            <Text style={[styles.profileName, { color: theme?.text }]}>
+              {userProfle?.fullname}
+            </Text>
+            <Text style={[styles.profileEmail, { color: theme?.text }]}>
+              {userProfle?.User?.email}
+            </Text>
           </View>
         </View>
 
@@ -193,14 +188,24 @@ const ProfileScreen = ({ navigation }) => {
           />
         ))}
 
-        <TouchableOpacity style={styles.set} onPress={logout}>
+        <TouchableOpacity
+          style={[styles.set, { borderBottomColor: theme?.borderColor }]}
+          onPress={logout}
+        >
           <View style={styles.setsContent}>
-            <Ionicons name="log-out-outline" size={20} color={"black"} />
-            <Text style={[styles.settingsText]}>Sign Out</Text>
+            <Ionicons name="log-out-outline" size={20} color={"#292D32"} />
+            <Text
+              style={[styles.settingsText, { color: theme?.rendezvousText }]}
+            >
+              Sign Out
+            </Text>
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.set} onPress={deactivateAccount}>
+        <TouchableOpacity
+          style={[styles.set, { borderBottomColor: theme?.borderColor }]}
+          onPress={deactivateAccount}
+        >
           <View style={styles.setsContent}>
             <Ionicons
               name="trash-outline"

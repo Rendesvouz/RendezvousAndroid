@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
   loading: false,
@@ -23,6 +23,10 @@ const initialState = {
   userLifeCoachPreference: null,
   userLifeCoaches: [],
 
+  // landing page
+  stringsLandingPage: false,
+  wellnessLandingPage: false,
+
   // tours section
   toursLocations: null,
 
@@ -40,7 +44,7 @@ const initialState = {
 };
 
 const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState: initialState,
   reducers: {
     getUser: (state, action) => {
@@ -86,6 +90,10 @@ const userSlice = createSlice({
       // state.productCategories = null;
       state.checkoutProducts = [];
 
+      // landingpages
+      state.stringsLandingPage = null;
+      state.wellnessLandingPage = null;
+
       // therapist section
       state.weeklyAvailability = {
         Monday: [],
@@ -99,6 +107,12 @@ const userSlice = createSlice({
     },
     setUserDestination: (state, action) => {
       state.destination = action.payload;
+    },
+    setStringsLandingPage: (state, action) => {
+      state.stringsLandingPage = action.payload;
+    },
+    setWellnessLandingPage: (state, action) => {
+      state.wellnessLandingPage = action.payload;
     },
     APILastFetchTime: (state, action) => {
       state.lastAPIFetchTime = action.payload;
@@ -122,7 +136,7 @@ const userSlice = createSlice({
     },
     removeProductFromCart: (state, action) => {
       const updatedSavedItems = state.cartProducts.filter(
-        (item) => item.id !== action.payload.id
+        item => item.id !== action.payload.id,
       );
 
       state.cartProducts = updatedSavedItems;
@@ -132,7 +146,7 @@ const userSlice = createSlice({
     },
     removeProductFromWishlist: (state, action) => {
       const updatedSavedItems = state.wishlistProducts.filter(
-        (item) => item.id !== action.payload.id
+        item => item.id !== action.payload.id,
       );
 
       state.wishlistProducts = updatedSavedItems;
@@ -155,8 +169,8 @@ const userSlice = createSlice({
       state.therapistProfile = action.payload;
     },
     updateWeeklyAvailability: (state, action) => {
-      console.log("acccc", action.payload);
-      const { day, times } = action.payload;
+      console.log('acccc', action.payload);
+      const {day, times} = action.payload;
       if (state.weeklyAvailability[day]) {
         state.weeklyAvailability[day] = times;
       }
@@ -186,6 +200,7 @@ export const {
   saveShopProducts,
   saveProductToCart,
   removeProductFromCart,
+  clearCartStore,
   saveCheckoutProducts,
   saveProductToWishList,
   removeProductFromWishlist,
@@ -193,6 +208,10 @@ export const {
   saveUserTherapists,
   saveUserLifeCoachPreference,
   saveUserLifeCoaches,
+
+  // landing page
+  setStringsLandingPage,
+  setWellnessLandingPage,
 
   // therapist section
   saveTherapistProfile,

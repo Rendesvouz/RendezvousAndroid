@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, {useState, useRef} from 'react';
 import {
   View,
   FlatList,
@@ -7,23 +7,23 @@ import {
   Dimensions,
   StyleSheet,
   TouchableOpacity,
-} from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
+} from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import PreferenceCard from "./PreferenceCard";
-import { windowHeight, windowWidth } from "../../utils/Dimensions";
-import { getAge } from "../../Library/Common";
-import { COLORS } from "../../themes/themes";
+import PreferenceCard from './PreferenceCard';
+import {windowHeight, windowWidth} from '../../utils/Dimensions';
+import {getAge} from '../../Library/Common';
+import {COLORS} from '../../themes/themes';
 
-const { width } = Dimensions.get("window");
+const {width} = Dimensions.get('window');
 
-const StringsProfileCard = ({ item, onPress, onLeftIconPress }) => {
+const StringsProfileCard = ({item, onPress, onLeftIconPress}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef();
 
   const images = item?.matchedUserProfile?.profile_pictures || [];
 
-  const handleScroll = (event) => {
+  const handleScroll = event => {
     const index = Math.round(event.nativeEvent.contentOffset.x / width);
     setCurrentIndex(index);
   };
@@ -32,8 +32,7 @@ const StringsProfileCard = ({ item, onPress, onLeftIconPress }) => {
     <TouchableOpacity
       style={styles.cardContainer}
       onPress={onPress}
-      activeOpacity={0.9}
-    >
+      activeOpacity={0.9}>
       {/* FlatList with Swipeable Images */}
       <FlatList
         ref={flatListRef}
@@ -43,12 +42,11 @@ const StringsProfileCard = ({ item, onPress, onLeftIconPress }) => {
         showsHorizontalScrollIndicator={false}
         onScroll={handleScroll}
         keyExtractor={(uri, index) => index.toString()}
-        renderItem={({ item: imageUri }) => (
+        renderItem={({item: imageUri}) => (
           <ImageBackground
-            source={{ uri: imageUri }}
+            source={{uri: imageUri}}
             imageStyle={styles.imageBackground}
-            style={styles.imageWrapper}
-          >
+            style={styles.imageWrapper}>
             {/* Overlay Info */}
             {/* <View style={styles.profileInfo}>
               <Text style={styles.profileName}>
@@ -79,10 +77,10 @@ const StringsProfileCard = ({ item, onPress, onLeftIconPress }) => {
                   width: 50,
                   height: 50,
                   padding: 10,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: 'white',
+                }}>
                 <Ionicons name="arrow-back-outline" size={30} color="black" />
               </TouchableOpacity>
             </View>
@@ -111,55 +109,55 @@ const styles = StyleSheet.create({
     width: windowWidth,
     height: windowHeight / 1.8,
     // borderRadius: 20,
-    overflow: "hidden",
+    overflow: 'hidden',
     // marginBottom: 20,
   },
   imageWrapper: {
     width: width,
     height: windowHeight / 1.8,
-    justifyContent: "flex-end",
+    justifyContent: 'flex-end',
   },
   imageBackground: {
-    resizeMode: "cover",
+    resizeMode: 'cover',
   },
   profileInfo: {
-    backgroundColor: "rgba(0,0,0,0.4)",
+    backgroundColor: 'rgba(0,0,0,0.4)',
     padding: 16,
   },
   profileName: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   displaySection: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 8,
     gap: 8,
-    flexWrap: "wrap",
+    flexWrap: 'wrap',
   },
   indicatorWrapper: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 10,
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "center",
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
     paddingHorizontal: 16,
   },
   indicator: {
     height: 3,
     width: 30,
-    backgroundColor: "#ccc",
+    backgroundColor: '#ccc',
     marginHorizontal: 2,
     borderRadius: 5,
   },
   activeIndicator: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   backBtnWrapper: {
-    position: "absolute",
+    position: 'absolute',
     top: 50,
-    width: "100%",
-    flexDirection: "row",
+    width: '100%',
+    flexDirection: 'row',
     // justifyContent: 'center',
     paddingHorizontal: 16,
     padding: 20,

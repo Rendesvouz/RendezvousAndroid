@@ -5,9 +5,10 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import React, { useEffect, useState } from "react";
-import { COLORS } from "../../themes/themes";
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {COLORS} from '../../themes/themes';
+import {useTheme} from '../../Context/ThemeContext';
 
 const ResendTimer = ({
   activeResend,
@@ -17,30 +18,29 @@ const ResendTimer = ({
   targetTime,
   resendEmail,
 }) => {
+  const {theme} = useTheme();
+
   return (
     <View
       style={{
-        flexDirection: "row",
-        justifyContent: "center",
+        flexDirection: 'row',
+        justifyContent: 'center',
         marginTop: 20,
-        alignContent: "center",
-        alignSelf: "center",
-      }}
-    >
-      <Text style={{ color: "#000", fontSize: 14, fontWeight: "700" }}>
+        alignContent: 'center',
+        alignSelf: 'center',
+      }}>
+      <Text style={{color: theme?.text, fontSize: 14, fontWeight: '700'}}>
         Didn't get the code?
       </Text>
       {!resendingEmail && (
         <TouchableOpacity
           activeOpacity={0.9}
           disabled={!activeResend}
-          style={{ opacity: !activeResend && 0.5 }}
-          onPress={resendEmail}
-        >
+          style={{opacity: !activeResend && 0.5}}
+          onPress={resendEmail}>
           <Text
             resendStatus={resendStatus}
-            style={{ textDecorationLine: "underline" }}
-          >
+            style={{textDecorationLine: 'underline'}}>
             {resendStatus}
           </Text>
         </TouchableOpacity>
@@ -56,15 +56,14 @@ const ResendTimer = ({
         <View>
           <Text
             style={{
-              color: "#ccc",
+              color: '#ccc',
               fontSize: 14,
-              fontWeight: "700",
+              fontWeight: '700',
               marginLeft: 10,
               opacity: !activeResend && 0.5,
-            }}
-          >
-            Resend in{" "}
-            <Text style={{ color: COLORS.rendezvousRed }}>
+            }}>
+            Resend in{' '}
+            <Text style={{color: COLORS.rendezvousRed}}>
               {timeLeft || targetTime}
             </Text>
           </Text>
@@ -77,10 +76,9 @@ const ResendTimer = ({
             style={{
               color: COLORS.rendezvousRed,
               fontSize: 14,
-              fontWeight: "700",
+              fontWeight: '700',
               marginLeft: 10,
-            }}
-          >
+            }}>
             Resend
           </Text>
         </TouchableOpacity>

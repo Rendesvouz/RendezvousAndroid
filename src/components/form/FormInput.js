@@ -5,19 +5,20 @@ import {
   TextInput,
   TouchableOpacity,
   Platform,
-} from "react-native";
-import React, { useState } from "react";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { windowHeight, windowWidth } from "../../utils/Dimensions";
-import { COLORS } from "../../themes/themes";
+} from 'react-native';
+import React, {useState} from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {windowHeight, windowWidth} from '../../utils/Dimensions';
+import {COLORS} from '../../themes/themes';
+import {useTheme} from '../../Context/ThemeContext';
 
 const FormInput = ({
   leftIcon,
-  iconColor = "#fff",
+  iconColor = '#fff',
   rightIcon,
   inputStyle,
   containerStyle,
-  placeholderTextColor = "#ccc",
+  placeholderTextColor = COLORS.appGrey5,
   handlePasswordVisibility,
   onPress,
   autoCapitalize,
@@ -35,8 +36,10 @@ const FormInput = ({
   formWidth,
   ...rest
 }) => {
+  const {theme} = useTheme();
+
   // This sets the color of the textInput field, default value is #1E1E1E4D
-  const [inputBg, setInputBg] = useState("#1E1E1E4D");
+  const [inputBg, setInputBg] = useState('#333');
 
   // this function changes the textInput field color when it's on focus
   const customOnFocus = () => {
@@ -45,8 +48,9 @@ const FormInput = ({
 
   // this function changes the textInput field color when it's on blur
   const customOnBlur = () => {
-    setInputBg("#1E1E1E4D");
+    setInputBg('#1E1E1E4D');
   };
+
   return (
     <View
       style={[
@@ -55,9 +59,10 @@ const FormInput = ({
           marginBottom: marginBottom ? marginBottom : 20,
           width: formWidth ? formWidth : null,
         },
-      ]}
-    >
-      <Text style={styles.inputTitle}>{formInputTitle}</Text>
+      ]}>
+      <Text style={[styles.inputTitle, {color: theme?.text}]}>
+        {formInputTitle}
+      </Text>
       <View
         style={[
           styles.container,
@@ -68,15 +73,15 @@ const FormInput = ({
             // height: height ? height : null,
             height: height
               ? height
-              : Platform.OS == "android"
+              : Platform.OS == 'android'
               ? 46
               : windowHeight / 16,
+            backgroundColor: theme?.background,
           },
         ]}
         onPress={onPress}
         onBlur={customOnBlur}
-        onFocus={customOnFocus}
-      >
+        onFocus={customOnFocus}>
         {leftIcon ? (
           <Ionicons
             name={leftIcon}
@@ -89,10 +94,10 @@ const FormInput = ({
           {...rest}
           autoCorrect={false}
           placeholderTextColor={placeholderTextColor}
-          style={[styles.input, inputStyle]}
+          style={[styles.input, inputStyle, {color: theme.text}]}
           onBlur={customOnBlur}
           onFocus={customOnFocus}
-          autoCapitalize={"none"}
+          autoCapitalize={'none'}
           // autoComplete={false}
           keyboardType={keyboardType}
           maxLength={maxLength}
@@ -103,14 +108,13 @@ const FormInput = ({
         />
         {rightIcon ? (
           <TouchableOpacity
-            style={{ padding: 6 }}
+            style={{padding: 6}}
             onPress={handlePasswordVisibility}
-            activeOpacity={0.9}
-          >
+            activeOpacity={0.9}>
             <Ionicons
               name={rightIcon}
               size={15}
-              color={iconColor}
+              color={theme?.text}
               style={styles.rightIcon}
             />
           </TouchableOpacity>
@@ -128,7 +132,7 @@ export default FormInput;
 const styles = StyleSheet.create({
   auth: {
     width: windowWidth / 1.1,
-    alignSelf: "center",
+    alignSelf: 'center',
     // marginTop: 30,
     // marginBottom: 10,
     // backgroundColor: 'red',
@@ -136,42 +140,42 @@ const styles = StyleSheet.create({
   inputTitle: {
     marginBottom: 10,
     fontSize: 16,
-    color: "#1E1E1E",
-    fontWeight: "500",
+    color: '#1E1E1E',
+    fontWeight: '500',
   },
   container: {
     borderRadius: 4,
-    flexDirection: "row",
-    padding: Platform.OS == "android" ? 3 : 10,
-    backgroundColor: "#fff",
+    flexDirection: 'row',
+    padding: Platform.OS == 'android' ? 3 : 10,
+    backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: "#333",
+    borderColor: '#333',
     marginBottom: 0,
-    height: Platform.OS == "android" ? 46 : windowHeight / 16,
+    height: Platform.OS == 'android' ? 46 : windowHeight / 16,
   },
   leftIcon: {
     marginRight: 10,
   },
   input: {
     flex: 1,
-    width: "100%",
+    width: '100%',
     fontSize: 16,
-    color: "black",
+    color: 'black',
     // backgroundColor: 'red',
-    height: Platform.OS == "android" ? 40 : null,
+    height: Platform.OS == 'android' ? 40 : null,
   },
   rightIcon: {
     marginLeft: 10,
-    alignSelf: "center",
-    justifyContent: "center",
-    alignContent: "center",
-    alignItems: "center",
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
     // backgroundColor: 'red',
     height: 15,
   },
   validationError: {
-    color: "red",
-    fontWeight: "500",
+    color: 'red',
+    fontWeight: '500',
     marginBottom: 5,
     fontSize: 13,
     // textAlign: 'center',

@@ -1,93 +1,93 @@
 export const COLORS = {
-  main: "#1974BA",
-  black: "#000000",
-  white: "#FFFFFF",
-  pinky: "#F50157",
-  purple: "#8E24AA",
+  main: '#1974BA',
+  black: '#000000',
+  white: '#FFFFFF',
+  pinky: '#F50157',
+  purple: '#8E24AA',
 
-  rendezvousRed: "#BC0D35",
-  rendezvousBgRed: "#FEF2F2",
-  rendezvousBlack: "#111827",
-  rendezvousBlack2: "#4B5563",
-  rendezvousBlue: "#0052B4",
+  rendezvousRed: '#BC0D35',
+  rendezvousBgRed: '#FEF2F2',
+  rendezvousBlack: '#111827',
+  rendezvousBlack2: '#4B5563',
+  rendezvousBlue: '#0052B4',
 
-  ndonuBtnColor: "#2465E1",
-  ndonuBlueColor: "#2465E1",
-  ndonuWhiteColor: "#ffffff",
-  ndonuGrey: "#1E1E1EB2",
-  ndonuRed: "#bd3838",
+  ndonuBtnColor: '#2465E1',
+  ndonuBlueColor: '#2465E1',
+  ndonuWhiteColor: '#ffffff',
+  ndonuGrey: '#1E1E1EB2',
+  ndonuRed: '#bd3838',
 
-  appBgColor1: "#05A30B",
-  appBgColor2: "#005903",
-  appColor2: "#003018",
-  footerColor: "#0B0B0B",
+  appBgColor1: '#05A30B',
+  appBgColor2: '#005903',
+  appColor2: '#003018',
+  footerColor: '#0B0B0B',
 
   // status colors
-  pendingColor: "#CFB001",
-  pendingBgColor: "#FEFFD9",
-  acceptedColor: "#039855",
-  acceptedBgColor: "#F6FEF9",
-  declinedColor: "#DB3304",
-  declinedBgColor: "#FFF1EE",
+  pendingColor: '#CFB001',
+  pendingBgColor: '#FEFFD9',
+  acceptedColor: '#039855',
+  acceptedBgColor: '#F6FEF9',
+  declinedColor: '#DB3304',
+  declinedBgColor: '#FFF1EE',
 
   // darkMode colors
-  darkModeTextColor: "white",
-  darkModeBgColor: "black",
-  darkModeBtnColor: "white",
-  darkModeBtnTextColor: "black",
-  darkModeIconColor: "white",
+  darkModeTextColor: 'white',
+  darkModeBgColor: 'black',
+  darkModeBtnColor: 'white',
+  darkModeBtnTextColor: 'black',
+  darkModeIconColor: 'white',
 
   // light mode colors
-  lightModeTextColor: "black",
-  lightModeBgColor: "white",
-  lightModeBtnColor: "black",
-  lightModeBtnTextColor: "white",
-  lightModeIconColor: "black",
+  lightModeTextColor: 'black',
+  lightModeBgColor: 'white',
+  lightModeBtnColor: 'black',
+  lightModeBtnTextColor: 'white',
+  lightModeIconColor: 'black',
 
   // App colors
-  splashBg: "#000000",
-  splashBlack: "#000000",
-  appBackground: "#fff",
-  formTextColor: "#E9D800",
-  appBlack: "#000917",
-  appTextColor: "black",
+  splashBg: '#000000',
+  splashBlack: '#000000',
+  appBackground: '#fff',
+  formTextColor: '#E9D800',
+  appBlack: '#000917',
+  appTextColor: 'black',
 
   // Form button colors
-  formActionBtn: "#05A30B",
-  formSecondaryBtn: "#FFFFFF",
-  formSecondaryBtnText: "#000000",
-  formButton: "#B60044",
-  disabledFormButton: "#8DD784",
+  formActionBtn: '#05A30B',
+  formSecondaryBtn: '#FFFFFF',
+  formSecondaryBtnText: '#000000',
+  formButton: '#B60044',
+  disabledFormButton: '#8DD784',
 
   // Text Colors
-  descriptionText: "#5E5E5E",
-  descriptionText2: "#5F5F5F",
-  formSecondaryBtnBorderColor: "#000000",
-  formActionBtnText: "#FFFFFF",
-  appGrey: "#D7D7D7",
-  appGrey2: "#7D8694",
-  appGrey3: "#F7F7F7",
-  appGrey4: "#F3F3F3",
-  appGrey5: "#4B5563",
+  descriptionText: '#5E5E5E',
+  descriptionText2: '#5F5F5F',
+  formSecondaryBtnBorderColor: '#000000',
+  formActionBtnText: '#FFFFFF',
+  appGrey: '#D7D7D7',
+  appGrey2: '#7D8694',
+  appGrey3: '#F7F7F7',
+  appGrey4: '#F3F3F3',
+  appGrey5: '#4B5563',
 
   // Action colors
-  successBg: "#ECFFF1",
-  sucessColor: "#00A400",
+  successBg: '#ECFFF1',
+  sucessColor: '#00A400',
 
-  primary: "#1974BA",
-  whitesmoke: "whitesmoke",
+  primary: '#1974BA',
+  whitesmoke: 'whitesmoke',
 
-  transparent: "transparent",
+  transparent: 'transparent',
 
-  btnBorderColor: "#333",
-  btnBorderColor2: "#666",
+  btnBorderColor: '#333',
+  btnBorderColor2: '#666',
 
-  optionBorderColor: "#333",
-  skeletonBgColor: "#000",
-  skeletonHighlightColor: "#242323",
+  optionBorderColor: '#333',
+  skeletonBgColor: '#000',
+  skeletonHighlightColor: '#242323',
 
-  success: "#6FCF97",
-  secondaryRed: "#FEF2F2",
+  success: '#6FCF97',
+  secondaryRed: '#FEF2F2',
 };
 
 export const SIZES = {
@@ -113,44 +113,44 @@ export const SIZES = {
   // app dimensions
 };
 export const FONTS = {
-  largeTitle: { fontFamily: "Poppins-Black", fontSize: SIZES.largeTitle },
-  h1: { fontFamily: "Poppins-Bold", fontSize: SIZES.h1, lineHeight: 36 },
-  h2: { fontFamily: "Poppins-Bold", fontSize: SIZES.h2, lineHeight: 30 },
-  h3: { fontFamily: "Poppins-SemiBold", fontSize: SIZES.h3, lineHeight: 22 },
+  largeTitle: {fontFamily: 'Poppins-Black', fontSize: SIZES.largeTitle},
+  h1: {fontFamily: 'Poppins-Bold', fontSize: SIZES.h1, lineHeight: 36},
+  h2: {fontFamily: 'Poppins-Bold', fontSize: SIZES.h2, lineHeight: 30},
+  h3: {fontFamily: 'Poppins-SemiBold', fontSize: SIZES.h3, lineHeight: 22},
   h4: {
-    fontFamily: "Poppins-SemiBold",
+    fontFamily: 'Poppins-SemiBold',
     fontSize: SIZES.h4,
     lineHeight: 22,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
-  h5: { fontFamily: "Poppins-SemiBold", fontSize: SIZES.h5, lineHeight: 22 },
+  h5: {fontFamily: 'Poppins-SemiBold', fontSize: SIZES.h5, lineHeight: 22},
   body1: {
-    fontFamily: "Poppins-Regular",
+    fontFamily: 'Poppins-Regular',
     fontSize: SIZES.body1,
     lineHeight: 36,
   },
   body2: {
-    fontFamily: "Poppins-Regular",
+    fontFamily: 'Poppins-Regular',
     fontSize: SIZES.body2,
     lineHeight: 30,
   },
   body3: {
-    fontFamily: "Poppins-Regular",
+    fontFamily: 'Poppins-Regular',
     fontSize: SIZES.body3,
     lineHeight: 22,
   },
   body4: {
-    fontFamily: "Poppins-Regular",
+    fontFamily: 'Poppins-Regular',
     fontSize: SIZES.body4,
     lineHeight: 22,
   },
   body5: {
-    fontFamily: "Poppins-Regular",
+    fontFamily: 'Poppins-Regular',
     fontSize: SIZES.body5,
     lineHeight: 22,
   },
 };
 
-const appTheme = { COLORS, SIZES, FONTS };
+const appTheme = {COLORS, SIZES, FONTS};
 
 export default appTheme;

@@ -1,25 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { AppState, Image, StyleSheet } from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useDispatch, useSelector } from "react-redux";
+import React, {useEffect, useState} from 'react';
+import {AppState, Image, StyleSheet} from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useDispatch, useSelector} from 'react-redux';
 
-import { createStackNavigator } from "@react-navigation/stack";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import { COLORS } from "../themes/themes";
-import CustomDrawer from "../components/common/CustomDrawer";
-import MainScreen from "../screens/MainScreen";
-import OnboardingScreen from "../screens/auth/OnboardingScreen";
-import SplashScreen from "../screens/SplashScreen";
+import {createStackNavigator} from '@react-navigation/stack';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {COLORS} from '../themes/themes';
+import CustomDrawer from '../components/common/CustomDrawer';
+import MainScreen from '../screens/MainScreen';
+import SplashScreen from '../screens/SplashScreen';
+import OnboardingScreen from '../screens/auth/OnboardingScreen';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
 const AppNavigation = () => {
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
+  const state = useSelector(state => state);
   const reduxLaunchScreen = state?.user?.launchScreen;
-  console.log("reduxLaunchScreen", reduxLaunchScreen);
 
   const [isFirstLaunch, setIsFirstLaunch] = useState(null);
 
@@ -28,6 +27,7 @@ const AppNavigation = () => {
   useEffect(() => {
     setIsLoading(reduxLaunchScreen);
     setIsFirstLaunch(false);
+
     // Set isLoading to false after 3 seconds
     const timeoutId = setTimeout(() => {
       setIsLoading(false);
@@ -41,21 +41,21 @@ const AppNavigation = () => {
   useEffect(() => {
     let isMounted = true;
     if (isMounted) {
-      AsyncStorage.getItem("alreadyLaunched").then((value) => {
+      AsyncStorage.getItem('alreadyLaunched').then(value => {
         if (value === null) {
-          AsyncStorage.setItem("alreadyLaunched", "true");
+          AsyncStorage.setItem('alreadyLaunched', 'true');
           setIsFirstLaunch(true);
-          console.log("isFirstLaunch");
+          console.log('isFirstLaunch');
         } else {
           setIsFirstLaunch(false);
-          console.log("notIsFirstLaunch");
+          console.log('notIsFirstLaunch');
         }
       });
 
       // AppStateIOS.addEventListener('change', state => console.log('AppStateIOS changed to', state));
 
-      AppState.addEventListener("change", (state) =>
-        console.log("AppState changed to", state)
+      AppState.addEventListener('change', state =>
+        console.log('AppState changed to', state),
       );
     }
     return () => {
@@ -70,17 +70,16 @@ const AppNavigation = () => {
     return (
       <Drawer.Navigator
         // ref={navigationRef}
-        drawerContent={(props) => <CustomDrawer {...props} />}
+        drawerContent={props => <CustomDrawer {...props} />}
         screenOptions={{
           drawerLabelStyle: {
             marginLeft: -25,
           },
           drawerActiveBackgroundColor: COLORS.black,
-          drawerActiveTintColor: "white",
+          drawerActiveTintColor: 'white',
           drawerInactiveTintColor: COLORS.btnBorderColor,
         }}
-        headerMode="none"
-      >
+        headerMode="none">
         <Stack.Screen
           name="Onboarding"
           component={OnboardingScreen}
@@ -93,7 +92,7 @@ const AppNavigation = () => {
           component={MainScreen}
           options={{
             headerShown: false,
-            drawerIcon: ({ color }) => (
+            drawerIcon: ({color}) => (
               <Ionicons name="home-outline" color={color} size={22} />
             ),
           }}
@@ -104,17 +103,16 @@ const AppNavigation = () => {
     return (
       <Drawer.Navigator
         // ref={navigationRef}
-        drawerContent={(props) => <CustomDrawer {...props} />}
+        drawerContent={props => <CustomDrawer {...props} />}
         screenOptions={{
           drawerLabelStyle: {
             marginLeft: -15,
           },
           drawerActiveBackgroundColor: COLORS.black,
-          drawerActiveTintColor: "white",
+          drawerActiveTintColor: 'white',
           drawerInactiveTintColor: COLORS.btnBorderColor,
         }}
-        headerMode="none"
-      >
+        headerMode="none">
         {isLoading ? (
           <Stack.Screen
             name="Splash"
@@ -129,7 +127,7 @@ const AppNavigation = () => {
             component={MainScreen}
             options={{
               headerShown: false,
-              drawerIcon: ({ color }) => (
+              drawerIcon: ({color}) => (
                 <Ionicons name="home-outline" color={color} size={22} />
               ),
             }}

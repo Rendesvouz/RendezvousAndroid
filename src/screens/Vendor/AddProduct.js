@@ -274,7 +274,7 @@ const AddProduct = ({ navigation }) => {
       </ScrollView>
 
       {/* Buttons */}
-      <FixedBottomContainer top={1.1}>
+      <FixedBottomContainer top={1.2}>
         <FormButton
           title={"Upload Product"}
           width={1.1}

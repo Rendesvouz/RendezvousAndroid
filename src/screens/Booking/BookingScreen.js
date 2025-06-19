@@ -1,41 +1,43 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import React from 'react';
 
-import SafeAreaViewComponent from "../../components/common/SafeAreaViewComponent";
+import SafeAreaViewComponent from '../../components/common/SafeAreaViewComponent';
 
-import MoreCard from "../../components/cards/MoreCard";
-import ScrollViewSpace from "../../components/common/ScrollViewSpace";
-import HeaderTitle from "../../components/common/HeaderTitle";
+import MoreCard from '../../components/cards/MoreCard';
+import ScrollViewSpace from '../../components/common/ScrollViewSpace';
+import HeaderTitle from '../../components/common/HeaderTitle';
 
 const rendezvousServices2 = [
   {
     id: 1,
     image:
-      "https://res.cloudinary.com/rendezvouscare/image/upload/v1741344647/Frame_1-3_hclicq.png",
-    title: "Book Flights",
-    navigate: "FlightsScreen",
+      'https://res.cloudinary.com/rendezvouscare/image/upload/w_1000,ar_16:9,c_fill,g_auto,e_sharpen/v1749647252/bao-menglong--FhoJYnw-cg-unsplash_gj7cbk.jpg',
+    title: 'Book Flights',
+    headerTitle: 'Flights Booking',
+    navigate: 'FlightsScreen',
     description:
-      "Book flights, hotels, and unforgettable experiences all in one place.",
+      'Book flights, hotels, and unforgettable experiences all in one place.',
   },
   {
     id: 2,
     image:
-      "https://res.cloudinary.com/rendezvouscare/image/upload/v1742595860/tourrr_lqazjb.png",
-    title: "Plan unforgettable tour experiences",
-    navigate: "TourguideScreen",
-    description: "Book a tour guide and explore with ease.",
+      'https://res.cloudinary.com/rendezvouscare/image/upload/v1742595860/tourrr_lqazjb.png',
+    title: 'Plan unforgettable tour experiences',
+    headerTitle: 'Tours',
+    navigate: 'TourguideScreen',
+    description: 'Book a tour guide and explore with ease.',
   },
-  {
-    id: 3,
-    image:
-      "https://res.cloudinary.com/rendezvouscare/image/upload/v1742596405/vietnam_k0sxif.jpg",
-    title: "Tour Guides",
-    description:
-      "Connect with experienced local tour guides to explore hidden gems, popular attractions, and authentic cultural experiences tailored to your journey.",
-    navigate: "TourguideScreen",
-    imagee:
-      "https://res.cloudinary.com/rendezvouscare/image/upload/v1742596405/vietnam_k0sxif.jpg",
-  },
+  // {
+  //   id: 3,
+  //   image:
+  //     'https://res.cloudinary.com/rendezvouscare/image/upload/v1742596405/vietnam_k0sxif.jpg',
+  //   title: 'Tour Guides',
+  //   description:
+  //     'Connect with experienced local tour guides to explore hidden gems, popular attractions, and authentic cultural experiences tailored to your journey.',
+  //   navigate: 'TourguideScreen',
+  //   imagee:
+  //     'https://res.cloudinary.com/rendezvouscare/image/upload/v1742596405/vietnam_k0sxif.jpg',
+  // },
   // {
   //   id: 3,
   //   image:
@@ -56,16 +58,15 @@ const rendezvousServices2 = [
   // },
 ];
 
-const BookingScreen = ({ navigation }) => {
+const BookingScreen = ({navigation}) => {
   return (
     <SafeAreaViewComponent>
-      <HeaderTitle headerTitle={"Travels"} />
+      <HeaderTitle headerTitle={'Travels'} />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ padding: 10 }}
-      >
-        <View style={{ padding: 10 }}>
+        contentContainerStyle={{padding: 10}}>
+        <View style={{padding: 10}}>
           {rendezvousServices2?.map((cur, i) => (
             <MoreCard
               key={i}

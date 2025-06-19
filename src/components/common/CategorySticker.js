@@ -1,23 +1,21 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { COLORS } from "../../themes/themes";
+import {StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import {COLORS} from '../../themes/themes';
 
-const CategorySticker = ({ categoryName }) => {
+const CategorySticker = ({categoryName}) => {
   return (
     <View
       style={{
-        backgroundColor: "#2465E11A",
+        backgroundColor: '#2465E11A',
         borderRadius: 15,
         padding: 10,
-        alignSelf: "flex-start",
-      }}
-    >
+        alignSelf: 'flex-start',
+      }}>
       <Text
         style={[
           styles.artisanPrice,
-          { color: COLORS.ndonuBlueColor, fontSize: 8 },
-        ]}
-      >
+          {color: COLORS.ndonuBlueColor, fontSize: 8},
+        ]}>
         {categoryName}
       </Text>
     </View>

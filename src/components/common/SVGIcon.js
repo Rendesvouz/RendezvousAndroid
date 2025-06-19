@@ -1,7 +1,7 @@
-import React from "react";
-import { icons } from "../../assets/Icons/index";
+import React from 'react';
+import {icons} from '../../assets/Icons/index';
 
-const SvgIcon = ({ name, width = 20, height = 20, color = "#000", style }) => {
+const SvgIcon = ({name, width = 20, height = 20, color = '#000', style}) => {
   const Icon = icons[name];
 
   if (!Icon) {

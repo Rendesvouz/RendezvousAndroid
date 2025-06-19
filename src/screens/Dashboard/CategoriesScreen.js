@@ -1,9 +1,9 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-import SafeAreaViewComponent from "../../components/common/SafeAreaViewComponent";
-import HeaderTitle from "../../components/common/HeaderTitle";
-import SearchBar from "../../components/search/SearchBar";
-import CategoryCard from "../../components/cards/CategoryCard";
+import {StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import SafeAreaViewComponent from '../../components/common/SafeAreaViewComponent';
+import HeaderTitle from '../../components/common/HeaderTitle';
+import SearchBar from '../../components/search/SearchBar';
+import CategoryCard from '../../components/cards/CategoryCard';
 
 const categoriesSector = [
   {
@@ -44,12 +44,12 @@ const categoriesSector = [
   },
 ];
 
-const CategoriesScreen = ({ navigation }) => {
+const CategoriesScreen = ({navigation}) => {
   return (
     <SafeAreaViewComponent>
       <HeaderTitle
-        headerTitle={"Top Categories"}
-        leftIcon={"arrow-back-outline"}
+        headerTitle={'Top Categories'}
+        leftIcon={'arrow-back-outline'}
         onLeftIconPress={() => {
           navigation.goBack();
         }}
@@ -69,12 +69,12 @@ export default CategoriesScreen;
 
 const styles = StyleSheet.create({
   catView: {
-    display: "flex",
-    flexDirection: "row",
+    display: 'flex',
+    flexDirection: 'row',
     padding: 20,
-    flexWrap: "wrap",
+    flexWrap: 'wrap',
     // backgroundColor: 'red',
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

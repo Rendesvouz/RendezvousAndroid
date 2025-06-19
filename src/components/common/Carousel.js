@@ -1,7 +1,6 @@
 import { View, Image, StyleSheet, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 import Carousel from "react-native-reanimated-carousel";
-import SkeletonPlaceholder from "react-native-skeleton-placeholder-expo";
 import { windowWidth } from "../../utils/Dimensions";
 import { sliderData } from "../../data/dummyData";
 import { COLORS } from "../../themes/themes";
@@ -54,19 +53,6 @@ const Carousels = ({ props }) => {
         onLoad={onLoadEnd}
         onLoadEnd={onLoadEnd}
       />
-
-      {!loading && (
-        // This shows the skeletonLoader when the image hasn't fully loaded on the screen
-        <View style={{ position: "absolute", top: 0, zIndex: 1000 }}>
-          <SkeletonPlaceholder
-            highlightColor={COLORS.skeletonHighlightColor}
-            backgroundColor={COLORS.skeletonBgColor}
-            speed={1900}
-          >
-            <View style={{ width: windowWidth, height: 200 }} />
-          </SkeletonPlaceholder>
-        </View>
-      )}
     </View>
   );
 };

@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import React, { useState } from "react";
-import SkeletonPlaceholder from "react-native-skeleton-placeholder-expo";
 
 import { windowWidth } from "../../utils/Dimensions";
 import { setPriceTo2DecimalPlaces } from "../../Library/Common";
 import { COLORS } from "../../themes/themes";
+import { useTheme } from "../../Context/ThemeContext";
 
 const ProductCard = ({
   navigation,
@@ -14,6 +14,8 @@ const ProductCard = ({
   productPrice,
   props,
 }) => {
+  const { theme } = useTheme();
+
   const [loading, setloading] = useState(true);
   const onLoadEnd = () => {
     setloading(false);
@@ -24,7 +26,7 @@ const ProductCard = ({
       <TouchableOpacity
         activeOpacity={0.9}
         onPress={onPress}
-        style={styles.productCard}
+        style={[styles.productCard, { borderColor: theme?.borderColor }]}
       >
         <Image
           style={styles.productImage}
@@ -32,7 +34,10 @@ const ProductCard = ({
           onLoad={onLoadEnd}
           onLoadEnd={onLoadEnd}
         />
-        <Text numberOfLines={1} style={styles.productName}>
+        <Text
+          numberOfLines={1}
+          style={[styles.productName, { color: theme?.text }]}
+        >
           {productName}
         </Text>
         <Text style={styles.productPrice}>
@@ -54,29 +59,6 @@ const ProductCard = ({
           )}
         </Text>
       </TouchableOpacity>
-
-      {loading && (
-        // This shows the skeletonLoader when the image hasn't fully loaded on the screen
-        <TouchableOpacity
-          activeOpacity={0.9}
-          onPress={onPress}
-          style={styles.productCard}
-        >
-          <SkeletonPlaceholder
-            highlightColor={COLORS.skeletonHighlightColor}
-            backgroundColor={COLORS.skeletonBgColor}
-            speed={1900}
-          >
-            <Image style={styles.productImage} source={""} />
-          </SkeletonPlaceholder>
-          <Text numberOfLines={1} style={styles.productName}>
-            {productName}
-          </Text>
-          <Text style={styles.productPrice}>
-            {setPriceTo2DecimalPlaces(productPrice)}
-          </Text>
-        </TouchableOpacity>
-      )}
     </>
   );
 };

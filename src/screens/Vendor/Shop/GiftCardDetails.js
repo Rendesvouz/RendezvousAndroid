@@ -1,36 +1,36 @@
-import { StyleSheet, ScrollView, Image, Text, View } from "react-native";
-import React, { useState } from "react";
-import Toast from "react-native-toast-message";
+import {StyleSheet, ScrollView, Image, Text, View} from 'react-native';
+import React, {useState} from 'react';
+import Toast from 'react-native-toast-message';
 
-import SafeAreaViewComponent from "../../../components/common/SafeAreaViewComponent";
-import HeaderTitle from "../../../components/common/HeaderTitle";
-import FixedBottomContainer from "../../../components/common/FixedBottomContainer";
-import FormButton from "../../../components/form/FormButton";
-import axiosInstance from "../../../utils/api-client";
-import { RNToast } from "../../../Library/Common";
-import ScrollViewSpace from "../../../components/common/ScrollViewSpace";
-import FormInput from "../../../components/form/FormInput";
-import { windowHeight, windowWidth } from "../../../utils/Dimensions";
+import SafeAreaViewComponent from '../../../components/common/SafeAreaViewComponent';
+import HeaderTitle from '../../../components/common/HeaderTitle';
+import FixedBottomContainer from '../../../components/common/FixedBottomContainer';
+import FormButton from '../../../components/form/FormButton';
+import axiosInstance from '../../../utils/api-client';
+import {RNToast} from '../../../Library/Common';
+import ScrollViewSpace from '../../../components/common/ScrollViewSpace';
+import FormInput from '../../../components/form/FormInput';
+import {windowHeight, windowWidth} from '../../../utils/Dimensions';
 
-const GiftCardDetails = ({ navigation, route }) => {
+const GiftCardDetails = ({navigation, route}) => {
   const item = route?.params;
-  console.log("eee", item);
+  console.log('eee', item);
 
   const [loading, setLoading] = useState(false);
 
-  const [amount, setAmount] = useState("");
-  const [receiver, setReceiver] = useState("");
-  const [receiverNumber, setReceiverNumber] = useState("");
-  const [senderName, setSenderName] = useState("");
-  const [message, setMessage] = useState("");
+  const [amount, setAmount] = useState('');
+  const [receiver, setReceiver] = useState('');
+  const [receiverNumber, setReceiverNumber] = useState('');
+  const [senderName, setSenderName] = useState('');
+  const [message, setMessage] = useState('');
 
   // Error states
-  const [formError, setFormError] = useState("");
-  const [amountError, setAmountError] = useState("");
-  const [receiverError, setReceiverError] = useState("");
-  const [receiverNumberError, setReceiverNumberError] = useState("");
-  const [senderNameError, setSenderNameError] = useState("");
-  const [messageError, setMessageError] = useState("");
+  const [formError, setFormError] = useState('');
+  const [amountError, setAmountError] = useState('');
+  const [receiverError, setReceiverError] = useState('');
+  const [receiverNumberError, setReceiverNumberError] = useState('');
+  const [senderNameError, setSenderNameError] = useState('');
+  const [messageError, setMessageError] = useState('');
 
   const buyGiftCard = async () => {
     const giftcardData = {
@@ -43,41 +43,41 @@ const GiftCardDetails = ({ navigation, route }) => {
     };
 
     if (!amount) {
-      setAmountError("Please provide an amount");
+      setAmountError('Please provide an amount');
     } else if (!receiver) {
-      setReceiverError("Please provide your recipient email");
+      setReceiverError('Please provide your recipient email');
     } else if (!receiverNumber) {
-      setReceiverNumberError("Please provide your recipients phone number");
+      setReceiverNumberError('Please provide your recipients phone number');
     } else if (!senderName) {
-      setSenderNameError("Please provide your sender name");
+      setSenderNameError('Please provide your sender name');
     } else if (!message) {
-      senderNameError("Please provide a custom message");
+      senderNameError('Please provide a custom message');
     } else {
       setLoading(true);
 
       try {
         await axiosInstance({
-          url: "gift-card/purchase",
-          method: "POST",
+          url: 'gift-card/purchase',
+          method: 'POST',
           data: giftcardData,
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         })
-          .then((res) => {
-            console.log("buyGiftCard res", res);
+          .then(res => {
+            console.log('buyGiftCard res', res);
             setLoading(false);
 
-            RNToast(Toast, "Great, your giftcard has been purchased");
-            navigation.navigate("GiftCardScreen");
+            RNToast(Toast, 'Great, your giftcard has been purchased');
+            navigation.navigate('GiftCardScreen');
           })
-          .catch((err) => {
-            console.log("buyGiftCard err", err?.response);
+          .catch(err => {
+            console.log('buyGiftCard err', err?.response);
             setLoading(false);
-            setFormError("An error occured while purchasing your giftcard");
+            setFormError('An error occured while purchasing your giftcard');
           });
       } catch (error) {
-        console.log("buyGiftCard error", error?.response);
+        console.log('buyGiftCard error', error?.response);
         setLoading(false);
       }
     }
@@ -87,7 +87,7 @@ const GiftCardDetails = ({ navigation, route }) => {
     <SafeAreaViewComponent>
       <HeaderTitle
         headerTitle={item?.name}
-        leftIcon={"arrow-back-outline"}
+        leftIcon={'arrow-back-outline'}
         onLeftIconPress={() => {
           navigation.goBack();
         }}
@@ -95,72 +95,71 @@ const GiftCardDetails = ({ navigation, route }) => {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ padding: 10 }}
-      >
+        contentContainerStyle={{padding: 10}}>
         <Image
           style={styles.detailsMainImage}
-          source={{ uri: item?.logoUrls[0] }}
+          source={{uri: item?.logoUrls[0]}}
         />
         <FormInput
-          formInputTitle={"Amount"}
-          placeholder={""}
+          formInputTitle={'Amount'}
+          placeholder={''}
           value={amount}
-          onChangeText={(txt) => {
+          onChangeText={txt => {
             setAmount(txt);
-            setFormError("");
-            setAmountError("");
+            setFormError('');
+            setAmountError('');
           }}
           errorMessage={amountError}
         />
         <FormInput
-          formInputTitle={"To"}
+          formInputTitle={'To'}
           placeholder="jane@gmail.com"
           value={receiver}
-          onChangeText={(txt) => {
+          onChangeText={txt => {
             setReceiver(txt);
-            setFormError("");
-            setReceiverError("");
+            setFormError('');
+            setReceiverError('');
           }}
           errorMessage={receiverError}
         />
         <FormInput
-          formInputTitle={"Recipient Number"}
+          formInputTitle={'Recipient Number'}
           placeholder="0987654321"
           value={receiverNumber}
-          onChangeText={(txt) => {
+          onChangeText={txt => {
             setReceiverNumber(txt);
-            setFormError("");
-            setReceiverNumberError("");
+            setFormError('');
+            setReceiverNumberError('');
           }}
           errorMessage={receiverNumberError}
         />
         <FormInput
-          formInputTitle={"From"}
+          formInputTitle={'From'}
           placeholder=""
-          keyboardType={"default"}
+          keyboardType={'default'}
           value={senderName}
           width={1.1}
           autoCapitalize="none"
           autoCorrect={false}
-          onChangeText={(txt) => {
+          onChangeText={txt => {
             setSenderName(txt);
-            setFormError("");
-            setSenderNameError("");
+            setFormError('');
+            setSenderNameError('');
           }}
           errorMessage={senderNameError}
         />
         <FormInput
-          formInputTitle={"Custom Message"}
+          formInputTitle={'Custom Message'}
           placeholder=""
-          keyboardType={"default"}
+          keyboardType={'default'}
           value={message}
           width={1.1}
           autoCapitalize="none"
           autoCorrect={false}
-          onChangeText={(txt) => {
+          onChangeText={txt => {
             setMessage(txt);
-            setFormError("");
-            setMessageError("");
+            setFormError('');
+            setMessageError('');
           }}
           errorMessage={messageError}
           numberOfLines={5}
@@ -171,9 +170,9 @@ const GiftCardDetails = ({ navigation, route }) => {
       </ScrollView>
 
       {/* Buttons */}
-      <FixedBottomContainer top={1.1}>
+      <FixedBottomContainer top={1.19}>
         <FormButton
-          title={"Buy Now"}
+          title={'Buy Now'}
           width={1.1}
           onPress={buyGiftCard}
           formError={formError}

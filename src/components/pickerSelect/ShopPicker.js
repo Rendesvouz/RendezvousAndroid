@@ -46,7 +46,7 @@ const ShopPicker = ({
       alignSelf: "center",
 
       marginTop: 0,
-      //   backgroundColor: "red",
+    //   backgroundColor: "red",
     },
     pickerIcon: {
       marginTop: 30,

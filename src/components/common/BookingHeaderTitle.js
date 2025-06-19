@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React from "react";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import ProgressBar from "./ProgressBar";
-import { useSelector } from "react-redux";
-import { windowWidth } from "../../utils/Dimensions";
-import { COLORS } from "../../themes/themes";
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import React from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import ProgressBar from './ProgressBar';
+import {useSelector} from 'react-redux';
+import {windowWidth} from '../../utils/Dimensions';
+import {COLORS} from '../../themes/themes';
 
 const BookingHeaderTitle = ({
   onLeftIconPress,
@@ -20,25 +20,22 @@ const BookingHeaderTitle = ({
 
       <View
         style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
+          flexDirection: 'row',
+          justifyContent: 'space-between',
           //   backgroundColor: 'green',
           width: windowWidth / 3.4,
-        }}
-      >
+        }}>
         <TouchableOpacity
           onPress={onRightIconPress1}
           activeOpacity={0.9}
-          style={styles.iconContainer}
-        >
-          <Ionicons name={"search-outline"} size={24} color={COLORS.appGrey2} />
+          style={styles.iconContainer}>
+          <Ionicons name={'search-outline'} size={24} color={COLORS.appGrey2} />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={onRightIconPress2}
           activeOpacity={0.9}
-          style={styles.iconContainer}
-        >
-          <Ionicons name={"heart-outline"} size={24} color={COLORS.appGrey2} />
+          style={styles.iconContainer}>
+          <Ionicons name={'heart-outline'} size={24} color={COLORS.appGrey2} />
         </TouchableOpacity>
       </View>
     </View>
@@ -49,16 +46,16 @@ export default BookingHeaderTitle;
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
+    flexDirection: 'row',
     padding: 20,
-    justifyContent: "space-between",
-    alignContent: "center",
-    alignItems: "center",
+    justifyContent: 'space-between',
+    alignContent: 'center',
+    alignItems: 'center',
   },
   headerTitle: {
     fontSize: 20,
     color: COLORS.rendezvousBlack,
-    fontWeight: "400",
+    fontWeight: '400',
   },
   leftIconContainer: {
     // backgroundColor: 'red',
@@ -73,20 +70,20 @@ const styles = StyleSheet.create({
     borderColor: COLORS.appGrey3,
   },
   badgeContainer: {
-    position: "absolute",
+    position: 'absolute',
     top: -5,
     right: -5,
     backgroundColor: COLORS.rendezvousRed,
     borderRadius: 10,
     minWidth: 18,
     height: 18,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingHorizontal: 4,
   },
   badgeText: {
-    color: "white",
+    color: 'white',
     fontSize: 12,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });

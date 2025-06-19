@@ -9,6 +9,7 @@ import React, { useState } from "react";
 import { RadioButton } from "react-native-paper";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import DatePicker from "react-native-date-picker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 import SafeAreaViewComponent from "../../../components/common/SafeAreaViewComponent";
 import HeaderTitle from "../../../components/common/HeaderTitle";
@@ -23,6 +24,7 @@ import FormButton from "../../../components/form/FormButton";
 import axiosInstance from "../../../utils/api-client";
 import FormInput from "../../../components/form/FormInput";
 import FixedBottomContainer from "../../../components/common/FixedBottomContainer";
+import { useTheme } from "../../../Context/ThemeContext";
 
 const flightOptions = [
   {
@@ -46,6 +48,8 @@ const flightClasses = [
 ];
 
 const FlightsScreen = ({ navigation }) => {
+  const { theme } = useTheme();
+
   const [loading, setLoading] = useState(false);
 
   const [flightType, setFlightType] = useState("One Way");
@@ -210,7 +214,7 @@ const FlightsScreen = ({ navigation }) => {
         headerTitle={"Flights Booking"}
         leftIcon={"arrow-back-outline"}
         onLeftIconPress={() => {
-          navigation.goBack();
+          navigation.navigate("BookingScreen");
         }}
       />
       <ScrollView
@@ -223,11 +227,11 @@ const FlightsScreen = ({ navigation }) => {
           {flightOptions?.map((cur, i) => (
             <TouchableOpacity
               key={i}
-              style={
-                flightType === cur?.type ? styles.activeCat : styles.priceCat
-              }
+              style={[
+                flightType === cur?.type ? styles.activeCat : styles.priceCat,
+                { color: theme?.text },
+              ]}
               onPress={() => {
-                console.log("prseesd", cur);
                 setFlightType(cur?.type);
               }}
             >
@@ -240,7 +244,9 @@ const FlightsScreen = ({ navigation }) => {
                 color={COLORS.rendezvousRed}
                 uncheckedColor={COLORS.appGrey2}
               />
-              <Text style={styles.priceRange}>{cur?.type}</Text>
+              <Text style={[styles.priceRange, { color: theme?.text }]}>
+                {cur?.type}
+              </Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -274,12 +280,14 @@ const FlightsScreen = ({ navigation }) => {
           }}
         />
 
-        <Text style={styles.formTitle}>Departure</Text>
+        <Text style={[styles.formTitle, { color: theme?.text }]}>
+          Departure
+        </Text>
         <TouchableOpacity
           onPress={() => setStartOpen(true)}
           style={styles.rangePicker}
         >
-          <Text style={styles.dateRange}>
+          <Text style={[styles.dateRange, { color: theme?.text }]}>
             {startDate !== null
               ? moment(startDate).format("MMM D, YYYY")
               : new Date(new Date().getFullYear(), 0, 1).toISOString()}
@@ -287,33 +295,40 @@ const FlightsScreen = ({ navigation }) => {
           <Ionicons
             name="calendar-outline"
             size={20}
-            color="black"
+            color={theme?.text}
             onPress={() => setStartOpen(true)}
           />
-          <DatePicker
+          <DateTimePicker
             mode="date"
-            modal
-            open={startOpen}
-            date={startDate}
-            onConfirm={(dat) => {
-              setStartOpen(false);
+            value={startDate}
+            onChange={(dat) => {
               setStartDate(dat);
-              console.log("ddd", dat);
+               console.log("ddd", dat);
             }}
-            onCancel={() => {
-              setStartOpen(false);
-            }}
+            // modal
+            // open={startOpen}
+            // date={startDate}
+            // onConfirm={(dat) => {
+            //   setStartOpen(false);
+            //   setStartDate(dat);
+            //   console.log("ddd", dat);
+            // }}
+            // onCancel={() => {
+            //   setStartOpen(false);
+            // }}
           />
         </TouchableOpacity>
 
         {flightType === "Round Trip" && (
           <View>
-            <Text style={styles.formTitle}>Arrival</Text>
+            <Text style={[styles.formTitle, { color: theme?.text }]}>
+              Arrival
+            </Text>
             <TouchableOpacity
               onPress={() => setEndOpen(true)}
               style={styles.rangePicker}
             >
-              <Text style={styles.dateRange}>
+              <Text style={[styles.dateRange, { color: theme?.text }]}>
                 {endDate !== null
                   ? moment(endDate).format("MMM D, YYYY")
                   : new Date(new Date().getFullYear(), 0, 1).toISOString()}
@@ -321,7 +336,7 @@ const FlightsScreen = ({ navigation }) => {
               <Ionicons
                 name="calendar-outline"
                 size={20}
-                color="black"
+                color={theme?.text}
                 onPress={() => setEndOpen(true)}
               />
               <DatePicker
@@ -356,7 +371,7 @@ const FlightsScreen = ({ navigation }) => {
       </ScrollView>
 
       {/* Buttons */}
-      <FixedBottomContainer top={1.1}>
+      <FixedBottomContainer top={1.19}>
         <FormButton
           title={"Search"}
           width={1.1}

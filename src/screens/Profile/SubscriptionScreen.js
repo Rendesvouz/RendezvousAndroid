@@ -20,6 +20,7 @@ import axiosInstance from "../../utils/api-client";
 import { getUser } from "../../redux/features/user/userSlice";
 import { RNToast } from "../../Library/Common";
 import IosSubscriptionCard from "../../components/cards/IosSubscriptionCard";
+import { useTheme } from "../../Context/ThemeContext";
 
 const itemSkus = [
   "com.rendezvouscare.subscription.premium",
@@ -32,6 +33,7 @@ const isIos = Platform.OS === "ios";
 const SubscriptionScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
+  const { theme } = useTheme();
 
   const userProfle = state?.user?.user?.profile;
   console.log("userProfle", userProfle);
@@ -186,17 +188,17 @@ const SubscriptionScreen = ({ navigation }) => {
       />
 
       <ScrollView>
-        <Text style={styles.subtitle}>
+        <Text style={[styles.subtitle, { color: theme?.text }]}>
           We've got a plan that's perfect for you.{" "}
         </Text>
-        <Text style={styles.subdescription}>
+        <Text style={[styles.subdescription, { color: theme?.text }]}>
           You cannot alter your plan or examine costs via the app. Please visit
           our website to upgrade or make changes, as we understand this is not
           ideal.
         </Text>
 
         {loading ? (
-          <Text style={styles.noData}>
+          <Text style={[styles.noData, { color: theme?.text }]}>
             Please wait while we aggregate your subscription data
           </Text>
         ) : (
@@ -206,14 +208,7 @@ const SubscriptionScreen = ({ navigation }) => {
             contentContainerStyle={{ padding: 10 }}
           >
             {userSubscriptionPlans?.map((cur, i) => {
-              const normalize = (str) =>
-                str
-                  ?.toLowerCase()
-                  .replace(/ plan$/, "")
-                  .trim();
-
-              const isCurrentPlan =
-                normalize(cur.subType) === normalize(whichSubscriptionPlan);
+              const isCurrentPlan = cur.subType === whichSubscriptionPlan;
               const isNilPlan = whichSubscriptionPlan === "nil";
               const isFreeTrial = whichSubscriptionPlan === "free_trial";
               const isSelected = cur.subType === selectedPlan?.subType;
@@ -222,16 +217,6 @@ const SubscriptionScreen = ({ navigation }) => {
                 !isFreeTrial &&
                 whichSubscriptionPlan &&
                 !isCurrentPlan;
-
-              console.log(
-                "isCurrentPlan",
-                isCurrentPlan,
-                isNilPlan,
-                isFreeTrial,
-                isSelected,
-                isDisabled,
-                whichSubscriptionPlan
-              );
 
               return (
                 <SubscriptionCard
@@ -245,6 +230,7 @@ const SubscriptionScreen = ({ navigation }) => {
                   isSubscribed={isCurrentPlan}
                   onSubscriptionPressed={async () => {
                     completeSubscription(cur);
+                    // await RNIap.requestSubscription({sku: cur?.productId});
                   }}
                   onPress={() => !isDisabled && handleSelectPlan(cur)}
                   loading={completeLoading}
@@ -280,6 +266,7 @@ const SubscriptionScreen = ({ navigation }) => {
                 isSubscribed={isCurrentPlan}
                 onSubscriptionPressed={async () => {
                   // completeSubscription(cur);
+                  await RNIap.requestSubscription({sku: cur?.productId});
                 }}
                 onPress={() => !isDisabled && handleSelectPlan(cur)}
                 loading={loading}
@@ -287,6 +274,32 @@ const SubscriptionScreen = ({ navigation }) => {
               />
             );
           })} */}
+
+          {/* <View
+          style={{
+            flexDirection: 'row',
+            // padding: 10,
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            marginBottom: 32,
+          }}>
+          {userSubscriptionPlans?.map((cur, i) => {
+            const isCurrentPlan = cur.subType === whichSubscriptionPlan;
+
+            return (
+              <SubscriptionPlansCard
+                key={i}
+                props={cur}
+                isCurrentPlan={isCurrentPlan}
+                onPress={() => {
+                  Linking.openURL(
+                    'https://www.rendezvouscare.com/subscription',
+                  );
+                }}
+              />
+            );
+          })}
+        </View> */}
 
           <ScrollViewSpace />
         </ScrollView>

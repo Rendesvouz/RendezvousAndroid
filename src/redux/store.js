@@ -2,10 +2,10 @@ import {
   configureStore,
   combineReducers,
   applyMiddleware,
-} from "@reduxjs/toolkit";
+} from '@reduxjs/toolkit';
 // Redux Persist
 // import storage from 'redux-persist/lib/storage';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
   persistStore,
@@ -16,16 +16,16 @@ import {
   PERSIST,
   PURGE,
   REGISTER,
-} from "redux-persist";
-import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
-import { userReducer } from "./features";
+} from 'redux-persist';
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
+import {userReducer} from './features';
 
 const allReducers = combineReducers({
   user: userReducer,
 });
 
 const rootReducer = (state, action) => {
-  if (action.type === "RESET_APP") {
+  if (action.type === 'RESET_APP') {
     state = undefined;
   }
 
@@ -33,7 +33,7 @@ const rootReducer = (state, action) => {
 };
 
 const persistConfig = {
-  key: "root",
+  key: 'root',
   version: 1,
   storage: AsyncStorage,
   debug: true,
@@ -44,9 +44,9 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
   reducer: persistedReducer,
-  devTools: process.env.NODE_ENV !== "production",
+  devTools: process.env.NODE_ENV !== 'production',
   thunk: true,
-  middleware: (getDefaultMiddleware) =>
+  middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       thunk: true,
       serializableCheck: {

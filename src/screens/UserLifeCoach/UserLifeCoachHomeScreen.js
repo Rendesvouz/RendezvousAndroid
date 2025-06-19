@@ -5,24 +5,25 @@ import {
   StyleSheet,
   Text,
   View,
-} from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
-import SafeAreaViewComponent from "../../components/common/SafeAreaViewComponent";
-import HeaderTitle from "../../components/common/HeaderTitle";
-import { windowHeight, windowWidth } from "../../utils/Dimensions";
-import FormButton from "../../components/form/FormButton";
-import axiosInstance from "../../utils/api-client";
+import SafeAreaViewComponent from '../../components/common/SafeAreaViewComponent';
+import HeaderTitle from '../../components/common/HeaderTitle';
+import {windowHeight, windowWidth} from '../../utils/Dimensions';
+import FormButton from '../../components/form/FormButton';
+import axiosInstance from '../../utils/api-client';
 import {
   saveUserLifeCoaches,
   saveUserLifeCoachPreference,
-} from "../../redux/features/user/userSlice";
-import TherapistCard from "../../components/cards/TherapistCard";
-import { COLORS } from "../../themes/themes";
-import LifeCoachCard from "../../components/cards/LifeCoachCard";
-import TherapistHeaderTitle from "../../components/common/TherapistHeaderTitle";
+} from '../../redux/features/user/userSlice';
+import TherapistCard from '../../components/cards/TherapistCard';
+import {COLORS} from '../../themes/themes';
+import LifeCoachCard from '../../components/cards/LifeCoachCard';
+import TherapistHeaderTitle from '../../components/common/TherapistHeaderTitle';
+import {useTheme} from '../../Context/ThemeContext';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -32,13 +33,15 @@ const TherapistComponent = ({
   navigation,
   onRefresh,
 }) => {
+  const {theme} = useTheme();
+
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{
         paddingTop: 0,
         padding: 10,
-        backgroundColor: "white",
+        backgroundColor: theme?.background,
         flex: 1,
       }}
       refreshControl={
@@ -46,12 +49,11 @@ const TherapistComponent = ({
           refreshing={loading}
           onRefresh={onRefresh}
           tintColor={COLORS.rendezvousRed}
-          style={{ zIndex: 999 }}
+          style={{zIndex: 999}}
         />
-      }
-    >
+      }>
       {loading ? (
-        <Text style={styles.loadingText}>
+        <Text style={[styles.loadingText, {color: theme?.text}]}>
           Please wait while we fetch your data
         </Text>
       ) : reduxUserLifeCoaches?.length ? (
@@ -60,12 +62,12 @@ const TherapistComponent = ({
             key={i}
             props={cur}
             onPress={() => {
-              navigation.navigate("UserLifeCoachDetails", cur);
+              navigation.navigate('UserLifeCoachDetails', cur);
             }}
           />
         ))
       ) : (
-        <Text style={[styles.noData]}>
+        <Text style={[styles.noData, {color: theme?.text}]}>
           We dont have any life coaches onboarded at the moment. You can check
           back some other time
         </Text>
@@ -74,35 +76,36 @@ const TherapistComponent = ({
   );
 };
 
-const UserLifeCoachHomeScreen = ({ navigation }) => {
+const UserLifeCoachHomeScreen = ({navigation}) => {
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
+  const state = useSelector(state => state);
+  const {theme} = useTheme();
 
   const userProfle = state?.user?.user?.profile;
   const reduxUserLifeCoachPreference = state?.user?.userLifeCoachPreference;
   const reduxUserLifeCoaches = state?.user?.userLifeCoaches;
 
-  console.log("userProfle", userProfle, reduxUserLifeCoaches);
+  console.log('userProfle', userProfle, reduxUserLifeCoaches);
 
   const [loading, setLoading] = useState(false);
   const [appointments, setAppointments] = useState([]);
 
   const [isOnboarded, setIsOnboarded] = useState(
-    reduxUserLifeCoachPreference ? true : false
+    reduxUserLifeCoachPreference ? true : false,
   );
 
   const getStarted = () => {
-    navigation.navigate("UserLifeCoachOnboardingFlow1");
+    navigation.navigate('UserLifeCoachOnboardingFlow1');
   };
 
   const getUserLifeCoachPreference = async () => {
     try {
       await axiosInstance({
-        url: "life-coach/preferences",
-        method: "GET",
+        url: 'life-coach/preferences',
+        method: 'GET',
       })
-        .then((res) => {
-          console.log("getUserLifeCoachPreference res", res);
+        .then(res => {
+          console.log('getUserLifeCoachPreference res', res);
 
           // if theres a data in the response, it means the user has onboarded his lifecoach preferences
           if (res?.data?.data) {
@@ -110,11 +113,11 @@ const UserLifeCoachHomeScreen = ({ navigation }) => {
             dispatch(saveUserLifeCoachPreference(res?.data?.data));
           }
         })
-        .catch((err) => {
-          console.log("getUserLifeCoachPreference err", err);
+        .catch(err => {
+          console.log('getUserLifeCoachPreference err', err);
         });
     } catch (error) {
-      console.log("getUserLifeCoachPreference error", error);
+      console.log('getUserLifeCoachPreference error', error);
     }
   };
 
@@ -122,23 +125,23 @@ const UserLifeCoachHomeScreen = ({ navigation }) => {
     setLoading(true);
     try {
       await axiosInstance({
-        url: "life-coach/search/provider",
-        method: "GET",
+        url: 'life-coach/search/provider',
+        method: 'GET',
       })
-        .then((res) => {
-          console.log("getAllLifeCoaches res", res);
+        .then(res => {
+          console.log('getAllLifeCoaches res', res);
           setLoading(false);
 
           if (res?.data?.data) {
             dispatch(saveUserLifeCoaches(res?.data?.data?.matchedProviders));
           }
         })
-        .catch((err) => {
-          console.log("getAllLifeCoaches err", err);
+        .catch(err => {
+          console.log('getAllLifeCoaches err', err);
           setLoading(false);
         });
     } catch (error) {
-      console.log("getAllLifeCoaches error", error);
+      console.log('getAllLifeCoaches error', error);
       setLoading(false);
     }
   };
@@ -147,50 +150,50 @@ const UserLifeCoachHomeScreen = ({ navigation }) => {
     setLoading(true);
     try {
       const appointmentsResponse = await axiosInstance({
-        url: "appointment/user-upcoming",
-        method: "GET",
+        url: 'appointment/user-upcoming',
+        method: 'GET',
       });
 
-      console.log("appointmentsResponse", appointmentsResponse?.data);
+      console.log('appointmentsResponse', appointmentsResponse?.data);
 
       if (appointmentsResponse?.data?.data?.appointments) {
         const appointmentss = appointmentsResponse?.data?.data?.appointments;
 
         // Filter appointments to only include those of type 'lifecoach'
         const therapyAppointments = appointmentss.filter(
-          (appointment) => appointment?.type != "therapy"
+          appointment => appointment?.type != 'therapy',
         );
 
         const appointmentsWithProfiles = await Promise.all(
-          therapyAppointments.map(async (appointment) => {
+          therapyAppointments.map(async appointment => {
             const providerProfile = await getProvidersProfile(
-              appointment?.providerId
+              appointment?.providerId,
             );
-            return { ...appointment, providerProfile };
-          })
+            return {...appointment, providerProfile};
+          }),
         );
 
-        console.log("appointmentsWithProfiles", appointmentsWithProfiles);
+        console.log('appointmentsWithProfiles', appointmentsWithProfiles);
         setAppointments(appointmentsWithProfiles);
       }
     } catch (error) {
-      console.log("getAllUserAppointments error", error);
+      console.log('getAllUserAppointments error', error);
       setLoading(false);
     }
   };
 
-  const getProvidersProfile = async (userId) => {
+  const getProvidersProfile = async userId => {
     try {
       const response = await axiosInstance({
         url: `profile/provider-profile/${userId}/Lifecoach`,
-        method: "GET",
+        method: 'GET',
       });
-      console.log("getProvidersProfile res", response?.data);
+      console.log('getProvidersProfile res', response?.data);
       return response?.data?.profile;
     } catch (error) {
-      console.log(
+      console.error(
         `getUserProfile error for userId ${userId}:`,
-        error?.response
+        error?.response,
       );
 
       return null;
@@ -226,10 +229,10 @@ const UserLifeCoachHomeScreen = ({ navigation }) => {
           {/* <HeaderTitle headerTitle={'Browse Life Coaches'} /> */}
 
           <TherapistHeaderTitle
-            headerTitle={"LifeCoaches"}
+            headerTitle={'LifeCoaches'}
             appointmentsArray={appointments}
             onRightIconPress3={() => {
-              navigation.navigate("UserLifeCoachAppointments", appointments);
+              navigation.navigate('UserLifeCoachAppointments', appointments);
             }}
           />
 
@@ -241,18 +244,18 @@ const UserLifeCoachHomeScreen = ({ navigation }) => {
           />
         </>
       ) : (
-        <View style={{ padding: 20, marginTop: 20 }}>
-          <Text style={styles.onboardingText}>
+        <View style={{padding: 20, marginTop: 20}}>
+          <Text style={[styles.onboardingText, {color: theme?.text}]}>
             Hey {userProfle?.username}, Ready to find the best Life Coach for
             you?
           </Text>
 
           <Image
-            source={require("../../assets/onboard.gif")}
+            source={require('../../assets/onboard.gif')}
             style={styles.onboardingImage}
           />
 
-          <FormButton title={"Get Started"} onPress={getStarted} />
+          <FormButton title={'Get Started'} onPress={getStarted} />
         </View>
       )}
     </SafeAreaViewComponent>
@@ -263,24 +266,24 @@ export default UserLifeCoachHomeScreen;
 
 const styles = StyleSheet.create({
   onboardingText: {
-    color: "black",
+    color: 'black',
     fontSize: 22,
-    fontWeight: "700",
-    alignSelf: "center",
+    fontWeight: '700',
+    alignSelf: 'center',
   },
   onboardingImage: {
     width: windowWidth / 1.1,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
   noData: {
-    fontWeight: "700",
-    justifyContent: "center",
-    alignItems: "center",
-    alignContent: "center",
-    alignSelf: "center",
+    fontWeight: '700',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    alignSelf: 'center',
     marginTop: 30,
   },
   loadingText: {
-    textAlign: "center",
+    textAlign: 'center',
   },
 });

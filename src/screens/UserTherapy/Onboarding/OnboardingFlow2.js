@@ -1,40 +1,42 @@
-import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import {Alert, ScrollView, StyleSheet, Text, View} from 'react-native';
+import React, {useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 
-import SafeAreaViewComponent from "../../../components/common/SafeAreaViewComponent";
-import HeaderTitle from "../../../components/common/HeaderTitle";
-import { validCounselingTypes } from "../../../data/dummyData";
-import PreferencesCard from "../../../components/cards/PreferencesCard";
-import ScrollViewSpace from "../../../components/common/ScrollViewSpace";
-import FixedBottomContainer from "../../../components/common/FixedBottomContainer";
-import FormButton from "../../../components/form/FormButton";
-import HeaderText from "../../../components/common/HeaderText";
-import axiosInstance from "../../../utils/api-client";
-import { saveUserTherapyPreference } from "../../../redux/features/user/userSlice";
-import { parseExperienceRange, parsePriceRange } from "../../../Library/Common";
+import SafeAreaViewComponent from '../../../components/common/SafeAreaViewComponent';
+import HeaderTitle from '../../../components/common/HeaderTitle';
+import {validCounselingTypes} from '../../../data/dummyData';
+import PreferencesCard from '../../../components/cards/PreferencesCard';
+import ScrollViewSpace from '../../../components/common/ScrollViewSpace';
+import FixedBottomContainer from '../../../components/common/FixedBottomContainer';
+import FormButton from '../../../components/form/FormButton';
+import HeaderText from '../../../components/common/HeaderText';
+import axiosInstance from '../../../utils/api-client';
+import {saveUserTherapyPreference} from '../../../redux/features/user/userSlice';
+import {parseExperienceRange, parsePriceRange} from '../../../Library/Common';
+import {useTheme} from '../../../Context/ThemeContext';
 
-const UserTherapyOnboardingFlow2 = ({ navigation, route }) => {
+const UserTherapyOnboardingFlow2 = ({navigation, route}) => {
   const items = route.params;
-  console.log("items", items);
+  console.log('items', items);
+  const {theme} = useTheme();
 
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
+  const state = useSelector(state => state);
 
   const userProfle = state?.user?.user?.profile;
-  console.log("userProfle", userProfle);
+  console.log('userProfle', userProfle);
 
   const [loading, setLoading] = useState(false);
-  const [formError, setFormError] = useState("");
+  const [formError, setFormError] = useState('');
 
   const [selectedCategories, setSelectedCategories] = useState([]);
-  console.log("selectedCategories", selectedCategories);
+  console.log('selectedCategories', selectedCategories);
 
-  const handleToggleSelect = (category) => {
-    setSelectedCategories((prevSelected) =>
+  const handleToggleSelect = category => {
+    setSelectedCategories(prevSelected =>
       prevSelected.includes(category)
-        ? prevSelected.filter((item) => item !== category)
-        : [...prevSelected, category]
+        ? prevSelected.filter(item => item !== category)
+        : [...prevSelected, category],
     );
   };
 
@@ -47,52 +49,52 @@ const UserTherapyOnboardingFlow2 = ({ navigation, route }) => {
       years_of_experience: parseExperienceRange(items.yearsOfExperience),
       counseling_type: selectedCategories,
     };
-    console.log("userTherapyPreferenceData", userTherapyPreferenceData);
+    console.log('userTherapyPreferenceData', userTherapyPreferenceData);
 
     setLoading(true);
     try {
       await axiosInstance({
-        url: "therapy/preferences",
-        method: "POST",
+        url: 'therapy/preferences',
+        method: 'POST',
         data: userTherapyPreferenceData,
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       })
-        .then((res) => {
-          console.log("postUserTherapyPreference res", res);
+        .then(res => {
+          console.log('postUserTherapyPreference res', res);
           setLoading(false);
 
           // if theres a data in the response, it means the user has onboarded his therapy preferences
           if (res?.data?.data) {
             dispatch(saveUserTherapyPreference(res?.data?.data));
-            navigation.navigate("Complete");
+            navigation.navigate('Complete');
           }
         })
-        .catch((err) => {
-          console.log("postUserTherapyPreference err", err);
+        .catch(err => {
+          console.log('postUserTherapyPreference err', err);
           setLoading(false);
-          setFormError("An error occured while uploading your preferences");
+          setFormError('An error occured while uploading your preferences');
 
           if (err?.status == 401) {
             Alert.alert(
-              "Session Expired",
-              "Your session has expired, please login again"
+              'Session Expired',
+              'Your session has expired, please login again',
             );
-            navigation.navigate("Login");
+            navigation.navigate('Login');
           }
         });
     } catch (error) {
-      console.log("postUserTherapyPreference error", error);
+      console.log('postUserTherapyPreference error', error);
       setLoading(false);
-      setFormError("An error occured while uploading your preferences");
+      setFormError('An error occured while uploading your preferences');
 
       if (err?.status == 401) {
         Alert.alert(
-          "Session Expired",
-          "Your session has expired, please login again"
+          'Session Expired',
+          'Your session has expired, please login again',
         );
-        navigation.navigate("Login");
+        navigation.navigate('Login');
       }
     }
   };
@@ -100,7 +102,7 @@ const UserTherapyOnboardingFlow2 = ({ navigation, route }) => {
   return (
     <SafeAreaViewComponent>
       <HeaderTitle
-        leftIcon={"arrow-back-outline"}
+        leftIcon={'arrow-back-outline'}
         progress={100}
         onLeftIconPress={() => {
           navigation.goBack();
@@ -108,7 +110,7 @@ const UserTherapyOnboardingFlow2 = ({ navigation, route }) => {
       />
 
       <HeaderText
-        headerTitle={"What type of therapists are you looking fosddr?"}
+        headerTitle={'What type of therapists are you looking for?'}
       />
 
       <ScrollView contentContainerStyle={styles.container}>
@@ -126,9 +128,9 @@ const UserTherapyOnboardingFlow2 = ({ navigation, route }) => {
       </ScrollView>
 
       {/* Buttons */}
-      <FixedBottomContainer top={1.1}>
+      <FixedBottomContainer top={1.2}>
         <FormButton
-          title={"Save Preferences"}
+          title={'Save Preferences'}
           width={1.1}
           onPress={completeOnboarding}
           disabled={selectedCategories?.length < 3 || loading}

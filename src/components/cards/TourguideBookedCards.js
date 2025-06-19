@@ -1,19 +1,21 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
-import React from "react";
-import { Rating } from "react-native-ratings";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+import React from 'react';
+import {Rating} from 'react-native-ratings';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { windowHeight, windowWidth } from "../../utils/Dimensions";
-import { COLORS } from "../../themes/themes";
-import { formatDate, formatDateTime, formatToUSD } from "../../Library/Common";
+import {windowHeight, windowWidth} from '../../utils/Dimensions';
+import {COLORS} from '../../themes/themes';
+import {formatDate, formatDateTime, formatToUSD} from '../../Library/Common';
+import {useTheme} from '../../Context/ThemeContext';
 
-const TourguideBookedCard = ({ onPress, props }) => {
+const TourguideBookedCard = ({onPress, props}) => {
+  const {theme} = useTheme();
+
   return (
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.9}
-      style={styles.tourcard}
-    >
+      style={[styles.tourcard, {borderColor: theme?.borderColor}]}>
       <Image
         source={{
           uri: props?.offeringData?.pictures[0],
@@ -23,15 +25,15 @@ const TourguideBookedCard = ({ onPress, props }) => {
       <View style={styles.tourguideProfile}>
         <View style={styles.tourguideProfileInfo}>
           <Image
-            source={{ uri: props?.tourguideProfile?.profile_pictures[0] }}
+            source={{uri: props?.tourguideProfile?.profile_pictures[0]}}
             style={styles.tourguideProfileImage}
           />
-          <Text style={styles.tourguideProfileName}>
+          <Text style={[styles.tourguideProfileName, {color: theme?.text}]}>
             {props?.tourguideProfile?.fullname}
           </Text>
         </View>
         <View style={styles.tourguideProfileInfo}>
-          <Text>0</Text>
+          <Text style={{color: theme?.text}}>0</Text>
           <Rating
             defaultRating={0}
             imageSize={17}
@@ -39,7 +41,7 @@ const TourguideBookedCard = ({ onPress, props }) => {
               //   backgroundColor: "black",
               marginTop: 10,
               marginBottom: 10,
-              justifyContent: "flex-start",
+              justifyContent: 'flex-start',
               //   width: windowWidth / 4,
               //   marginLeft: 5,
               //   marginRight: 10,
@@ -51,9 +53,9 @@ const TourguideBookedCard = ({ onPress, props }) => {
             ratingCount={1}
             readonly={true}
             unSelectedColor="red"
-            starContainerStyle={{ color: "red" }}
+            starContainerStyle={{color: 'red'}}
           />
-          <Text>(0 reviews)</Text>
+          <Text style={{color: theme?.text}}>(0 reviews)</Text>
         </View>
       </View>
       <Text numberOfLines={2} style={styles.tourguideDescription}>
@@ -63,19 +65,25 @@ const TourguideBookedCard = ({ onPress, props }) => {
         <Ionicons
           name="location-outline"
           size={15}
-          style={{ marginRight: 6 }}
+          color={theme?.text}
+          style={{marginRight: 6}}
         />
-        <Text>
+        <Text style={{color: theme?.text}}>
           {props?.offeringData ? props?.offeringData?.city : props?.city}
         </Text>
       </View>
 
       <View style={styles.tourguideProfile2}>
-        <Ionicons name="time-outline" size={15} style={{ marginRight: 6 }} />
-        <Text>
+        <Ionicons
+          name="time-outline"
+          size={15}
+          color={theme?.text}
+          style={{marginRight: 6}}
+        />
+        <Text style={{color: theme?.text}}>
           {props?.offeringData
             ? props?.offeringData?.duration
-            : props?.duration}{" "}
+            : props?.duration}{' '}
           hours
         </Text>
       </View>
@@ -83,23 +91,23 @@ const TourguideBookedCard = ({ onPress, props }) => {
         <Ionicons
           name="calendar-outline"
           size={15}
-          style={{ marginRight: 6 }}
+          color={theme?.text}
+          style={{marginRight: 6}}
         />
-        <Text>{formatDateTime(props?.date)}</Text>
+        <Text style={{color: theme?.text}}>{formatDateTime(props?.date)}</Text>
       </View>
       <View
         style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Text style={styles.tourPrice}>
-          {formatToUSD(props?.price)}{" "}
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+        <Text style={[styles.tourPrice, {color: theme?.text}]}>
+          {formatToUSD(props?.price)}{' '}
           <Text
             style={{
               fontSize: 16,
-              fontWeight: "400",
+              fontWeight: '400',
               color: COLORS.rendezvousBlack2,
             }}
           />
@@ -110,32 +118,30 @@ const TourguideBookedCard = ({ onPress, props }) => {
               styles.statusCard,
               {
                 backgroundColor:
-                  props?.status == "request"
+                  props?.status == 'request'
                     ? COLORS.pendingBgColor
-                    : props?.status == "scheduled"
+                    : props?.status == 'scheduled'
                     ? COLORS.acceptedBgColor
                     : COLORS.declinedBgColor,
               },
-            ]}
-          >
+            ]}>
             <Text
               style={[
                 styles.statusText,
                 {
                   color:
-                    props?.status == "request"
+                    props?.status == 'request'
                       ? COLORS.pendingColor
-                      : props?.status == "scheduled"
+                      : props?.status == 'scheduled'
                       ? COLORS.acceptedColor
                       : COLORS.declinedColor,
                 },
-              ]}
-            >
-              {props?.status == "request"
-                ? "Pending"
-                : props?.status == "scheduled"
-                ? "Accepted"
-                : "Declined"}
+              ]}>
+              {props?.status == 'request'
+                ? 'Pending'
+                : props?.status == 'scheduled'
+                ? 'Accepted'
+                : 'Declined'}
             </Text>
           </View>
         )}
@@ -160,19 +166,19 @@ const styles = StyleSheet.create({
   tourcardImage: {
     width: windowWidth / 1.12,
     height: windowHeight / 7,
-    objectFit: "cover",
+    objectFit: 'cover',
     borderRadius: 10,
     // marginBottom: 10,
   },
   tourguideProfile: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: 10,
   },
   tourguideProfileInfo: {
-    flexDirection: "row",
-    alignContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center',
   },
   tourguideProfileImage: {
     width: 30,
@@ -182,20 +188,20 @@ const styles = StyleSheet.create({
   },
   tourguideProfileName: {
     fontSize: 18,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   tourguideDescription: {
     color: COLORS.rendezvousBlack2,
-    fontWeight: "500",
+    fontWeight: '500',
     fontSize: 14,
   },
   tourguideProfile2: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 10,
   },
   tourPrice: {
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: '700',
     marginTop: 10,
   },
   statusCard: {

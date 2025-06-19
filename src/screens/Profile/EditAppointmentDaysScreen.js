@@ -79,7 +79,7 @@ const EditAppointmentDaysScreen = ({ navigation, route }) => {
         <ScrollViewSpace />
       </ScrollView>
 
-      <FixedBottomContainer top={1.1}>
+      <FixedBottomContainer top={1.2}>
         <TransparentBtn
           title={"Update Availability"}
           width={1.1}

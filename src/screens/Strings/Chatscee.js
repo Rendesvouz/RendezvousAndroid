@@ -12,57 +12,52 @@ import {
   Keyboard,
   ActivityIndicator,
   FlatList,
-} from "react-native";
-import React, { useEffect, useState, useCallback, useRef } from "react";
+} from 'react-native';
+import React, {useEffect, useState, useCallback, useRef} from 'react';
 import {
   launchCamera,
   launchImageLibrary,
   ImagePicker,
-} from "react-native-image-picker";
-import { useNavigation } from "@react-navigation/native";
-import ImageView from "react-native-image-viewing";
+} from 'react-native-image-picker';
+import {useNavigation} from '@react-navigation/native';
+import ImageView from 'react-native-image-viewing';
 
-import { getAllUserChatMessages } from "../../services/personalChat";
-import axiosInstance from "../../utils/api-client";
-import { COLORS } from "../../theme/themes";
-import {
-  GiftedChat,
-  Bubble,
-  Send,
-  InputToolbar,
-} from "react-native-gifted-chat";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { windowHeight, windowWidth } from "../../utils/Dimensions";
+import {getAllUserChatMessages} from '../../services/personalChat';
+import axiosInstance from '../../utils/api-client';
+import {COLORS} from '../../theme/themes';
+import {GiftedChat, Bubble, Send, InputToolbar} from 'react-native-gifted-chat';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {windowHeight, windowWidth} from '../../utils/Dimensions';
 import {
   convertTimestampToAmPm,
   displayMessagesByDay,
   getFileExtention,
   photoBaseUrlConcat,
   startsWithHttpOrHttps,
-} from "../../Library/Common";
-import { useDispatch, useSelector } from "react-redux";
-import CommentInput from "../../components/form/CommentInput";
-import socket from "../../utils/socket";
-import { setWasabiFileUploading } from "../../store/features/user/userSlice";
+} from '../../Library/Common';
+import {useDispatch, useSelector} from 'react-redux';
+import CommentInput from '../../components/form/CommentInput';
+import socket from '../../utils/socket';
+import {setWasabiFileUploading} from '../../store/features/user/userSlice';
 
-const ChatScreen = ({ route }) => {
+const ChatScreen = ({route}) => {
   const item = route.params;
-  console.log("item", item);
+  console.log('item', item);
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const state = useSelector((state) => state);
+  const state = useSelector(state => state);
   const user = state?.user?.user;
-  console.log("user", user);
+  console.log('user', user);
 
   const isUploading = state?.user?.isUploading;
-  console.log("isUploading", isUploading);
+  console.log('isUploading', isUploading);
 
   // this stores all the messages from the endpoint
   // we will use the 'messages' state to display omn the chat UI usinhg GiftedChats
   const [messages, setMessages] = useState([]);
   const [messagesData, setMessagesData] = useState();
-  const [msgText, setMsgText] = useState("");
+  const [msgText, setMsgText] = useState('');
   const [incomingMessage, setIncomingMessage] = useState();
   const [fetchingMessage, setFetchingMessage] = useState(false);
   const [image, setImage] = useState(null);
@@ -74,14 +69,14 @@ const ChatScreen = ({ route }) => {
 
   // socket states
   const [isSocketConnected, setIsSocketConnected] = useState(false);
-  console.log("isSocketConnected", isSocketConnected);
+  console.log('isSocketConnected', isSocketConnected);
 
   // List of valid image extensions
-  const validExtensions = ["png", "jpeg", "jpg"];
+  const validExtensions = ['png', 'jpeg', 'jpg'];
 
-  console.log("messages", messages);
-  console.log("messagesData", messagesData);
-  console.log("incomingMessage", incomingMessage);
+  console.log('messages', messages);
+  console.log('messagesData', messagesData);
+  console.log('incomingMessage', incomingMessage);
 
   let reverseMessages = [];
   if (messages) {
@@ -91,20 +86,20 @@ const ChatScreen = ({ route }) => {
   const displayMessagesBySpecificDay = displayMessagesByDay(messages);
 
   const options = {
-    mediaType: "mixed",
+    mediaType: 'mixed',
     // saveToPhotos: true,
   };
 
   const pickImage = async () => {
-    await launchImageLibrary(options, (res) => {
-      console.log("ImagePicked", res);
+    await launchImageLibrary(options, res => {
+      console.log('ImagePicked', res);
 
       if (res?.didCancel === true) {
         return;
       }
 
       if (res?.assets) {
-        console.log("ressssss", res.assets);
+        console.log('ressssss', res.assets);
         sendFileToAPI(res.assets[0].uri);
 
         // setImage(res?.assets[0]?.uri);
@@ -112,31 +107,31 @@ const ChatScreen = ({ route }) => {
     });
   };
 
-  const renderBubble = (props) => {
+  const renderBubble = props => {
     return (
       <Bubble
         {...props}
         wrapperStyle={{
           right: {
-            backgroundColor: "#0677E8",
+            backgroundColor: '#0677E8',
           },
           left: {
-            backgroundColor: "#11141B",
+            backgroundColor: '#11141B',
           },
         }}
         textStyle={{
           right: {
-            color: "#fff",
+            color: '#fff',
           },
           left: {
-            color: "white",
+            color: 'white',
           },
         }}
       />
     );
   };
 
-  const sendMessageToAPI = async (message) => {
+  const sendMessageToAPI = async message => {
     Keyboard.dismiss();
     const messageBody = {
       recipient_id: item?.recipient?.id,
@@ -154,18 +149,18 @@ const ChatScreen = ({ route }) => {
 
     // append the messages array to display the new message
     // thereby making it a way real time for user experience
-    setMessages((prevMessages) => [...prevMessages, appendMessageBody]);
-    setMsgText("");
+    setMessages(prevMessages => [...prevMessages, appendMessageBody]);
+    setMsgText('');
 
     try {
       await axiosInstance({
-        url: "chats/messages",
-        method: "POST",
+        url: 'chats/messages',
+        method: 'POST',
         data: messageBody,
       })
-        .then((res) => {
-          console.log("sendMessageToAPI data", res);
-          setMsgText("");
+        .then(res => {
+          console.log('sendMessageToAPI data', res);
+          setMsgText('');
 
           // emit the messages to the socket
           socket.emit(res?.data);
@@ -173,32 +168,32 @@ const ChatScreen = ({ route }) => {
           // setMessages(prevMessages => [...prevMessages, res?.data]);
           res?.data?.status === 201 && getAllChatMessages();
         })
-        .catch((err) => {
-          console.log("sendMessageToAPI Errrr", err);
+        .catch(err => {
+          console.log('sendMessageToAPI Errrr', err);
         });
     } catch (error) {
-      console.log("sendMessageToAPI error", error);
+      console.log('sendMessageToAPI error', error);
     }
   };
 
-  const sendFileToAPI = async (url) => {
+  const sendFileToAPI = async url => {
     Keyboard.dismiss();
     const formData = new FormData();
     const checkFileExtension = getFileExtention(url);
 
     validExtensions.includes(checkFileExtension[0])
-      ? formData.append("file", {
+      ? formData.append('file', {
           uri: url,
-          name: "chat-Image.jpg",
-          type: "image/jpg",
+          name: 'chat-Image.jpg',
+          type: 'image/jpg',
         })
-      : formData.append("file", {
+      : formData.append('file', {
           uri: url,
-          name: "chat-video.mp4",
-          type: "video/mp4",
+          name: 'chat-video.mp4',
+          type: 'video/mp4',
         });
-    formData.append("message", null);
-    formData.append("recipient_id", item?.recipient?.id);
+    formData.append('message', null);
+    formData.append('recipient_id', item?.recipient?.id);
 
     const messageBody = {
       recipient_id: item?.recipient?.id,
@@ -206,18 +201,18 @@ const ChatScreen = ({ route }) => {
       file: url,
     };
 
-    console.log("formData", formData);
+    console.log('formData', formData);
     try {
       await axiosInstance({
-        url: "chats/messages",
-        method: "POST",
+        url: 'chats/messages',
+        method: 'POST',
         data: formData,
       })
-        .then((res) => {
-          console.log("sendFileToAPI data", res);
+        .then(res => {
+          console.log('sendFileToAPI data', res);
           setImage(null);
 
-          setMessages((prevMessages) => [...prevMessages, res?.data]);
+          setMessages(prevMessages => [...prevMessages, res?.data]);
           res?.data?.status === 201 && getAllChatMessages();
 
           // socket sending data
@@ -226,14 +221,14 @@ const ChatScreen = ({ route }) => {
             to: item?.id,
             msg: res?.data, // Send the entire response data as the message content
           };
-          socket.emit("send-msg", sentMsgObj);
+          socket.emit('send-msg', sentMsgObj);
         })
-        .catch((err) => {
-          console.log("sendFileToAPI Errrr", err);
+        .catch(err => {
+          console.log('sendFileToAPI Errrr', err);
           setImage(null);
         });
     } catch (error) {
-      console.log("sendFileToAPI error", error);
+      console.log('sendFileToAPI error', error);
       setImage(null);
     }
   };
@@ -244,10 +239,10 @@ const ChatScreen = ({ route }) => {
     try {
       await axiosInstance({
         url: `chats/messages?recipient_id=${item.recipient.id}`,
-        method: "GET",
+        method: 'GET',
       })
-        .then((res) => {
-          console.log("getAllUserChatMessages data", res);
+        .then(res => {
+          console.log('getAllUserChatMessages data', res);
           setFetchingMessage(false);
           setMessagesData(res.data);
           setMessages(res.data.data);
@@ -265,18 +260,18 @@ const ChatScreen = ({ route }) => {
           //   }))
           // );
         })
-        .catch((err) => {
-          console.log("getAllUserChatMessages Errrr", err);
+        .catch(err => {
+          console.log('getAllUserChatMessages Errrr', err);
           setFetchingMessage(false);
         });
     } catch (error) {
-      console.log("getAllUserChatMessages error", error);
+      console.log('getAllUserChatMessages error', error);
       setFetchingMessage(false);
     }
   };
 
   useEffect(() => {
-    const focusHandler = navigation.addListener("focus", () => {
+    const focusHandler = navigation.addListener('focus', () => {
       getAllChatMessages();
     });
     return focusHandler;
@@ -284,21 +279,21 @@ const ChatScreen = ({ route }) => {
 
   // this useEffect runs and listens to the socket if there is a new message to displayed to the user
   useEffect(() => {
-    socket.on("connect", () => {
+    socket.on('connect', () => {
       setIsSocketConnected(true);
     });
 
-    socket.on("disconnect", () => {
+    socket.on('disconnect', () => {
       setIsSocketConnected(false);
     });
 
     if (socket?.connected) {
-      socket?.on("msg-recieve", (msg) => {
-        console.log("receivedobj: ", msg);
+      socket?.on('msg-recieve', msg => {
+        console.log('receivedobj: ', msg);
 
         // i'm setting the data that comes from the socket when there is a new message received
         setIncomingMessage(msg?.content);
-        console.log("incoming", incomingMessage);
+        console.log('incoming', incomingMessage);
       });
     }
   }, [socket]);
@@ -320,32 +315,27 @@ const ChatScreen = ({ route }) => {
   // listens to when there is an incomingMessage object
   useEffect(() => {
     incomingMessage &&
-      setMessages((prevMessages) => [...prevMessages, incomingMessage]);
+      setMessages(prevMessages => [...prevMessages, incomingMessage]);
   }, [incomingMessage]);
 
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
-        style={styles.container}
-      >
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+        style={styles.container}>
         <View style={styles.groupInfo}>
           <TouchableOpacity
             activeOpacity={0.9}
-            onPress={() =>
-              navigation.navigate("Messages", { screen: "Message" })
-            }
-            style={styles.backBtn}
-          >
+            onPress={() => navigation.navigate('Messages', {screen: 'Message'})}
+            style={styles.backBtn}>
             <Ionicons name="chevron-back-outline" size={25} color="black" />
           </TouchableOpacity>
           <View
             style={{
-              flexDirection: "row",
-              alignItems: "center",
-              alignContent: "center",
-            }}
-          >
+              flexDirection: 'row',
+              alignItems: 'center',
+              alignContent: 'center',
+            }}>
             <Image
               source={
                 item?.picture
@@ -368,35 +358,33 @@ const ChatScreen = ({ route }) => {
               }}
             />
             <View>
-              <Text style={{ color: "white", fontWeight: "700", fontSize: 20 }}>
+              <Text style={{color: 'white', fontWeight: '700', fontSize: 20}}>
                 @{item?.username ? item?.username : item?.recipient?.username}
               </Text>
               <Text
                 style={{
-                  color: "#BBBBBB",
-                  fontWeight: "500",
+                  color: '#BBBBBB',
+                  fontWeight: '500',
                   fontSize: 14,
                   marginTop: 6,
-                }}
-              >
+                }}>
                 Online
               </Text>
             </View>
           </View>
         </View>
 
-        <ScrollView contentContainerStyle={{ padding: 10 }}>
+        <ScrollView contentContainerStyle={{padding: 10}}>
           {displayMessagesBySpecificDay?.length
             ? displayMessagesBySpecificDay?.map((cur, i) => (
-                <View key={i} style={{ padding: 10 }}>
+                <View key={i} style={{padding: 10}}>
                   <Text
                     style={{
-                      color: "#ccc",
-                      textAlign: "center",
+                      color: '#ccc',
+                      textAlign: 'center',
                       fontSize: 14,
                       padding: 10,
-                    }}
-                  >
+                    }}>
                     {cur.day}
                   </Text>
                   {cur?.messages?.map((mess, i) => (
@@ -407,21 +395,20 @@ const ChatScreen = ({ route }) => {
                           {
                             flexDirection:
                               mess?.sender_id === user?.id
-                                ? "row-reverse"
-                                : "row",
+                                ? 'row-reverse'
+                                : 'row',
                             alignSelf:
                               mess?.sender_id == user?.id
-                                ? "flex-end"
-                                : "flex-start",
-                            alignItems: "flex-start",
+                                ? 'flex-end'
+                                : 'flex-start',
+                            alignItems: 'flex-start',
                             backgroundColor:
                               mess?.sender_id === user?.id
-                                ? "#0677E8"
-                                : "#11141B",
+                                ? '#0677E8'
+                                : '#11141B',
                             padding: mess?.file ? 0 : 10,
                           },
-                        ]}
-                      >
+                        ]}>
                         <View>
                           {!mess.file ? (
                             <Text
@@ -429,30 +416,28 @@ const ChatScreen = ({ route }) => {
                                 mess.sender_id == user.id
                                   ? styles.fromUserText
                                   : styles.recipientText
-                              }
-                            >
+                              }>
                               {mess.message}
                             </Text>
                           ) : (
                             <TouchableOpacity
                               onPress={() => {
                                 setIsVisible(true);
-                              }}
-                            >
+                              }}>
                               <Image
                                 style={{
                                   height: 150,
                                   width: 250,
                                   borderRadius: 7,
                                 }}
-                                source={{ uri: mess.file }}
+                                source={{uri: mess.file}}
                               />
                             </TouchableOpacity>
                           )}
                         </View>
 
                         <ImageView
-                          images={[{ uri: mess?.file }]}
+                          images={[{uri: mess?.file}]}
                           imageIndex={0}
                           visible={visible}
                           onRequestClose={() => setIsVisible(false)}
@@ -464,16 +449,15 @@ const ChatScreen = ({ route }) => {
                           {
                             flexDirection:
                               mess?.sender_id === user?.id
-                                ? "row-reverse"
-                                : "row",
+                                ? 'row-reverse'
+                                : 'row',
                             alignSelf:
                               mess?.sender_id == user?.id
-                                ? "flex-end"
-                                : "flex-start",
-                            alignItems: "flex-start",
+                                ? 'flex-end'
+                                : 'flex-start',
+                            alignItems: 'flex-start',
                           },
-                        ]}
-                      >
+                        ]}>
                         {convertTimestampToAmPm(mess?.created_at)}
                       </Text>
                     </View>
@@ -486,17 +470,17 @@ const ChatScreen = ({ route }) => {
         {fetchingMessage && <ActivityIndicator size="large" color="white" />}
 
         {/* Textinput Section */}
-        <View style={{ flexDirection: "row", marginLeft: 20 }}>
+        <View style={{flexDirection: 'row', marginLeft: 20}}>
           <TouchableOpacity style={styles.sendBtn} onPress={pickImage}>
             <Ionicons name="add" size={20} color={COLORS.formBtn} />
           </TouchableOpacity>
           <CommentInput
             value={msgText}
             width={1.35}
-            rightIcon={msgText == "" ? "" : "paper-plane-outline"}
+            rightIcon={msgText == '' ? '' : 'paper-plane-outline'}
             placeholderTextColor="#ccc"
             placeholder="    Write now ..."
-            onChangeText={(txt) => {
+            onChangeText={txt => {
               setMsgText(txt);
             }}
             handlePasswordVisibility={() => {
@@ -519,11 +503,11 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: COLORS.appBackgroundColor,
-    color: "white",
+    color: 'white',
     height: 60,
   },
   backBtn: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 10,
     width: 35,
     height: 35,
@@ -531,20 +515,20 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   groupInfo: {
-    flexDirection: "row",
+    flexDirection: 'row',
     // justifyContent: "space-between",
     paddingTop: 10,
     marginLeft: 20,
     marginBottom: 20,
-    alignItems: "center",
-    alignContent: "center",
+    alignItems: 'center',
+    alignContent: 'center',
   },
   sendBtn: {
-    backgroundColor: "#292C35",
-    alignContent: "center",
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "center",
+    backgroundColor: '#292C35',
+    alignContent: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
     marginLeft: 5,
     height: 40,
     width: 40,
@@ -552,15 +536,15 @@ const styles = StyleSheet.create({
     padding: 10,
     marginRight: 15,
   },
-  senderSection: { backgroundColor: "red" },
+  senderSection: {backgroundColor: 'red'},
   inboxSection: {
-    backgroundColor: "red",
+    backgroundColor: 'red',
   },
   inboxText: {
-    color: "green",
+    color: 'green',
   },
   chatArea: {
-    backgroundColor: "red",
+    backgroundColor: 'red',
     // width: windowWidth / 2,
     padding: 10,
     // marginBottom: 10,
@@ -568,69 +552,68 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   fromUserText: {
-    color: "white",
+    color: 'white',
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   recipientText: {
-    color: "white",
+    color: 'white',
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   messageTime: {
-    color: "#ccc",
+    color: '#ccc',
     fontSize: 10,
-    alignContent: "flex-end",
-    alignSelf: "flex-end",
+    alignContent: 'flex-end',
+    alignSelf: 'flex-end',
     marginTop: 5,
   },
   inputContainer: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 0,
     padding: 24,
     backgroundColor: COLORS.black,
   },
 });
 
-<ScrollView contentContainerStyle={{ padding: 10 }}>
-  {displayMessagesBySpecificDay?.length
-    ? displayMessagesBySpecificDay?.map((cur, i) => (
-        <View key={i} style={{ padding: 10 }}>
-          <Text
-            style={{
-              color: "#ccc",
-              textAlign: "center",
-              fontSize: 14,
-              padding: 10,
-            }}
-          >
-            {cur?.day}
-          </Text>
-          {cur?.messages?.map((mess, key) => (
-            <View key={key}>
-              <View
-                style={[
-                  styles.chatArea,
-                  {
-                    flexDirection:
-                      mess?.senderId === userProfle?.user_id
-                        ? "row-reverse"
-                        : "row",
-                    alignSelf:
-                      mess?.senderId == userProfle?.user_id
-                        ? "flex-end"
-                        : "flex-start",
-                    alignItems: "flex-start",
-                    backgroundColor:
-                      mess?.senderId === userProfle?.user_id
-                        ? COLORS.declinedBgColor
-                        : "#11141B",
-                    padding: mess?.file ? 0 : 10,
-                  },
-                ]}
-              >
-                {/* displaying the message content itself here */}
-                {/* <View>
+
+   <ScrollView contentContainerStyle={{padding: 10}}>
+     {displayMessagesBySpecificDay?.length
+       ? displayMessagesBySpecificDay?.map((cur, i) => (
+           <View key={i} style={{padding: 10}}>
+             <Text
+               style={{
+                 color: '#ccc',
+                 textAlign: 'center',
+                 fontSize: 14,
+                 padding: 10,
+               }}>
+               {cur?.day}
+             </Text>
+             {cur?.messages?.map((mess, key) => (
+               <View key={key}>
+                 <View
+                   style={[
+                     styles.chatArea,
+                     {
+                       flexDirection:
+                         mess?.senderId === userProfle?.user_id
+                           ? 'row-reverse'
+                           : 'row',
+                       alignSelf:
+                         mess?.senderId == userProfle?.user_id
+                           ? 'flex-end'
+                           : 'flex-start',
+                       alignItems: 'flex-start',
+                       backgroundColor:
+                         mess?.senderId === userProfle?.user_id
+                           ? COLORS.declinedBgColor
+                           : '#11141B',
+                       padding: mess?.file ? 0 : 10,
+                     },
+                   ]}>
+                   {/* displaying the message content itself here */}
+                   {/* <View>
                         {!mess.file ? (
                           <Text
                             style={
@@ -657,72 +640,69 @@ const styles = StyleSheet.create({
                         )}
                       </View> */}
 
-                {mess?.content?.map((c, idx) => (
-                  <View key={idx} style={{ flexDirection: "column" }}>
-                    <View
-                      style={[
-                        styles.chatArea,
-                        {
-                          flexDirection:
-                            c?.senderId === userProfle?.user_id
-                              ? "row-reverse"
-                              : "row",
-                          alignSelf:
-                            c?.senderId === userProfle?.user_id
-                              ? "flex-end"
-                              : "flex-start",
-                          alignItems: "flex-start",
-                          backgroundColor:
-                            c?.senderId === userProfle?.user_id
-                              ? COLORS.declinedBgColor
-                              : "#11141B",
-                          padding: 10,
-                        },
-                      ]}
-                    >
-                      <Text
-                        style={
-                          c?.senderId === userProfle?.user_id
-                            ? styles.fromUserText
-                            : styles.recipientText
-                        }
-                      >
-                        {c?.content || "No message"}
-                      </Text>
-                    </View>
+                   {mess?.content?.map((c, idx) => (
+                     <View key={idx} style={{flexDirection: 'column'}}>
+                       <View
+                         style={[
+                           styles.chatArea,
+                           {
+                             flexDirection:
+                               c?.senderId === userProfle?.user_id
+                                 ? 'row-reverse'
+                                 : 'row',
+                             alignSelf:
+                               c?.senderId === userProfle?.user_id
+                                 ? 'flex-end'
+                                 : 'flex-start',
+                             alignItems: 'flex-start',
+                             backgroundColor:
+                               c?.senderId === userProfle?.user_id
+                                 ? COLORS.declinedBgColor
+                                 : '#11141B',
+                             padding: 10,
+                           },
+                         ]}>
+                         <Text
+                           style={
+                             c?.senderId === userProfle?.user_id
+                               ? styles.fromUserText
+                               : styles.recipientText
+                           }>
+                           {c?.content || 'No message'}
+                         </Text>
+                       </View>
 
-                    {/* ⏰ Timestamp right below the message bubble */}
-                    <Text
-                      style={[
-                        styles.messageTime,
-                        {
-                          flexDirection:
-                            c?.senderId === userProfle?.user_id
-                              ? "row-reverse"
-                              : "row",
-                          alignSelf:
-                            c?.senderId === userProfle?.user_id
-                              ? "flex-end"
-                              : "flex-start",
-                          alignItems: "flex-start",
-                        },
-                      ]}
-                    >
-                      {convertTimestampToAmPm(c?.timestamp)}
-                    </Text>
-                  </View>
-                ))}
+                       {/* ⏰ Timestamp right below the message bubble */}
+                       <Text
+                         style={[
+                           styles.messageTime,
+                           {
+                             flexDirection:
+                               c?.senderId === userProfle?.user_id
+                                 ? 'row-reverse'
+                                 : 'row',
+                             alignSelf:
+                               c?.senderId === userProfle?.user_id
+                                 ? 'flex-end'
+                                 : 'flex-start',
+                             alignItems: 'flex-start',
+                           },
+                         ]}>
+                         {convertTimestampToAmPm(c?.timestamp)}
+                       </Text>
+                     </View>
+                   ))}
 
-                <ImageView
-                  images={[{ uri: mess?.file }]}
-                  imageIndex={0}
-                  visible={visible}
-                  onRequestClose={() => setIsVisible(false)}
-                />
-              </View>
-            </View>
-          ))}
-        </View>
-      ))
-    : null}
-</ScrollView>;
+                   <ImageView
+                     images={[{uri: mess?.file}]}
+                     imageIndex={0}
+                     visible={visible}
+                     onRequestClose={() => setIsVisible(false)}
+                   />
+                 </View>
+               </View>
+             ))}
+           </View>
+         ))
+       : null}
+   </ScrollView>;

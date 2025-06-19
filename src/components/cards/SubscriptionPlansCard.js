@@ -1,10 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
-import React from "react";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { windowWidth } from "../../utils/Dimensions";
-import { COLORS } from "../../themes/themes";
+import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
+import React from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {windowWidth} from '../../utils/Dimensions';
+import {COLORS} from '../../themes/themes';
 
-const SubscriptionPlansCard = ({ props, onPress, isCurrentPlan }) => {
+const SubscriptionPlansCard = ({props, onPress, isCurrentPlan}) => {
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -15,11 +15,10 @@ const SubscriptionPlansCard = ({ props, onPress, isCurrentPlan }) => {
           borderColor: COLORS.rendezvousRed,
           borderWidth: 1,
         },
-      ]}
-    >
+      ]}>
       <Image
         style={styles.rendezLogo}
-        source={require("../../assets/newRendezvousLogo.png")}
+        source={require('../../assets/newRendezvousLogo.png')}
       />
       {isCurrentPlan && (
         <View style={styles.currentBadge}>
@@ -47,20 +46,20 @@ const styles = StyleSheet.create({
     // borderRadius: 16,
     // marginBottom: 4,
     margin: 3,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   rendezLogo: {
     width: 40,
     height: 40,
-    objectFit: "contain",
+    objectFit: 'contain',
     marginBottom: 20,
   },
   planTitle: {
     fontSize: 18,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   currentBadge: {
-    position: "absolute",
+    position: 'absolute',
     top: 8,
     right: 8,
     backgroundColor: COLORS.rendezvousRed,
@@ -69,8 +68,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   currentBadgeText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 10,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });

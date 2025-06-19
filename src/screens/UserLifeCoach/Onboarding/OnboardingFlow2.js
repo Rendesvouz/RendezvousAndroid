@@ -16,10 +16,12 @@ import HeaderText from "../../../components/common/HeaderText";
 import axiosInstance from "../../../utils/api-client";
 import { saveUserLifeCoachPreference } from "../../../redux/features/user/userSlice";
 import { parseExperienceRange, parsePriceRange } from "../../../Library/Common";
+import {useTheme} from '../../../Context/ThemeContext';
 
 const UserLifeCoachOnboardingFlow2 = ({ navigation, route }) => {
   const items = route.params;
   console.log("items", items);
+  const {theme} = useTheme();
 
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
@@ -45,7 +47,7 @@ const UserLifeCoachOnboardingFlow2 = ({ navigation, route }) => {
     const userLifeCoachPreferenceData = {
       previous_experience: items.previousExperience,
       platforms: [items.platform],
-      //   skill: [items.skill],
+    //   skill: [items.skill],
       priceRange: parsePriceRange(items.priceRange),
       years_of_experience: parseExperienceRange(items.yearsOfExperience),
       coaching_areas: selectedCategories,
@@ -69,7 +71,7 @@ const UserLifeCoachOnboardingFlow2 = ({ navigation, route }) => {
           // if theres a data in the response, it means the user has onboarded his life coach preferences
           if (res?.data?.data) {
             dispatch(saveUserLifeCoachPreference(res?.data?.data));
-            navigation.navigate("UserLifeCoachComplete");
+            navigation.navigate('UserLifeCoachComplete');
           }
         })
         .catch((err) => {
@@ -128,7 +130,7 @@ const UserLifeCoachOnboardingFlow2 = ({ navigation, route }) => {
       </ScrollView>
 
       {/* Buttons */}
-      <FixedBottomContainer top={1.1}>
+      <FixedBottomContainer top={1.2}>
         <FormButton
           title={"Save Preferences"}
           width={1.1}

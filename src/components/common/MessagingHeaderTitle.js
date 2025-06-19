@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
-import React from "react";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { useSelector } from "react-redux";
-import { windowWidth } from "../../utils/Dimensions";
-import { COLORS } from "../../themes/themes";
+import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+import React from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useSelector} from 'react-redux';
+import {windowWidth} from '../../utils/Dimensions';
+import {COLORS} from '../../themes/themes';
+import {useTheme} from '../../Context/ThemeContext';
 
 const MessagingHeaderTitle = ({
   leftIcon,
@@ -12,32 +13,34 @@ const MessagingHeaderTitle = ({
   onProfilePressed,
   profileImage,
 }) => {
+  const {theme} = useTheme();
+
   return (
-    <View style={styles.container}>
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
+    <View style={[styles.container, {borderBottomColor: theme?.borderColor}]}>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
         {leftIcon && (
           <TouchableOpacity
             onPress={onLeftIconPress}
             activeOpacity={0.9}
-            style={styles.leftIconContainer}
-          >
+            style={styles.leftIconContainer}>
             <Ionicons
-              name={leftIcon ? leftIcon : "arrow-back-outline"}
+              name={leftIcon ? leftIcon : 'arrow-back-outline'}
               size={25}
-              color={"black"}
+              color={theme?.text}
             />
           </TouchableOpacity>
         )}
         <TouchableOpacity
           onPress={onProfilePressed}
-          style={{ flexDirection: "row", alignItems: "center", marginLeft: 10 }}
-        >
+          style={{flexDirection: 'row', alignItems: 'center', marginLeft: 10}}>
           <Image
-            style={{ width: 35, height: 35, borderRadius: 20 }}
-            source={{ uri: profileImage }}
+            style={{width: 35, height: 35, borderRadius: 20}}
+            source={{uri: profileImage}}
           />
           {headerTitle && (
-            <Text style={[styles.headerTitle]}>{headerTitle}</Text>
+            <Text style={[styles.headerTitle, {color: theme?.text}]}>
+              {headerTitle}
+            </Text>
           )}
         </TouchableOpacity>
       </View>
@@ -49,24 +52,24 @@ export default MessagingHeaderTitle;
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
+    flexDirection: 'row',
     padding: 20,
-    justifyContent: "space-between",
-    alignContent: "center",
-    alignItems: "center",
+    justifyContent: 'space-between',
+    alignContent: 'center',
+    alignItems: 'center',
     borderBottomColor: COLORS.appGrey,
     borderBottomWidth: 1,
   },
   headerTitle: {
     fontSize: 20,
     color: COLORS.rendezvousBlack,
-    fontWeight: "400",
+    fontWeight: '400',
     marginLeft: 10,
   },
   headerIcon: {
     width: 20,
     height: 20,
-    objectFit: "contain",
+    objectFit: 'contain',
   },
   leftIconContainer: {
     // backgroundColor: 'red',
@@ -81,20 +84,20 @@ const styles = StyleSheet.create({
     borderColor: COLORS.appGrey3,
   },
   badgeContainer: {
-    position: "absolute",
+    position: 'absolute',
     top: -5,
     right: -5,
     backgroundColor: COLORS.rendezvousRed,
     borderRadius: 10,
     minWidth: 18,
     height: 18,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingHorizontal: 4,
   },
   badgeText: {
-    color: "white",
+    color: 'white',
     fontSize: 12,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });

@@ -4,19 +4,20 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-} from "react-native";
-import React, { useState } from "react";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { windowWidth } from "../../utils/Dimensions";
-import { COLORS } from "../../themes/themes";
+} from 'react-native';
+import React, {useState} from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {windowWidth} from '../../utils/Dimensions';
+import {COLORS} from '../../themes/themes';
+import {useTheme} from '../../Context/ThemeContext';
 
 const CommentInput = ({
   leftIcon,
-  iconColor = "#fff",
+  iconColor = '#fff',
   rightIcon,
   inputStyle,
   containerStyle,
-  placeholderTextColor,
+  placeholderTextColor = COLORS.appGrey5,
   handlePasswordVisibility,
   onPress,
   autoCapitalize,
@@ -28,15 +29,19 @@ const CommentInput = ({
   height,
   ...rest
 }) => {
+  const {theme} = useTheme();
+
   return (
     <View
       style={[
         styles.container,
         containerStyle,
-        { width: windowWidth / (width || 1.4) },
+        {
+          width: windowWidth / (width || 1.4),
+          backgroundColor: theme?.borderColor,
+        },
       ]}
-      onPress={onPress}
-    >
+      onPress={onPress}>
       {leftIcon ? (
         <Ionicons
           name={leftIcon}
@@ -49,7 +54,7 @@ const CommentInput = ({
         {...rest}
         autoCorrect={false}
         placeholderTextColor={placeholderTextColor}
-        style={[styles.input, inputStyle]}
+        style={[styles.input, inputStyle, {color: theme.text}]}
         autoCapitalize={autoCapitalize}
         keyboardType={keyboardType}
         maxLength={maxLength}
@@ -59,8 +64,7 @@ const CommentInput = ({
       {rightIcon ? (
         <TouchableOpacity
           activeOpacity={0.9}
-          onPress={handlePasswordVisibility}
-        >
+          onPress={handlePasswordVisibility}>
           <Ionicons
             name={rightIcon}
             size={30}
@@ -78,7 +82,7 @@ export default CommentInput;
 const styles = StyleSheet.create({
   container: {
     borderRadius: 12,
-    flexDirection: "row",
+    flexDirection: 'row',
     padding: 10,
     backgroundColor: COLORS.appGrey3,
     // borderWidth: 1,
@@ -91,9 +95,9 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    width: "100%",
+    width: '100%',
     fontSize: 16,
-    color: "black",
+    color: 'black',
     height: 25,
     // backgroundColor: "red",
     // marginTop: 0,
@@ -101,10 +105,10 @@ const styles = StyleSheet.create({
   },
   rightIcon: {
     marginLeft: 10,
-    alignSelf: "center",
-    justifyContent: "center",
-    alignItems: "center",
-    alignContent: "center",
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
     marginTop: 2,
   },
 });

@@ -2,7 +2,7 @@
   "expo": {
     "name": "Rendezvouscare",
     "slug": "rendezvouscare",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/adaptiveIcon.png",
     "userInterfaceStyle": "light",
@@ -23,7 +23,8 @@
       },
       "edgeToEdgeEnabled": true,
       "permissions": ["android.permission.RECORD_AUDIO"],
-      "package": "com.rendezvouscare"
+      "package": "com.rendezvouscare",
+      "versionCode": 2
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -33,6 +34,13 @@
         "expo-image-picker",
         {
           "photosPermission": "Rendezvouscare accesses your photos to let you share them with your friends."
+        }
+      ],
+      [
+        "expo-video",
+        {
+          "supportsBackgroundPlayback": true,
+          "supportsPictureInPicture": true
         }
       ]
     ],

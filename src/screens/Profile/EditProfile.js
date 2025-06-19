@@ -76,7 +76,7 @@ const EditProfile = ({ navigation }) => {
       </ScrollView>
 
       {/* Buttons */}
-      <FixedBottomContainer top={1.1}>
+      <FixedBottomContainer top={1.2}>
         <FormButton title={"Update"} width={1.1} onPress={updateProfile} />
       </FixedBottomContainer>
     </SafeAreaViewComponent>

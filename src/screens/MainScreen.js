@@ -1,107 +1,111 @@
-import React from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import React from 'react';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   getFocusedRouteNameFromRoute,
   NavigationContainer,
-} from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
-import HomeScreen from "./HomeScreen";
-import SearchScreen from "./SearchScreen";
-import ProfileScreen from "./Profile/ProfileScreen";
-import { COLORS } from "../themes/themes";
-import EditProfile from "./Profile/EditProfile";
-import ResetPassword from "./auth/ResetPassword";
-import AccountSettings from "./Profile/AccountSettings";
-import ChangePassword from "./Profile/ChangePassword";
-import PasswordResetSuccess from "./Profile/PasswordResetConfirmation";
-import ServicesScreen from "./Dashboard/ServicesScreen";
-import CategoriesScreen from "./Dashboard/CategoriesScreen";
-import SplashScreen from "./SplashScreen";
-import LoginScreen from "./auth/LoginScreen";
-import DetailsScreen from "./Dashboard/DetailsScreen";
-import PaymentMethod from "./Dashboard/PaymentMethod";
-import AddPaymentCard from "./Dashboard/AddPaymentCard";
-import OrderSummary from "./Dashboard/OrderSummary";
-import OrderSuccessfulScreen from "./Dashboard/OrderSuccessfulScreen";
-import ReceiptScreen from "./Dashboard/ReceiptScreen";
-import Bookings from "./Profile/Bookings";
-import OnboardingScreen from "./auth/OnboardingScreen";
-import RegisterScreen1 from "./auth/RegisterScreen1";
-import RegisterScreen2 from "./auth/RegisterScreen2";
-import VideoVerificationScreen from "./auth/VideoVerificationScreen";
-import EmailVerificationScreen from "./auth/EmailVerification";
-import ForgetPassword from "./auth/ForgotPassword";
-import AccountCreationSuccess from "./auth/AccountCreationSuccess";
-import OnboardingFlow1 from "./OnboardingProcesses/User/OnboardingFlow1";
-import ProfileInfo from "./Profile/ProfileInfo";
-import ProfileInformation from "./Profile/User/ProfileInformation";
-import BasicInformation from "./Profile/User/BasicInformation";
-import AdditionalImages from "./Profile/User/AdditionalImages";
-import AdditionalInformation from "./Profile/User/AdditionalInformation";
-import UserPreferences from "./Profile/User/UserPreferences";
-import WalletScreen from "./Profile/WalletScreen";
-import UserTherapyHomeScreen from "./UserTherapy/UserTherapyHomeScreen";
-import UserTherapyOnboardingFlow1 from "./UserTherapy/Onboarding/OnboardingFlow1";
-import UserTherapyOnboardingFlow2 from "./UserTherapy/Onboarding/OnboardingFlow2";
-import Complete from "./UserTherapy/Onboarding/Complete";
-import UserTherapistDetails from "./UserTherapy/UserTherapistDetails";
-import UserTherapistBooking from "./UserTherapy/UserTherapistBooking";
-import ShopScreen from "./Vendor/Shop/ShopScreen";
-import ProductDetails from "./Vendor/Shop/ProductDetails";
-import AddProduct from "./Vendor/AddProduct";
-import CartScreen from "./Vendor/Shop/CartScreen";
-import UserLifeCoachHomeScreen from "./UserLifeCoach/UserLifeCoachHomeScreen";
-import UserLifeCoachOnboardingFlow1 from "./UserLifeCoach/Onboarding/OnboardingFlow1";
-import UserLifeCoachOnboardingFlow2 from "./UserLifeCoach/Onboarding/OnboardingFlow2";
-import UserLifeCoachDetails from "./UserLifeCoach/UserLifeCoachDetails";
-import UserLifeCoachBooking from "./UserLifeCoach/UserLifeCoachBooking";
-import UserLifeCoachComplete from "./UserLifeCoach/Onboarding/Complete";
-import CheckoutScreen from "./Vendor/Shop/CheckoutScreen";
-import SupportScreen from "./Profile/SupportScreen";
-import NotificationsScreen from "./NotificationsScreen";
-import BlogScreen from "./Profile/BlogScreen";
-import BlogDetailsScreen from "./Profile/BlogDetailsScreen";
-import GiftCardScreen from "./Vendor/Shop/GiftCardScreen";
-import UserTherapyAppointDetails from "./UserTherapy/UserTherapyAppointDetails";
-import StringsScreen from "./Strings/StringsScreen";
-import TourguideHomeScreen from "./TourGuide/TourguideHomeScreen";
-import TourPlacesScreen from "./TourGuide/TourPlacesScreen";
-import ToursDetailsScreen from "./TourGuide/ToursDetailsScreen";
-import TourguideBookingsScreen from "./TourGuide/TourguideBookingsScreen";
-import TourSuccessScreen from "./TourGuide/TourSuccessScreen";
-import CarRentalScreen from "./CarRentalScreen";
-import BookedToursScreen from "./TourGuide/BookedToursScreen";
-import LegalScreen from "./Profile/LegalScreen";
-import SubscriptionScreen from "./Profile/SubscriptionScreen";
-import GiftCardDetails from "./Vendor/Shop/GiftCardDetails";
-import CarRentalHomeScreen from "./CarRental/CarRentalHomeScreen";
-import UserTherapyAppointments from "./UserTherapy/UserTherapyAppointments";
-import UserLifeCoachAppointments from "./UserLifeCoach/UserLifeCoachAppointments";
-import TourguideAppointments from "./TourGuide/TourguideAppointments";
-import OnboardingFlow2 from "./OnboardingProcesses/User/OnboardingFlow2";
-import OnboardingFlow3 from "./OnboardingProcesses/User/OnboardingFlow3";
-import OnboardingFlow4 from "./OnboardingProcesses/User/OnboardingFlow4";
-import OnboardingFlow5 from "./OnboardingProcesses/User/OnboardingFlow5";
-import PreferenceFlow1 from "./OnboardingProcesses/User/Preferences/PreferenceFlow1";
-import StringsProfileScreen from "./Strings/StringsProfileScreen";
-import StringsFriendRequest from "./Strings/StringsFriendRequest";
-import StringsMessagingScreen from "./Strings/StringsMessagingScreen";
-import StringsChattingScreen from "./Strings/StringsChattingScreen";
-import BookingScreen from "./Booking/BookingScreen";
-import WellnessScreen from "./UserTherapy/WellnessScreen";
-import FlightsScreen from "./Booking/Flights/FlightsScreen";
-import FlightsListingScreen from "./Booking/Flights/FlightsListingScreen";
-import FlightBookingScreen from "./Booking/Flights/FlightBookingScreen";
-import HotelsScreen from "./Booking/Hotels/HotelsScreen";
-import PreferenceFlow2 from "./OnboardingProcesses/User/Preferences/PreferenceFlow2";
+} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import HomeScreen from './HomeScreen';
+import SearchScreen from './SearchScreen';
+import ProfileScreen from './Profile/ProfileScreen';
+import {COLORS} from '../themes/themes';
+import EditProfile from './Profile/EditProfile';
+import ResetPassword from './auth/ResetPassword';
+import AccountSettings from './Profile/AccountSettings';
+import ChangePassword from './Profile/ChangePassword';
+import PasswordResetSuccess from './Profile/PasswordResetConfirmation';
+import ServicesScreen from './Dashboard/ServicesScreen';
+import CategoriesScreen from './Dashboard/CategoriesScreen';
+import SplashScreen from './SplashScreen';
+import LoginScreen from './auth/LoginScreen';
+import DetailsScreen from './Dashboard/DetailsScreen';
+import PaymentMethod from './Dashboard/PaymentMethod';
+import AddPaymentCard from './Dashboard/AddPaymentCard';
+import OrderSummary from './Dashboard/OrderSummary';
+import OrderSuccessfulScreen from './Dashboard/OrderSuccessfulScreen';
+import ReceiptScreen from './Dashboard/ReceiptScreen';
+import Bookings from './Profile/Bookings';
+import OnboardingScreen from './auth/OnboardingScreen';
+import RegisterScreen1 from './auth/RegisterScreen1';
+import RegisterScreen2 from './auth/RegisterScreen2';
+import VideoVerificationScreen from './auth/VideoVerificationScreen';
+import EmailVerificationScreen from './auth/EmailVerification';
+import ForgetPassword from './auth/ForgotPassword';
+import AccountCreationSuccess from './auth/AccountCreationSuccess';
+import OnboardingFlow1 from './OnboardingProcesses/User/OnboardingFlow1';
+import ProfileInfo from './Profile/ProfileInfo';
+import ProfileInformation from './Profile/User/ProfileInformation';
+import BasicInformation from './Profile/User/BasicInformation';
+import AdditionalImages from './Profile/User/AdditionalImages';
+import AdditionalInformation from './Profile/User/AdditionalInformation';
+import UserPreferences from './Profile/User/UserPreferences';
+import WalletScreen from './Profile/WalletScreen';
+import UserTherapyHomeScreen from './UserTherapy/UserTherapyHomeScreen';
+import UserTherapyOnboardingFlow1 from './UserTherapy/Onboarding/OnboardingFlow1';
+import UserTherapyOnboardingFlow2 from './UserTherapy/Onboarding/OnboardingFlow2';
+import Complete from './UserTherapy/Onboarding/Complete';
+import UserTherapistDetails from './UserTherapy/UserTherapistDetails';
+import UserTherapistBooking from './UserTherapy/UserTherapistBooking';
+import ShopScreen from './Vendor/Shop/ShopScreen';
+import ProductDetails from './Vendor/Shop/ProductDetails';
+import AddProduct from './Vendor/AddProduct';
+import CartScreen from './Vendor/Shop/CartScreen';
+import UserLifeCoachHomeScreen from './UserLifeCoach/UserLifeCoachHomeScreen';
+import UserLifeCoachOnboardingFlow1 from './UserLifeCoach/Onboarding/OnboardingFlow1';
+import UserLifeCoachOnboardingFlow2 from './UserLifeCoach/Onboarding/OnboardingFlow2';
+import UserLifeCoachDetails from './UserLifeCoach/UserLifeCoachDetails';
+import UserLifeCoachBooking from './UserLifeCoach/UserLifeCoachBooking';
+import UserLifeCoachComplete from './UserLifeCoach/Onboarding/Complete';
+import CheckoutScreen from './Vendor/Shop/CheckoutScreen';
+import SupportScreen from './Profile/SupportScreen';
+import NotificationsScreen from './NotificationsScreen';
+import BlogScreen from './Profile/BlogScreen';
+import BlogDetailsScreen from './Profile/BlogDetailsScreen';
+import GiftCardScreen from './Vendor/Shop/GiftCardScreen';
+import UserTherapyAppointDetails from './UserTherapy/UserTherapyAppointDetails';
+import StringsScreen from './Strings/StringsScreen';
+import TourguideHomeScreen from './TourGuide/TourguideHomeScreen';
+import TourPlacesScreen from './TourGuide/TourPlacesScreen';
+import ToursDetailsScreen from './TourGuide/ToursDetailsScreen';
+import TourguideBookingsScreen from './TourGuide/TourguideBookingsScreen';
+import TourSuccessScreen from './TourGuide/TourSuccessScreen';
+import BookedToursScreen from './TourGuide/BookedToursScreen';
+import LegalScreen from './Profile/LegalScreen';
+import SubscriptionScreen from './Profile/SubscriptionScreen';
+import GiftCardDetails from './Vendor/Shop/GiftCardDetails';
+import UserTherapyAppointments from './UserTherapy/UserTherapyAppointments';
+import UserLifeCoachAppointments from './UserLifeCoach/UserLifeCoachAppointments';
+import TourguideAppointments from './TourGuide/TourguideAppointments';
+import OnboardingFlow2 from './OnboardingProcesses/User/OnboardingFlow2';
+import OnboardingFlow3 from './OnboardingProcesses/User/OnboardingFlow3';
+import OnboardingFlow4 from './OnboardingProcesses/User/OnboardingFlow4';
+import OnboardingFlow5 from './OnboardingProcesses/User/OnboardingFlow5';
+import PreferenceFlow1 from './OnboardingProcesses/User/Preferences/PreferenceFlow1';
+import StringsProfileScreen from './Strings/StringsProfileScreen';
+import StringsFriendRequest from './Strings/StringsFriendRequest';
+import StringsMessagingScreen from './Strings/StringsMessagingScreen';
+import StringsChattingScreen from './Strings/StringsChattingScreen';
+import BookingScreen from './Booking/BookingScreen';
+import WellnessScreen from './UserTherapy/WellnessScreen';
+import FlightsScreen from './Booking/Flights/FlightsScreen';
+import FlightsListingScreen from './Booking/Flights/FlightsListingScreen';
+import FlightBookingScreen from './Booking/Flights/FlightBookingScreen';
+import HotelsScreen from './Booking/Hotels/HotelsScreen';
+import PreferenceFlow2 from './OnboardingProcesses/User/Preferences/PreferenceFlow2';
+import StringsLandingScreen from './Strings/StringsLandingScreen';
+import WellnessLandingPage from './UserTherapy/WellnessLandingPage';
+import FeedsScreen from './Feeds/FeedsScreen';
+import GridsScreen from './Feeds/GridsScreen';
+import {useTheme} from '../Context/ThemeContext';
+import TravelsLandingScreen from './Booking/TravelsLandingScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-const HomeStack = ({ navigation }) => (
+const HomeStack = ({navigation}) => (
   <Stack.Navigator>
     <Stack.Screen
       name="HomeScreen"
@@ -110,12 +114,12 @@ const HomeStack = ({ navigation }) => (
         headerShown: false,
         headerBackTitleVisible: false,
         headerLeft: () => (
-          <View style={{ marginLeft: 10 }}>
+          <View style={{marginLeft: 10}}>
             <Ionicons
               name="menu-outline"
               size={30}
               color="#333"
-              onPress={() => navigation.navigate("Drawer")}
+              onPress={() => navigation.navigate('Drawer')}
             />
           </View>
         ),
@@ -379,14 +383,6 @@ const HomeStack = ({ navigation }) => (
 
     {/* Car Rental section */}
     <Stack.Screen
-      name="CarRental"
-      component={CarRentalScreen}
-      options={{
-        headerShown: false,
-        headerBackTitleVisible: false,
-      }}
-    />
-    <Stack.Screen
       name="Booking"
       component={BookingScreen}
       options={{
@@ -557,16 +553,6 @@ const HomeStack = ({ navigation }) => (
       }}
     />
 
-    {/* Car Rental */}
-    <Stack.Screen
-      name="CarRentalHomeScreen"
-      component={CarRentalHomeScreen}
-      options={{
-        headerShown: false,
-        headerBackTitleVisible: false,
-      }}
-    />
-
     {/* Flight Booking */}
     <Stack.Screen
       name="BookingScreen"
@@ -580,7 +566,7 @@ const HomeStack = ({ navigation }) => (
 );
 
 const AuthStack = ({}) => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
+  <Stack.Navigator screenOptions={{headerShown: false}}>
     <Stack.Screen name="Login" component={LoginScreen} />
     <Stack.Screen name="Register" component={RegisterScreen1} />
     <Stack.Screen name="Register2" component={RegisterScreen2} />
@@ -640,7 +626,7 @@ const AuthStack = ({}) => (
   </Stack.Navigator>
 );
 
-const UserTherapyStack = ({ navigation }) => (
+const UserTherapyStack = ({navigation}) => (
   <Stack.Navigator>
     <Stack.Screen
       name="UserWellness"
@@ -717,7 +703,7 @@ const UserTherapyStack = ({ navigation }) => (
   </Stack.Navigator>
 );
 
-const UserLifeCoachStack = ({ navigation }) => (
+const UserLifeCoachStack = ({navigation}) => (
   <Stack.Navigator>
     <Stack.Screen
       name="UserLifeCoach"
@@ -778,7 +764,7 @@ const UserLifeCoachStack = ({ navigation }) => (
   </Stack.Navigator>
 );
 
-const UserWellnessStack = ({ navigation }) => (
+const UserWellnessStack = ({navigation}) => (
   <Stack.Navigator>
     <Stack.Screen
       name="UserWellness"
@@ -915,7 +901,7 @@ const UserWellnessStack = ({ navigation }) => (
   </Stack.Navigator>
 );
 
-const UserShopStack = ({ navigation }) => (
+const UserShopStack = ({navigation}) => (
   <Stack.Navigator>
     <Stack.Screen
       name="ShopScreen"
@@ -1043,7 +1029,7 @@ const BookingsStack = ({}) => (
   <Stack.Navigator>
     <Stack.Screen
       name="BookingScreen"
-      component={BookingScreen}
+      component={TravelsLandingScreen}
       options={{
         headerShown: false,
         headerBackTitleVisible: false,
@@ -1149,19 +1135,105 @@ const BookingsStack = ({}) => (
     />
 
     {/* auth section */}
-    <Stack.Screen name="Register" component={RegisterScreen1} />
-    <Stack.Screen name="Register2" component={RegisterScreen2} />
+    <Stack.Screen
+      name="Login"
+      component={LoginScreen}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="Register"
+      component={RegisterScreen1}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="Register2"
+      component={RegisterScreen2}
+      options={{
+        headerShown: false,
+      }}
+    />
     <Stack.Screen
       name="EmailVerification"
       component={EmailVerificationScreen}
+      options={{
+        headerShown: false,
+      }}
     />
-    <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
-    <Stack.Screen name="ResetPassword" component={ResetPassword} />
-    <Stack.Screen name="SuccessScreen" component={AccountCreationSuccess} />
+    <Stack.Screen
+      name="ForgetPassword"
+      component={ForgetPassword}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="ResetPassword"
+      component={ResetPassword}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="SuccessScreen"
+      component={AccountCreationSuccess}
+      options={{
+        headerShown: false,
+      }}
+    />
+
+    <Stack.Screen
+      name="OnboardingFlow1"
+      component={OnboardingFlow1}
+      options={{
+        headerShown: false,
+      }}
+    />
+
+    <Stack.Screen
+      name="OnboardingFlow2"
+      component={OnboardingFlow2}
+      options={{
+        headerShown: false,
+      }}
+    />
+
+    <Stack.Screen
+      name="OnboardingFlow3"
+      component={OnboardingFlow3}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="OnboardingFlow4"
+      component={OnboardingFlow4}
+      options={{
+        headerShown: false,
+      }}
+    />
+
+    <Stack.Screen
+      name="OnboardingFlow5"
+      component={OnboardingFlow5}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="PreferenceFlow1"
+      component={PreferenceFlow1}
+      options={{
+        headerShown: false,
+      }}
+    />
   </Stack.Navigator>
 );
 
-const ProfileStack = ({ navigation }) => (
+const ProfileStack = ({navigation}) => (
   <Stack.Navigator>
     <Stack.Screen
       name="Profile"
@@ -1170,12 +1242,12 @@ const ProfileStack = ({ navigation }) => (
         headerShown: false,
         headerBackTitleVisible: false,
         headerLeft: () => (
-          <View style={{ marginLeft: 10 }}>
+          <View style={{marginLeft: 10}}>
             <Ionicons
               name="menu-outline"
               size={30}
               color="#333"
-              onPress={() => navigation.navigate("Drawer")}
+              onPress={() => navigation.navigate('Drawer')}
             />
           </View>
         ),
@@ -1196,12 +1268,12 @@ const ProfileStack = ({ navigation }) => (
         headerShown: false,
         headerBackTitleVisible: false,
         headerLeft: () => (
-          <View style={{ marginLeft: 10 }}>
+          <View style={{marginLeft: 10}}>
             <Ionicons
               name="menu-outline"
               size={30}
               color="#333"
-              onPress={() => navigation.navigate("Drawer")}
+              onPress={() => navigation.navigate('Drawer')}
             />
           </View>
         ),
@@ -1330,7 +1402,7 @@ const ProfileStack = ({ navigation }) => (
   </Stack.Navigator>
 );
 
-const StringsStack = ({ navigation }) => (
+const StringsStack = ({navigation}) => (
   <Stack.Navigator>
     <Stack.Screen
       name="StringsScreen"
@@ -1393,109 +1465,156 @@ const StringsStack = ({ navigation }) => (
   </Stack.Navigator>
 );
 
+const FeedsStack = ({navigation}) => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="FeedsScreen"
+      component={FeedsScreen}
+      options={{
+        headerShown: false,
+        headerBackTitleVisible: false,
+      }}
+    />
+  </Stack.Navigator>
+);
+
+const GridsStack = ({navigation}) => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="GridsScreen"
+      component={GridsScreen}
+      options={{
+        headerShown: false,
+        headerBackTitleVisible: false,
+      }}
+    />
+
+    <Stack.Screen
+      name="Auth"
+      component={AuthStack}
+      options={{
+        headerShown: false,
+        headerBackTitleVisible: false,
+      }}
+    />
+
+    <Stack.Screen
+      name="StringsStack"
+      component={StringsStack}
+      options={{
+        headerShown: false,
+        headerBackTitleVisible: false,
+      }}
+    />
+  </Stack.Navigator>
+);
+
 const MainScreen = () => {
-  const state = useSelector((state) => state);
+  const state = useSelector(state => state);
   const loggedInUserRole = state?.user?.userRole;
   const userProfle = state?.user?.user?.profile;
+  const reduxStringsLandingPage = state?.user?.stringsLandingPage;
+  const reduxWellnessLandingPage = state?.user?.wellnessLandingPage;
 
-  console.log("loggedInUserRole", loggedInUserRole, userProfle);
+  const {theme} = useTheme();
+
+  console.log('loggedInUserRole', loggedInUserRole, userProfle, theme);
 
   return (
     <Tab.Navigator
       initialRouteName="Home"
-      screenOptions={({ route }) => ({
-        tabBarStyle: ((route) => {
-          const routeName = getFocusedRouteNameFromRoute(route) ?? "";
+      screenOptions={({route}) => ({
+        tabBarStyle: (route => {
+          const routeName = getFocusedRouteNameFromRoute(route) ?? '';
           const routeWithNoTarBar = [
-            "Details",
-            "EditProfile",
-            "ChangePassword",
-            "PasswordResetSuccess",
-            "PaymentMethod",
-            "AddPaymentCard",
-            "OrderSummary",
-            "OrderSuccessful",
-            "OrderReceipt",
-            "Bookings",
+            'Details',
+            'EditProfile',
+            'ChangePassword',
+            'PasswordResetSuccess',
+            'PaymentMethod',
+            'AddPaymentCard',
+            'OrderSummary',
+            'OrderSuccessful',
+            'OrderReceipt',
+            'Bookings',
 
-            "CarRental",
-            "Booking",
-            "Subscription",
-            "GiftCardDetails",
-            "Wallet",
+            'Booking',
+            'Subscription',
+            'GiftCardDetails',
+            'Wallet',
 
             // UserTherapy sections
-            "UserTherapyOnboardingFlow1",
-            "UserTherapyOnboardingFlow2",
-            "Complete",
-            "UserTherapistDetails",
-            "UserTherapistBooking",
-            "UserTherapyAppointmentDetails",
-            "UserTherapyAppointments",
+            'UserTherapyOnboardingFlow1',
+            'UserTherapyOnboardingFlow2',
+            'Complete',
+            'UserTherapistDetails',
+            'UserTherapistBooking',
+            'UserTherapyAppointmentDetails',
+            'UserTherapyAppointments',
 
             // Shop section
-            "ProductDetails",
-            "AddProduct",
-            "Cart",
-            "Checkout",
+            'ProductDetails',
+            'AddProduct',
+            'Cart',
+            'Checkout',
 
             // UserLifecoach section
-            "UserLifeCoachOnboardingFlow1",
-            "UserLifeCoachOnboardingFlow2",
-            "Complete",
-            "UserLifeCoachDetails",
-            "UserLifeCoachBooking",
-            "UserLifeCoachAppointments",
+            'UserLifeCoachOnboardingFlow1',
+            'UserLifeCoachOnboardingFlow2',
+            'Complete',
+            'UserLifeCoachDetails',
+            'UserLifeCoachBooking',
+            'UserLifeCoachAppointments',
 
             // tourguide section
-            "ToursDetailsScreen",
-            "TourguideBookingsScreen",
-            "TourSuccessScreen",
+            'ToursDetailsScreen',
+            'TourguideBookingsScreen',
+            'TourSuccessScreen',
 
             // Profiles section
-            "SchedulingScreen",
-            "EditAppointmentDates",
+            'SchedulingScreen',
+            'EditAppointmentDates',
 
             // Strings section
-            "StringsProfile",
-            "StringsChattingScreen",
+            'StringsProfile',
+            'StringsChattingScreen',
 
             // Bookings
-            "FlightsScreen",
-            "FlightBookingScreen",
-            "FlightsListingScreen",
+            'FlightsScreen',
+            'FlightBookingScreen',
+            'FlightsListingScreen',
 
             // Auth section
-            "OnboardingFlow1",
-            "OnboardingFlow2",
-            "OnboardingFlow3",
-            "OnboardingFlow4",
-            "OnboardingFlow5",
-            "PreferenceFlow1",
-            "PreferenceFlow2",
-            "EmailVerification",
-            "ForgetPassword",
+            'OnboardingFlow1',
+            'OnboardingFlow2',
+            'OnboardingFlow3',
+            'OnboardingFlow4',
+            'OnboardingFlow5',
+            'PreferenceFlow1',
+            'PreferenceFlow2',
+            'EmailVerification',
+            'ForgetPassword',
 
             // User Profile Section
-            "AdditionalImages",
-            "ProfileInformation",
-            "BasicProfile",
-            "AdditionalInformation",
-            "UserPreferences",
+            'AdditionalImages',
+            'ProfileInformation',
+            'BasicProfile',
+            'AdditionalInformation',
+            'UserPreferences',
           ];
           if (routeWithNoTarBar.includes(routeName)) {
-            return { display: "none" };
+            return {display: 'none'};
           }
           return {
-            backgroundColor: COLORS.white,
+            backgroundColor: theme.background,
+            borderTopColor: theme.background,
           };
         })(route),
         tabBarActiveTintColor: COLORS.rendezvousRed,
         tabBarColor: COLORS.rendezvousRed,
         tabBarInActiveBackgroundColor: COLORS.rendezvousRed,
-      })}
-    >
-      {/* <Tab.Screen
+      })}>
+      <Tab.Screen
         name="Home"
         component={HomeStack}
         options={({route}) => ({
@@ -1505,51 +1624,93 @@ const MainScreen = () => {
           ),
           headerShown: false,
         })}
+      />
+
+      {/* <Tab.Screen
+        name="Feeds"
+        component={FeedsStack}
+        options={{
+          tabBarLabel: 'Grids',
+          tabBarIcon: ({color}) => (
+            <Ionicons name="layers-outline" color={color} size={26} />
+          ),
+          headerShown: false,
+        }}
       /> */}
 
       <Tab.Screen
-        name="Therapy"
-        component={userProfle ? UserWellnessStack : AuthStack}
+        name="Grids"
+        component={GridsStack}
         options={{
-          tabBarLabel: "Wellness",
-          tabBarIcon: ({ focused }) => (
-            // <Ionicons name="medical-outline" color={color} size={26} />
-            <Image
-              source={
-                focused
-                  ? require("../assets/wellness.png")
-                  : require("../assets/wellnessInactive.png")
-              }
-              style={{ width: 20, height: 20 }}
-            />
+          tabBarLabel: 'Grids',
+          tabBarIcon: ({color}) => (
+            <Ionicons name="layers-outline" color={color} size={26} />
           ),
           headerShown: false,
+          headerStyle: {
+            backgroundColor: 'black',
+          },
+          headerTitleStyle: {
+            color: '#ccc',
+          },
         }}
       />
 
       <Tab.Screen
         name="Strings"
-        component={userProfle ? StringsStack : AuthStack}
+        component={
+          !reduxStringsLandingPage
+            ? StringsLandingScreen
+            : userProfle
+            ? StringsStack
+            : AuthStack
+        }
         options={{
-          tabBarLabel: "Strings",
-          tabBarIcon: ({ focused }) => (
+          tabBarLabel: 'Strings',
+          tabBarIcon: ({focused}) => (
             // <Ionicons name="contract-outline" color={color} size={26} />
             <Image
               source={
                 focused
-                  ? require("../assets/stringsActive.png")
-                  : require("../assets/strings.png")
+                  ? require('../assets/stringsActive.png')
+                  : require('../assets/strings.png')
               }
-              style={{ width: 20, height: 20 }}
+              style={{width: 20, height: 20}}
             />
           ),
           headerShown: false,
           headerStyle: {
-            backgroundColor: "black",
+            backgroundColor: 'black',
           },
           headerTitleStyle: {
-            color: "#ccc",
+            color: '#ccc',
           },
+        }}
+      />
+
+      <Tab.Screen
+        name="Therapy"
+        component={
+          !reduxWellnessLandingPage
+            ? WellnessLandingPage
+            : userProfle
+            ? UserWellnessStack
+            : AuthStack
+        }
+        options={{
+          tabBarLabel: 'Wellness',
+          tabBarIcon: ({focused}) => (
+            // <Ionicons name="medical-outline" color={color} size={26} />
+            <Image
+              source={
+                focused
+                  ? require('../assets/wellness.png')
+                  : require('../assets/wellnessInactive.png')
+              }
+              style={{width: 20, height: 20}}
+            />
+          ),
+          headerShown: false,
         }}
       />
 
@@ -1590,31 +1751,20 @@ const MainScreen = () => {
       /> */}
 
       <Tab.Screen
-        name="Home"
-        component={HomeStack}
-        options={({ route }) => ({
-          tabBarLabel: "Home",
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="home-outline" color={color} size={26} />
-          ),
-          headerShown: false,
-        })}
-      />
-
-      <Tab.Screen
         name="Bookings"
-        component={userProfle ? BookingsStack : AuthStack}
+        component={BookingsStack}
+        // component={userProfle ? BookingsStack : AuthStack}
         options={{
-          tabBarLabel: "Travel",
-          tabBarIcon: ({ color }) => (
+          tabBarLabel: 'Travel',
+          tabBarIcon: ({color}) => (
             <Ionicons name="earth-outline" color={color} size={26} />
           ),
           headerShown: false,
           headerStyle: {
-            backgroundColor: "black",
+            backgroundColor: 'black',
           },
           headerTitleStyle: {
-            color: "#ccc",
+            color: '#ccc',
           },
         }}
       />
@@ -1623,24 +1773,24 @@ const MainScreen = () => {
         name="Shop"
         component={UserShopStack}
         options={{
-          tabBarLabel: "Store",
-          tabBarIcon: ({ focused }) => (
+          tabBarLabel: 'Store',
+          tabBarIcon: ({focused}) => (
             // <Ionicons name="basket-outline" color={color} size={26} />
             <Image
               source={
                 focused
-                  ? require("../assets/shopActive.png")
-                  : require("../assets/shop.png")
+                  ? require('../assets/shopActive.png')
+                  : require('../assets/shop.png')
               }
-              style={{ width: 20, height: 20 }}
+              style={{width: 20, height: 20}}
             />
           ),
           headerShown: false,
           headerStyle: {
-            backgroundColor: "black",
+            backgroundColor: 'black',
           },
           headerTitleStyle: {
-            color: "#ccc",
+            color: '#ccc',
           },
         }}
       />

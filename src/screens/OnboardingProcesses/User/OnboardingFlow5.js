@@ -2,7 +2,6 @@ import { StyleSheet } from "react-native";
 import React, { useRef, useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import * as ImagePicker from "expo-image-picker";
-
 import Toast from "react-native-toast-message";
 import { useDispatch } from "react-redux";
 
@@ -16,12 +15,14 @@ import HeaderTitle from "../../../components/common/HeaderTitle";
 import { RNToast } from "../../../Library/Common";
 import axiosInstance from "../../../utils/api-client";
 import { getUser } from "../../../redux/features/user/userSlice";
+import { useTheme } from "../../../Context/ThemeContext";
 
 const OnboardingFlow5 = ({ navigation, route }) => {
   const item = route.params;
   console.log("item", item);
 
   const dispatch = useDispatch();
+  const { theme } = useTheme();
 
   const [loading, setLoading] = useState(false);
 
@@ -153,7 +154,7 @@ const OnboardingFlow5 = ({ navigation, route }) => {
       RNToast(Toast, "Awesome. Your profile has been setup 😇");
       navigation.navigate("Home");
     } catch (error) {
-      console.log("checkUserProfile check error:", error?.response);
+      console.error("checkUserProfile check error:", error?.response);
     }
   };
 
@@ -173,7 +174,7 @@ const OnboardingFlow5 = ({ navigation, route }) => {
       />
 
       {/* Buttons */}
-      <FixedBottomContainer top={1.1}>
+      <FixedBottomContainer top={1.2}>
         <FormButton
           title={"Submit"}
           width={1.1}

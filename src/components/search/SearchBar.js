@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -7,10 +7,11 @@ import {
   Button,
   TouchableOpacity,
   TouchableWithoutFeedback,
-} from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { windowWidth } from "../../utils/Dimensions";
-import { COLORS } from "../../themes/themes";
+} from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {windowWidth} from '../../utils/Dimensions';
+import {COLORS} from '../../themes/themes';
+import {useTheme} from '../../Context/ThemeContext';
 
 const SearchBar = ({
   clicked,
@@ -19,20 +20,21 @@ const SearchBar = ({
   searchPhrase,
   setSearchPhrase,
 }) => {
+  const {theme} = useTheme();
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {borderColor: theme?.text}]}>
       <View
         style={
           !clicked ? styles.searchBar__unclicked : styles.searchBar__clicked
         }
-        onPress={Keyboard.dismiss}
-      >
+        onPress={Keyboard.dismiss}>
         {/* search Icon */}
-        <Ionicons name="search-outline" size={27} color="#000" />
+        <Ionicons name="search-outline" size={27} color={theme?.text} />
 
         {/* Input field */}
         <TextInput
-          style={styles.input}
+          style={[styles.input, {color: theme?.text}]}
           placeholder={searchPlaceholder}
           value={searchPhrase}
           onChangeText={setSearchPhrase}
@@ -47,9 +49,9 @@ const SearchBar = ({
             name="close-outline"
             size={20}
             color={COLORS.rendezvousRed}
-            style={{ padding: 1 }}
+            style={{padding: 1}}
             onPress={() => {
-              setSearchPhrase("");
+              setSearchPhrase('');
             }}
           />
         )}
@@ -77,9 +79,9 @@ export default SearchBar;
 const styles = StyleSheet.create({
   container: {
     margin: 10,
-    justifyContent: "flex-start",
-    alignItems: "center",
-    flexDirection: "row",
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexDirection: 'row',
     width: windowWidth - 10,
     marginBottom: 10,
     marginTop: 10,
@@ -87,25 +89,25 @@ const styles = StyleSheet.create({
   },
   searchBar__unclicked: {
     padding: 7,
-    flexDirection: "row",
-    width: "97%",
-    backgroundColor: "#2465E10D",
+    flexDirection: 'row',
+    width: '97%',
+    backgroundColor: '#2465E10D',
     borderRadius: 8,
-    alignItems: "center",
+    alignItems: 'center',
   },
   searchBar__clicked: {
     padding: 7,
-    flexDirection: "row",
-    width: "93%",
-    backgroundColor: "#2465E10D",
+    flexDirection: 'row',
+    width: '93%',
+    backgroundColor: '#2465E10D',
     borderRadius: 8,
-    alignItems: "center",
+    alignItems: 'center',
     // justifyContent: "space-evenly",
   },
   input: {
     fontSize: 16,
     marginLeft: 10,
-    width: "90%",
-    color: "black",
+    width: '90%',
+    color: 'black',
   },
 });
