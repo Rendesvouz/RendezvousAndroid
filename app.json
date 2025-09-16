@@ -2,7 +2,7 @@
   "expo": {
     "name": "Rendezvouscare",
     "slug": "rendezvouscare",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/adaptiveIcon.png",
     "userInterfaceStyle": "light",
@@ -24,7 +24,7 @@
       "edgeToEdgeEnabled": true,
       "permissions": ["android.permission.RECORD_AUDIO"],
       "package": "com.rendezvouscare",
-      "versionCode": 2
+      "versionCode": 4
     },
     "web": {
       "favicon": "./assets/favicon.png"

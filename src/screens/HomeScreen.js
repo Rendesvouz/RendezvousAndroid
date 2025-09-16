@@ -349,17 +349,19 @@ const HomeScreen = ({navigation}) => {
       {userProfle && <HomeHeader />}
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{padding: 10}}>
+        contentContainerStyle={{ padding: 10 }}
+      >
         <Carousels />
 
         <View
           style={{
-            flexDirection: 'row',
+            flexDirection: "row",
             // padding: 10,
-            alignItems: 'center',
-            flexWrap: 'wrap',
+            alignItems: "center",
+            flexWrap: "wrap",
             marginBottom: 10,
-          }}>
+          }}
+        >
           {/* {rendezvousServices?.map((cur, i) => (
             <ServicesCard
               key={i}
@@ -381,11 +383,11 @@ const HomeScreen = ({navigation}) => {
           ))}
         </View>
 
-        <Text style={[styles.additionText, {color: theme?.text}]}>
-          What can you do here?{' '}
+        <Text style={[styles.additionText, { color: theme?.text }]}>
+          What can you do here?{" "}
         </Text>
 
-        <View style={{padding: 10}}>
+        <View style={{ padding: 10 }}>
           {rendezvousServices2?.map((cur, i) => (
             <View key={i}>
               {/* Service Card */}
@@ -394,13 +396,15 @@ const HomeScreen = ({navigation}) => {
                 onPress={() => {
                   navigation.navigate(cur?.navigate);
                   if (!userProfle) {
-                    navigation.navigate('Login', {destination: cur?.navigate});
+                    navigation.navigate("Login", {
+                      destination: cur?.navigate,
+                    });
                   }
                 }}
               />
 
               {/* Strings horizontal scroll under "Strings of Connections" */}
-              {cur?.title?.toLowerCase().includes('strings') && (
+              {/*  {cur?.title?.toLowerCase().includes('strings') && (
                 <ScrollView
                   horizontal
                   showsHorizontalScrollIndicator={false}
@@ -417,10 +421,10 @@ const HomeScreen = ({navigation}) => {
                     />
                   ))}
                 </ScrollView>
-              )}
+              )} */}
 
               {/* Store horizontal scroll under "Store" */}
-              {cur?.headerTitle?.toLowerCase().includes('store') && (
+              {cur?.headerTitle?.toLowerCase().includes("store") && (
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   {reduxProducts?.slice(0, 5)?.map((product, k) => (
                     <ProductCard
@@ -430,7 +434,7 @@ const HomeScreen = ({navigation}) => {
                       productImage={product?.images_url[0]}
                       productPrice={product?.price}
                       onPress={() =>
-                        navigation.navigate('ProductDetails', product)
+                        navigation.navigate("ProductDetails", product)
                       }
                     />
                   ))}
