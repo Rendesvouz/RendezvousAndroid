@@ -103,6 +103,7 @@ import { useTheme } from "../Context/ThemeContext";
 import TravelsLandingScreen from "./Booking/TravelsLandingScreen";
 import AddFeedScreen from "./Feeds/AddFeedScreen";
 import ReviewFeedScreen from "./Feeds/ReviewFeedScreen";
+import ViewProfileScreen from "./Profile/ViewProfileScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -397,6 +398,14 @@ const HomeStack = ({ navigation }) => (
     <Stack.Screen
       name="Profile"
       component={ProfileScreen}
+      options={{
+        headerShown: false,
+        headerBackTitleVisible: false,
+      }}
+    />
+    <Stack.Screen
+      name="ViewProfileScreen"
+      component={ViewProfileScreen}
       options={{
         headerShown: false,
         headerBackTitleVisible: false,
