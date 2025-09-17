@@ -18,6 +18,7 @@ import {useTheme} from '../Context/ThemeContext';
 import FeedsCard from '../components/cards/FeedsCard';
 import ProductCard from '../components/cards/ProductCard';
 import StringsCard from '../components/cards/StringsCard';
+import HomeHeader2 from '../components/common/HomeHeader2';
 
 const rendezvousServices = [
   {
@@ -71,52 +72,41 @@ const rendezvousServices = [
 const rendezvousServices2 = [
   {
     id: 1,
-    headerTitle: 'Strings of Connections',
+    headerTitle: "Strings of Connections",
     image:
-      'https://res.cloudinary.com/rendezvouscare/image/upload/v1748444885/dating_ppc9eu.jpg',
-    title: 'Find Strings of Connections',
-    navigate: 'Strings',
+      "https://res.cloudinary.com/rendezvouscare/image/upload/v1748444885/dating_ppc9eu.jpg",
+    title: "Find Strings of Connections",
+    navigate: "Strings",
     description:
-      'Strings is a connection-focused dating space designed to help you build meaningful relationships, with supportive tools to guide you toward lasting, intentional love.',
+      "Strings is a connection-focused dating space designed to help you build meaningful relationships, with supportive tools to guide you toward lasting, intentional love.",
     sliderImages: [
-      'https://res.cloudinary.com/rendezvouscare/image/upload/v1748444885/dating_ppc9eu.jpg',
+      "https://res.cloudinary.com/rendezvouscare/image/upload/v1748444885/dating_ppc9eu.jpg",
     ],
   },
   {
     id: 2,
-    headerTitle: 'Wellness',
+    headerTitle: "Wellness",
     image:
-      'https://res.cloudinary.com/rendezvouscare/image/upload/v1741344648/image_564_vo61ca.png',
-    title: 'Invest in Yourself',
-    navigate: 'Therapy',
+      "https://res.cloudinary.com/rendezvouscare/image/upload/v1741344648/image_564_vo61ca.png",
+    title: "Invest in Yourself",
+    navigate: "Therapy",
     description:
-      'Take charge of your growth with expert guidance. Book a session with a therapist or life coach.',
+      "Take charge of your growth with expert guidance. Book a session with a therapist or life coach.",
     sliderImages: [
-      'https://res.cloudinary.com/rendezvouscare/image/upload/v1745839879/therapy3_vav8a3.jpg',
+      "https://res.cloudinary.com/rendezvouscare/image/upload/v1745839879/therapy3_vav8a3.jpg",
     ],
   },
-  // {
-  //   id: 3,
-  //   headerTitle: 'Tours',
-  //   image:
-  //     'https://res.cloudinary.com/rendezvouscare/image/upload/v1742595860/tourrr_lqazjb.png',
-  //   title: 'Plan unforgettable tour experiences',
-  //   navigate: 'TourguideScreen',
-  //   description: 'Book a tour guide and explore with ease.',
-  // },
-  // {
-  //   id: 3,
-  //   image:
-  //     'https://res.cloudinary.com/rendezvouscare/image/upload/v1742596405/vietnam_k0sxif.jpg',
-  //   title: 'Tour Guides',
-  //   description:
-  //     'Connect with experienced local tour guides to explore hidden gems, popular attractions, and authentic cultural experiences tailored to your journey.',
-  //   navigate: 'TourguideScreen',
-  //   imagee:
-  //     'https://res.cloudinary.com/rendezvouscare/image/upload/v1742596405/vietnam_k0sxif.jpg',
-
-  //   // 'https://res.cloudinary.com/rendezvouscare/image/upload/v1742595860/tourrr_lqazjb.png',
-  // },
+  {
+    id: 3,
+    headerTitle: "Events",
+    image:
+      "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=1920&h=1080&fit=crop&crop=center",
+    // 'https://res.cloudinary.com/rendezvouscare/image/upload/v1742595860/tourrr_lqazjb.png',
+    title: "Discover Your Next Adventure",
+    navigate: "BookingScreen",
+    description:
+      "From electrifying concerts to championship games—find events that ignite your passion and connect you with unforgettable experiences.",
+  },
   // {
   //   id: 3,
   //   image:
@@ -128,34 +118,34 @@ const rendezvousServices2 = [
   // },
   {
     id: 4,
-    headerTitle: 'Travel',
+    headerTitle: "Travel",
     image:
-      'https://res.cloudinary.com/rendezvouscare/image/upload/w_1000,ar_16:9,c_fill,g_auto,e_sharpen/v1749647252/bao-menglong--FhoJYnw-cg-unsplash_gj7cbk.jpg',
+      "https://res.cloudinary.com/rendezvouscare/image/upload/w_1000,ar_16:9,c_fill,g_auto,e_sharpen/v1749647252/bao-menglong--FhoJYnw-cg-unsplash_gj7cbk.jpg",
     // 'https://res.cloudinary.com/rendezvouscare/image/upload/v1741344647/Frame_1-3_hclicq.png',
-    title: 'Book the best Flights and Places',
-    navigate: 'BookingScreen',
+    title: "Book the best Flights and Places",
+    navigate: "BookingScreen",
     description:
-      'Book flights, hotels, and unforgettable experiences all in one place.',
+      "Book flights, hotels, and unforgettable experiences all in one place.",
     sliderImages: [
-      'https://res.cloudinary.com/rendezvouscare/image/upload/w_1000,ar_16:9,c_fill,g_auto,e_sharpen/v1749647252/bao-menglong--FhoJYnw-cg-unsplash_gj7cbk.jpg',
-      'https://res.cloudinary.com/rendezvouscare/image/upload/v1749650487/pietro-de-grandi-T7K4aEPoGGk-unsplash_pemfc4.jpg',
-      'https://res.cloudinary.com/rendezvouscare/image/upload/v1749650479/mesut-kaya-eOcyhe5-9sQ-unsplash_ogyolk.jpg',
-      'https://res.cloudinary.com/rendezvouscare/image/upload/v1749650632/logan-armstrong-hVhfqhDYciU-unsplash_pogexw.jpg',
+      "https://res.cloudinary.com/rendezvouscare/image/upload/w_1000,ar_16:9,c_fill,g_auto,e_sharpen/v1749647252/bao-menglong--FhoJYnw-cg-unsplash_gj7cbk.jpg",
+      "https://res.cloudinary.com/rendezvouscare/image/upload/v1749650487/pietro-de-grandi-T7K4aEPoGGk-unsplash_pemfc4.jpg",
+      "https://res.cloudinary.com/rendezvouscare/image/upload/v1749650479/mesut-kaya-eOcyhe5-9sQ-unsplash_ogyolk.jpg",
+      "https://res.cloudinary.com/rendezvouscare/image/upload/v1749650632/logan-armstrong-hVhfqhDYciU-unsplash_pogexw.jpg",
     ],
   },
   {
     id: 5,
-    headerTitle: 'Store',
+    headerTitle: "Store",
     image:
-      'https://res.cloudinary.com/rendezvouscare/image/upload/v1747317785/brands_nb2vbj.jpg',
+      "https://res.cloudinary.com/rendezvouscare/image/upload/v1747317785/brands_nb2vbj.jpg",
     // 'https://res.cloudinary.com/rendezvouscare/image/upload/v1745839922/freestocks-_3Q3tsJ01nc-unsplash_kunezi.jpg',
-    title: 'Explore a World of Extraordinary Products',
-    navigate: 'Shop',
+    title: "Explore a World of Extraordinary Products",
+    navigate: "Shop",
     description:
-      'Shop unique gift items for your loved ones from our carefully curated marketplace.',
+      "Shop unique gift items for your loved ones from our carefully curated marketplace.",
     sliderImages: [
-      'https://res.cloudinary.com/rendezvouscare/image/upload/v1745839922/freestocks-_3Q3tsJ01nc-unsplash_kunezi.jpg',
-      'https://res.cloudinary.com/rendezvouscare/image/upload/v1745839939/alisa-anton-D4Blldtly00-unsplash_dptz7m.jpg',
+      "https://res.cloudinary.com/rendezvouscare/image/upload/v1745839922/freestocks-_3Q3tsJ01nc-unsplash_kunezi.jpg",
+      "https://res.cloudinary.com/rendezvouscare/image/upload/v1745839939/alisa-anton-D4Blldtly00-unsplash_dptz7m.jpg",
     ],
   },
 ];
@@ -346,7 +336,7 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <SafeAreaViewComponent>
-      {userProfle && <HomeHeader />}
+      {userProfle ? <HomeHeader /> : <HomeHeader2 />}
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ padding: 10 }}

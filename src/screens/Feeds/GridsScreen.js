@@ -6,23 +6,22 @@ import {
   Image,
   ScrollView,
   FlatList,
+  RefreshControl,
 } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { useDispatch, useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
 import { SwiperFlatList } from "react-native-swiper-flatlist";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import SafeAreaViewComponent from "../../components/common/SafeAreaViewComponent";
-import HeaderTitle from "../../components/common/HeaderTitle";
 import { windowHeight, windowWidth } from "../../utils/Dimensions";
-import { COLORS } from "../../themes/themes";
 import axiosInstance from "../../utils/api-client";
 import { RNToast, shuffleArray } from "../../Library/Common";
 import GridsCard from "../../components/cards/GridsCard";
 import { useTheme } from "../../Context/ThemeContext";
-import HomeHeader2 from "../../components/common/HomeHeader2";
+import FeedsHeader from "../../components/common/FeedsHeader";
+import { useFocusEffect } from "@react-navigation/native";
 
 const MAX_IMAGES = 4;
 const PAGE_SIZE = 10;
@@ -34,7 +33,7 @@ const GridsScreen = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const bottomSheetRef = useRef();
-  const { theme } = useTheme();
+  const { theme, isDarkMode } = useTheme();
   const insets = useSafeAreaInsets();
   // console.log('insets.top', insets.top);
 
@@ -147,31 +146,74 @@ const GridsScreen = () => {
     }
   };
 
-  const getAllPosts = async () => {
+  // const getAllPosts = async () => {
+  //   setLoading(true);
+
+  //   try {
+  //     // Fetch both endpoints individually and safely
+  //     const [allPostsResponse, allReelsResponse] = await Promise.allSettled([
+  //       axiosInstance.get('feeds/post'),
+  //       axiosInstance.get('feeds/reels'),
+  //     ]);
+
+  //     const postsData =
+  //       allPostsResponse.status === 'fulfilled' &&
+  //       allPostsResponse.value?.data?.data
+  //         ? allPostsResponse.value.data.data
+  //         : [];
+
+  //     const reelsData =
+  //       allReelsResponse?.status === 'fulfilled' &&
+  //       allReelsResponse.value?.data?.data
+  //         ? allReelsResponse.value.data.data
+  //         : [];
+
+  //     const combinedFeed = [...postsData, ...reelsData];
+
+  //     if (combinedFeed?.length === 0) {
+  //       console.warn('No posts or reels found.');
+  //       setLoading(false);
+  //       return;
+  //     }
+
+  //     // Fetch author profiles for each item
+  //     const feedWithProfiles = await Promise.all(
+  //       combinedFeed?.map(async item => {
+  //         try {
+  //           const postUserProfile = await getFeedUsersProfile(item?.authorId);
+  //           return {...item, postUserProfile};
+  //         } catch (err) {
+  //           console.warn('Failed to fetch profile for:', item?.authorId);
+  //           return {...item, postUserProfile: null};
+  //         }
+  //       }),
+  //     );
+
+  //     const randomizedData = shuffleArray(feedWithProfiles);
+  //     setFeedsPosts(randomizedData);
+  //     setDisplayedPosts(randomizedData.slice(0, PAGE_SIZE));
+  //   } catch (error) {
+  //     console.error('getAllPosts fatal error:', error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const getAllFeeds = async () => {
     setLoading(true);
 
     try {
-      const allPostsResponse = await axiosInstance({
-        url: "feeds/post",
-        method: "GET",
-      });
-
-      const allReelsResponse = await axiosInstance({
+      const allFeedsResponse = await axiosInstance({
         url: "feeds/reels",
         method: "GET",
       });
 
-      console.log("allReelsResponse", allReelsResponse?.data);
-      console.log("allPostsResponse", allPostsResponse?.data);
+      console.log("allFeedsResponse", allFeedsResponse?.data?.data?.data);
+      const feedsData = allFeedsResponse?.data?.data?.data;
 
-      if (allPostsResponse?.data?.data && allReelsResponse?.data?.data) {
-        const postResponses = allPostsResponse?.data?.data;
-        const reelResponses = allReelsResponse?.data?.data;
-
-        const allPostAndReelsDatax = [...postResponses, ...reelResponses];
-
+      if (feedsData) {
         const postResponseWithProfiles = await Promise.all(
-          allPostAndReelsDatax?.map(async (match) => {
+          feedsData?.map(async (match) => {
             const postUserProfile = await getFeedUsersProfile(match?.authorId);
             return { ...match, postUserProfile };
           })
@@ -185,7 +227,7 @@ const GridsScreen = () => {
         // setFeedsPosts(postResponseWithProfiles);
       }
     } catch (error) {
-      console.log("getAllPosts error", error?.response);
+      console.log("getAllFeeds error", error?.response);
       setLoading(false);
     }
   };
@@ -199,7 +241,7 @@ const GridsScreen = () => {
       console.log("getFeedUsersProfile res", response?.data);
       return response?.data?.profileData;
     } catch (error) {
-      console.error(
+      console.log(
         `getFeedUsersProfile error for userId ${userId}:`,
         error?.response
       );
@@ -225,13 +267,21 @@ const GridsScreen = () => {
   };
 
   useEffect(() => {
-    getAllPosts();
+    // getAllPosts();
+    getAllFeeds();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      getAllFeeds();
+    }, [])
+  );
 
   const onRefresh = async () => {
     setLoading(true);
     try {
-      await getAllPosts();
+      // await getAllPosts();
+      await getAllFeeds();
     } catch (e) {
       console.error(e);
     } finally {
@@ -239,21 +289,58 @@ const GridsScreen = () => {
     }
   };
 
+  const renderSkeletons = () => {
+    return (
+      <View
+        borderRadius={10}
+        backgroundColor={isDarkMode ? "#2a2a2a" : "#e1e9ee"}
+        highlightColor={isDarkMode ? "#3a3a3a" : "#f2f8fc"}
+      >
+        {[...Array(3)].map((_, index) => (
+          <View key={index} style={{ marginBottom: 20 }}>
+            {/* User info row */}
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                padding: 10,
+              }}
+            >
+              <View style={{ width: 50, height: 50, borderRadius: 25 }} />
+              <View style={{ marginLeft: 10 }}>
+                <View style={{ width: 120, height: 12, borderRadius: 4 }} />
+                <View
+                  style={{
+                    marginTop: 6,
+                    width: 180,
+                    height: 12,
+                    borderRadius: 4,
+                  }}
+                />
+              </View>
+            </View>
+
+            {/* Image Placeholder */}
+            <View style={{ width: "100%", height: 300, borderRadius: 10 }} />
+          </View>
+        ))}
+      </View>
+    );
+  };
+
   return (
     <View style={{ backgroundColor: theme?.background }}>
-      {/* {userProfle && (
-        <View
-          style={{
-            position: 'absolute',
-            top: insets.top,
-            left: 0,
-            right: 0,
-            zIndex: 999,
-          }}>
-          <HomeHeader2 />
-        </View>
-      )} */}
-
+      <View
+        style={{
+          position: "absolute",
+          top: insets.top,
+          left: 0,
+          right: 0,
+          zIndex: 999,
+        }}
+      >
+        <FeedsHeader />
+      </View>
       {/* <Image
         source={require('../../assets/2.jpg')}
         style={styles.imageContainer}
@@ -280,16 +367,18 @@ const GridsScreen = () => {
         </View>
       </View> */}
 
-      {/* <FlatList
+      {loading && <ScrollView>{renderSkeletons()}</ScrollView>}
+
+      <FlatList
         data={displayedPosts}
         keyExtractor={(_, i) => i.toString()}
-        renderItem={({item, index}) => (
+        renderItem={({ item, index }) => (
           <GridsCard props={item} isActive={index === currentIndex} />
         )}
         pagingEnabled
         showsVerticalScrollIndicator={false}
         onViewableItemsChanged={
-          useRef(({viewableItems}) => {
+          useRef(({ viewableItems }) => {
             if (viewableItems?.length > 0) {
               setCurrentIndex(viewableItems[0]?.index);
             }
@@ -300,15 +389,31 @@ const GridsScreen = () => {
         }}
         bounces={false}
         decelerationRate="fast"
-      /> */}
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+        }
+      />
 
-      <SwiperFlatList
+      {/* <SwiperFlatList
         vertical={true}
         onChangeIndex={handleChangeIndexValue}
         data={displayedPosts}
-        renderItem={({ item, index }) => <GridsCard key={index} props={item} />}
+        renderItem={({item, index}) => <GridsCard props={item} />}
         keyExtractor={(item, index) => index}
-      />
+        pagingEnabled
+        showsVerticalScrollIndicator={false}
+        onViewableItemsChanged={
+          useRef(({viewableItems}) => {
+            if (viewableItems?.length > 0) {
+              setCurrentIndex(viewableItems[0]?.index);
+            }
+          }).current
+        }
+        viewabilityConfig={{itemVisiblePercentThreshold: 80}}
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+        }
+      /> */}
     </View>
   );
 };

@@ -7,7 +7,7 @@ import { COLORS } from "../../themes/themes";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "../../Context/ThemeContext";
 
-const HomeHeader2 = () => {
+const FeedsHeader = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
@@ -18,12 +18,15 @@ const HomeHeader2 = () => {
   console.log("userProfle", userProfle);
 
   return (
-    <View style={[styles.container, { backgroundColor: theme?.background }]}>
-      <View
-        style={[styles.profileSection, { backgroundColor: theme?.background }]}
-      >
+    <View
+      style={[styles.container, { backgroundColor: "rgba(0, 0, 0, 0.25)" }]}
+    >
+      <View style={[styles.profileSection]}>
         <TouchableOpacity
-          style={[styles.menuBorder, { backgroundColor: theme?.background }]}
+          style={[
+            styles.menuBorder,
+            { backgroundColor: "rgba(0, 0, 0, 0.25)" },
+          ]}
           activeOpacity={0.9}
         >
           <Ionicons
@@ -37,41 +40,70 @@ const HomeHeader2 = () => {
         </TouchableOpacity>
       </View>
 
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <TouchableOpacity
-          activeOpacity={0.9}
-          onPress={() => {
-            navigation.navigate("Login", {
-              destination: "HomeScreen",
-            });
-          }}
-          style={styles.profileDetails}
-        >
-          <Text
-            style={[
-              styles.profileName,
-              { color: COLORS.rendezvousRed, fontSize: 14 },
-            ]}
+      {!userProfle ? (
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={() => {
+              navigation.navigate("Login", {
+                destination: "GridsScreen",
+              });
+            }}
+            style={styles.profileDetails}
           >
-            Login
-          </Text>
-        </TouchableOpacity>
-        <Ionicons
-          name="log-in-outline"
-          size={24}
-          color={COLORS.rendezvousRed}
-          onPress={() => {
-            navigation.navigate("Login", {
-              destination: "HomeScreen",
-            });
-          }}
-        />
-      </View>
+            <Text
+              style={[
+                styles.profileName,
+                { color: COLORS.rendezvousRed, fontSize: 14 },
+              ]}
+            >
+              Create
+            </Text>
+          </TouchableOpacity>
+          <Ionicons
+            name="add-circle-outline"
+            size={24}
+            color={COLORS.rendezvousRed}
+            onPress={() => {
+              navigation.navigate("Login", {
+                destination: "GridsScreen",
+              });
+            }}
+          />
+        </View>
+      ) : (
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={() => {
+              navigation.navigate("AddFeedScreen");
+            }}
+            style={styles.profileDetails}
+          >
+            <Text
+              style={[
+                styles.profileName,
+                { color: COLORS.rendezvousRed, fontSize: 14, marginRight: 6 },
+              ]}
+            >
+              Create
+            </Text>
+          </TouchableOpacity>
+          <Ionicons
+            name="add-circle-outline"
+            size={24}
+            color={COLORS.rendezvousRed}
+            onPress={() => {
+              navigation.navigate("AddFeedScreen");
+            }}
+          />
+        </View>
+      )}
     </View>
   );
 };
 
-export default HomeHeader2;
+export default FeedsHeader;
 
 const styles = StyleSheet.create({
   container: {

@@ -186,6 +186,40 @@ const FeedsScreen = () => {
     }
   };
 
+  const getAllFeeds = async () => {
+    setLoading(true);
+
+    try {
+      const allFeedsResponse = await axiosInstance({
+        url: "feeds/reels",
+        method: "GET",
+      });
+
+      console.log("allFeedsResponse", allFeedsResponse?.data);
+
+      if (allFeedsResponse?.data?.data) {
+        const allPostAndReelsDatax = [...allFeedsResponse];
+
+        const postResponseWithProfiles = await Promise.all(
+          allPostAndReelsDatax?.map(async (match) => {
+            const postUserProfile = await getFeedUsersProfile(match?.authorId);
+            return { ...match, postUserProfile };
+          })
+        );
+
+        console.log("postResponseWithProfiles", postResponseWithProfiles);
+        setLoading(false);
+        const randomizedData = shuffleArray(postResponseWithProfiles);
+        setFeedsPosts(randomizedData);
+        setDisplayedPosts(randomizedData?.slice(0, PAGE_SIZE));
+        // setFeedsPosts(postResponseWithProfiles);
+      }
+    } catch (error) {
+      console.log("getAllPosts error", error?.response);
+      setLoading(false);
+    }
+  };
+
   const getFeedUsersProfile = async (userId) => {
     try {
       const response = await axiosInstance({
@@ -222,6 +256,7 @@ const FeedsScreen = () => {
 
   useEffect(() => {
     getAllPosts();
+    getAllFeeds();
   }, []);
 
   const onRefresh = async () => {
@@ -254,7 +289,7 @@ const FeedsScreen = () => {
           data={displayedPosts}
           keyExtractor={(_, index) => index.toString()}
           renderItem={({ item, index }) => (
-            <FeedsCard key={index} props={item} play={index === visibleIndex} />
+            <FeedsCard props={item} play={index === visibleIndex} />
           )}
           onViewableItemsChanged={onViewableItemsChanged}
           viewabilityConfig={viewabilityConfig}
