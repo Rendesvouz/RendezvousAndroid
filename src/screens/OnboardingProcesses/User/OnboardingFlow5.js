@@ -152,7 +152,7 @@ const OnboardingFlow5 = ({ navigation, route }) => {
       console.log("ressssssss", profileResponse);
       dispatch(getUser(profileResponse?.data?.data));
       RNToast(Toast, "Awesome. Your profile has been setup 😇");
-      navigation.navigate("Home");
+      navigation.navigate("HomeScreen");
     } catch (error) {
       console.error("checkUserProfile check error:", error?.response);
     }
