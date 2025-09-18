@@ -20,3 +20,27 @@ export const orderDetailsTextPrecedence = (propss) => {
 
   return textPreference;
 };
+
+export const isProfileComplete = (userProfile) => {
+  console.log("isProfileComplete", userProfile);
+  if (!userProfile) {
+    return false;
+  }
+
+  const Address = userProfile?.address;
+  const EmploymentStatus = userProfile?.employmentStatus;
+  const University = userProfile?.university;
+  const PhoneNumber = userProfile?.phone_number;
+  const Occupation = userProfile?.occupation;
+  const Degree = userProfile?.degree;
+
+  // Check if every field has a truthy value
+  return (
+    Boolean(EmploymentStatus) &&
+    Boolean(University) &&
+    Boolean(PhoneNumber) &&
+    Boolean(Occupation) &&
+    Boolean(Degree) &&
+    Boolean(Address)
+  );
+};

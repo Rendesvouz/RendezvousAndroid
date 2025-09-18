@@ -1,36 +1,37 @@
-import {FlatList, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import SafeAreaViewComponent from '../components/common/SafeAreaViewComponent';
-import HomeHeader from '../components/common/HomeHeader';
+import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import SafeAreaViewComponent from "../components/common/SafeAreaViewComponent";
+import HomeHeader from "../components/common/HomeHeader";
 
-import ScrollViewSpace from '../components/common/ScrollViewSpace';
-import Carousels from '../components/common/Carousel';
-import {useDispatch, useSelector} from 'react-redux';
+import ScrollViewSpace from "../components/common/ScrollViewSpace";
+import Carousels from "../components/common/Carousel";
+import { useDispatch, useSelector } from "react-redux";
 import {
   saveProductCatgeories,
   saveShopProducts,
-} from '../redux/features/user/userSlice';
-import axiosInstance, {baseURL} from '../utils/api-client';
-import MoreCard from '../components/cards/MoreCard';
-import {COLORS} from '../themes/themes';
-import axios from 'axios';
-import {useTheme} from '../Context/ThemeContext';
-import FeedsCard from '../components/cards/FeedsCard';
-import ProductCard from '../components/cards/ProductCard';
-import StringsCard from '../components/cards/StringsCard';
-import HomeHeader2 from '../components/common/HomeHeader2';
+} from "../redux/features/user/userSlice";
+import axiosInstance, { baseURL } from "../utils/api-client";
+import MoreCard from "../components/cards/MoreCard";
+import { COLORS } from "../themes/themes";
+import axios from "axios";
+import { useTheme } from "../Context/ThemeContext";
+import FeedsCard from "../components/cards/FeedsCard";
+import ProductCard from "../components/cards/ProductCard";
+import StringsCard from "../components/cards/StringsCard";
+import HomeHeader2 from "../components/common/HomeHeader2";
+import ProfileCompleteness from "../components/common/ProfileCompleteness";
 
 const rendezvousServices = [
   {
     id: 1,
     image:
-      'https://res.cloudinary.com/rendezvouscare/image/upload/v1727131385/booking1_agr60w.jpg',
-    title: 'Booking',
+      "https://res.cloudinary.com/rendezvouscare/image/upload/v1727131385/booking1_agr60w.jpg",
+    title: "Booking",
     description:
-      'Book flights, hotels, and unforgettable experiences all in one place.',
-    navigate: 'Booking',
+      "Book flights, hotels, and unforgettable experiences all in one place.",
+    navigate: "Booking",
     imagee:
-      'https://res.cloudinary.com/rendezvouscare/image/upload/v1741344647/Frame_1-3_hclicq.png',
+      "https://res.cloudinary.com/rendezvouscare/image/upload/v1741344647/Frame_1-3_hclicq.png",
   },
   // {
   //   id: 2,
@@ -46,13 +47,13 @@ const rendezvousServices = [
   {
     id: 3,
     image:
-      'https://res.cloudinary.com/rendezvouscare/image/upload/v1742596405/vietnam_k0sxif.jpg',
-    title: 'Tour Guides',
+      "https://res.cloudinary.com/rendezvouscare/image/upload/v1742596405/vietnam_k0sxif.jpg",
+    title: "Tour Guides",
     description:
-      'Book flights, hotels, and unforgettable experiences all in one place.',
-    navigate: 'TourguideScreen',
+      "Book flights, hotels, and unforgettable experiences all in one place.",
+    navigate: "TourguideScreen",
     imagee:
-      'https://res.cloudinary.com/rendezvouscare/image/upload/v1742596405/vietnam_k0sxif.jpg',
+      "https://res.cloudinary.com/rendezvouscare/image/upload/v1742596405/vietnam_k0sxif.jpg",
 
     // 'https://res.cloudinary.com/rendezvouscare/image/upload/v1742595860/tourrr_lqazjb.png',
   },
@@ -154,16 +155,16 @@ const rendezvousFeeds = [
   {
     id: 1,
     postUserProfile: {
-      username: 'rendezvouscare',
+      username: "rendezvouscare",
       profile_pictures: [
-        'https://res.cloudinary.com/rendezvouscare/image/upload/v1749763351/Rendezvous_logomark_modified_WhiteBG_2_ddqa4y.png',
+        "https://res.cloudinary.com/rendezvouscare/image/upload/v1749763351/Rendezvous_logomark_modified_WhiteBG_2_ddqa4y.png",
       ],
     },
     feed_pictures: [
-      'https://pub-08be10b6cc074c21b638af3d8ff441f0.r2.dev/feed_pictures/36a60834-344f-4abd-94be-893d4e49a254-feedPost-image-1748371303526-0.jpg',
-      'https://pub-08be10b6cc074c21b638af3d8ff441f0.r2.dev/feed_pictures/36a60834-344f-4abd-94be-893d4e49a254-feedPost-image-1748371303526-1.jpg',
+      "https://pub-08be10b6cc074c21b638af3d8ff441f0.r2.dev/feed_pictures/36a60834-344f-4abd-94be-893d4e49a254-feedPost-image-1748371303526-0.jpg",
+      "https://pub-08be10b6cc074c21b638af3d8ff441f0.r2.dev/feed_pictures/36a60834-344f-4abd-94be-893d4e49a254-feedPost-image-1748371303526-1.jpg",
     ],
-    caption: 'Best Feed',
+    caption: "Best Feed",
   },
 ];
 
@@ -171,96 +172,96 @@ const rendezvousStrings = [
   {
     id: 1,
     matchedUserProfile: {
-      username: 'Faux',
-      dob: '1996-03-22',
-      height: '184',
-      city: 'Ontario',
-      country: 'Canada',
+      username: "Faux",
+      dob: "1996-03-22",
+      height: "184",
+      city: "Ontario",
+      country: "Canada",
       profile_pictures: [
-        'https://res.cloudinary.com/rendezvouscare/image/upload/v1749759325/sexy-woman-6826763_xeli3g.jpg',
+        "https://res.cloudinary.com/rendezvouscare/image/upload/v1749759325/sexy-woman-6826763_xeli3g.jpg",
       ],
     },
   },
   {
     id: 2,
     matchedUserProfile: {
-      username: 'Trevor',
-      dob: '1989-03-22',
-      height: '189',
-      city: 'Dubai',
-      country: 'UAE',
+      username: "Trevor",
+      dob: "1989-03-22",
+      height: "189",
+      city: "Dubai",
+      country: "UAE",
       profile_pictures: [
-        'https://res.cloudinary.com/rendezvouscare/image/upload/v1749761537/beard-5216825_1280_f7h4rw.jpg',
+        "https://res.cloudinary.com/rendezvouscare/image/upload/v1749761537/beard-5216825_1280_f7h4rw.jpg",
       ],
     },
   },
   {
     id: 3,
     matchedUserProfile: {
-      username: 'Katarina',
-      dob: '1997-03-22',
-      height: '164',
-      city: 'New Orleans',
-      country: 'United States',
+      username: "Katarina",
+      dob: "1997-03-22",
+      height: "164",
+      city: "New Orleans",
+      country: "United States",
       profile_pictures: [
-        'https://res.cloudinary.com/rendezvouscare/image/upload/v1749759324/playing-poker-4286439_vm8h74.jpg',
+        "https://res.cloudinary.com/rendezvouscare/image/upload/v1749759324/playing-poker-4286439_vm8h74.jpg",
       ],
     },
   },
   {
     id: 4,
     matchedUserProfile: {
-      username: 'Malik',
-      dob: '1987-03-22',
-      height: '187',
-      city: 'London',
-      country: 'UK',
+      username: "Malik",
+      dob: "1987-03-22",
+      height: "187",
+      city: "London",
+      country: "UK",
       profile_pictures: [
-        'https://res.cloudinary.com/rendezvouscare/image/upload/v1749761538/pexels-lazarus-ziridis-351891426-28580367_za5fwh.jpg',
+        "https://res.cloudinary.com/rendezvouscare/image/upload/v1749761538/pexels-lazarus-ziridis-351891426-28580367_za5fwh.jpg",
       ],
     },
   },
   {
     id: 5,
     matchedUserProfile: {
-      username: 'Allana',
-      dob: '1994-03-22',
-      height: '164',
-      city: 'New York',
-      country: 'United States',
+      username: "Allana",
+      dob: "1994-03-22",
+      height: "164",
+      city: "New York",
+      country: "United States",
       profile_pictures: [
-        'https://res.cloudinary.com/rendezvouscare/image/upload/v1749759342/woman-9095076_mu9b5x.jpg',
+        "https://res.cloudinary.com/rendezvouscare/image/upload/v1749759342/woman-9095076_mu9b5x.jpg",
       ],
     },
   },
   {
     id: 6,
     matchedUserProfile: {
-      username: 'Cindy',
-      dob: '1994-03-22',
-      height: '164',
-      city: 'Texas',
-      country: 'United States',
+      username: "Cindy",
+      dob: "1994-03-22",
+      height: "164",
+      city: "Texas",
+      country: "United States",
       profile_pictures: [
-        'https://res.cloudinary.com/rendezvouscare/image/upload/v1749759330/woman-7897053_q4ye9l.jpg',
+        "https://res.cloudinary.com/rendezvouscare/image/upload/v1749759330/woman-7897053_q4ye9l.jpg",
       ],
     },
   },
 ];
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const state = useSelector(state => state);
+  const state = useSelector((state) => state);
   const userProfle = state?.user?.user?.profile;
 
-  const {theme} = useTheme();
+  const { theme } = useTheme();
 
   const reduxProducts = state?.user?.shopProduct;
 
   const reduxProductCategories = state?.user?.productCategories;
   // console.log('reduxProductCategories', reduxProductCategories);
 
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [masterDataSource, setMasterDataSource] = useState(reduxProducts);
   const [filteredDataSource, setFilteredDataSource] = useState(reduxProducts);
   // console.log('masterDataSource', masterDataSource);
@@ -281,15 +282,15 @@ const HomeScreen = ({navigation}) => {
     try {
       axios
         .get(`${baseURL}category`)
-        .then(res => {
-          console.log('productCategories res', res);
+        .then((res) => {
+          console.log("productCategories res", res);
           dispatch(saveProductCatgeories(res?.data?.data?.categories));
         })
-        .catch(err => {
-          console.log('productCategories err', err?.response);
+        .catch((err) => {
+          console.log("productCategories err", err?.response);
         });
     } catch (error) {
-      console.log('productCategories error', error);
+      console.log("productCategories error", error);
     }
   };
 
@@ -313,19 +314,19 @@ const HomeScreen = ({navigation}) => {
     try {
       axios
         .get(`${baseURL}product`)
-        .then(res => {
-          console.log('fetchProducts res', res?.data);
+        .then((res) => {
+          console.log("fetchProducts res", res?.data);
           dispatch(saveShopProducts(res?.data?.data?.products));
         })
-        .catch(err => {
-          console.log('fetchProducts err', err?.response?.data);
+        .catch((err) => {
+          console.log("fetchProducts err", err?.response?.data);
         });
     } catch (error) {
-      console.log('fetchProducts error', error);
+      console.log("fetchProducts error", error);
     }
   };
 
-  const renderItem = ({item}) => (
+  const renderItem = ({ item }) => (
     <StringsCard props={item} matchedUserProfile={item?.matchedUserProfile} />
   );
 
@@ -366,6 +367,11 @@ const HomeScreen = ({navigation}) => {
             />
           ))} */}
         </View>
+
+        {/* Profile Completeness */}
+        {userProfle && !isProfileComplete(userProfle) && (
+          <ProfileCompleteness />
+        )}
 
         <View>
           {rendezvousFeeds?.map((cur, i) => (
@@ -446,7 +452,7 @@ const styles = StyleSheet.create({
   additionText: {
     padding: 10,
     fontSize: 24,
-    fontWeight: '400',
+    fontWeight: "400",
     color: COLORS.rendezvousBlack,
   },
 });
