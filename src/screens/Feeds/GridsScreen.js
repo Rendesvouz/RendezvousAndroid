@@ -22,6 +22,7 @@ import GridsCard from "../../components/cards/GridsCard";
 import { useTheme } from "../../Context/ThemeContext";
 import FeedsHeader from "../../components/common/FeedsHeader";
 import { useFocusEffect } from "@react-navigation/native";
+import { COLORS } from "../../themes/themes";
 
 const MAX_IMAGES = 4;
 const PAGE_SIZE = 10;
@@ -55,6 +56,8 @@ const GridsScreen = () => {
 
   const [feedsPosts, setFeedsPosts] = useState([]);
   const [displayedPosts, setDisplayedPosts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   console.log("feedsPosts", feedsPosts, displayedPosts);
 
   // Error states
@@ -146,70 +149,24 @@ const GridsScreen = () => {
     }
   };
 
-  // const getAllPosts = async () => {
-  //   setLoading(true);
-
-  //   try {
-  //     // Fetch both endpoints individually and safely
-  //     const [allPostsResponse, allReelsResponse] = await Promise.allSettled([
-  //       axiosInstance.get('feeds/post'),
-  //       axiosInstance.get('feeds/reels'),
-  //     ]);
-
-  //     const postsData =
-  //       allPostsResponse.status === 'fulfilled' &&
-  //       allPostsResponse.value?.data?.data
-  //         ? allPostsResponse.value.data.data
-  //         : [];
-
-  //     const reelsData =
-  //       allReelsResponse?.status === 'fulfilled' &&
-  //       allReelsResponse.value?.data?.data
-  //         ? allReelsResponse.value.data.data
-  //         : [];
-
-  //     const combinedFeed = [...postsData, ...reelsData];
-
-  //     if (combinedFeed?.length === 0) {
-  //       console.warn('No posts or reels found.');
-  //       setLoading(false);
-  //       return;
-  //     }
-
-  //     // Fetch author profiles for each item
-  //     const feedWithProfiles = await Promise.all(
-  //       combinedFeed?.map(async item => {
-  //         try {
-  //           const postUserProfile = await getFeedUsersProfile(item?.authorId);
-  //           return {...item, postUserProfile};
-  //         } catch (err) {
-  //           console.warn('Failed to fetch profile for:', item?.authorId);
-  //           return {...item, postUserProfile: null};
-  //         }
-  //       }),
-  //     );
-
-  //     const randomizedData = shuffleArray(feedWithProfiles);
-  //     setFeedsPosts(randomizedData);
-  //     setDisplayedPosts(randomizedData.slice(0, PAGE_SIZE));
-  //   } catch (error) {
-  //     console.error('getAllPosts fatal error:', error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  const getAllFeeds = async () => {
-    setLoading(true);
+  const getAllFeeds = async (pageNumber = 1, isRefresh = false) => {
+    if (pageNumber === 1 && !isRefresh) {
+      setLoading(true);
+    } else {
+      setLoadingMore(true);
+    }
 
     try {
       const allFeedsResponse = await axiosInstance({
-        url: "feeds/reels",
+        url: `feeds/reels?page=${pageNumber}&limit=20`,
         method: "GET",
       });
 
-      console.log("allFeedsResponse", allFeedsResponse?.data?.data?.data);
+      console.log("allFeedsResponse", allFeedsResponse);
       const feedsData = allFeedsResponse?.data?.data?.data;
+      const totalPagesResponse = allFeedsResponse?.data?.data?.totalPages;
+      const pagination = allFeedsResponse?.data?.pagination;
+      // console.log('totalPagesResponse', totalPagesResponse, pagination);
 
       if (feedsData) {
         const postResponseWithProfiles = await Promise.all(
@@ -221,14 +178,25 @@ const GridsScreen = () => {
 
         console.log("postResponseWithProfiles", postResponseWithProfiles);
         setLoading(false);
+        setLoadingMore(false);
         const randomizedData = shuffleArray(postResponseWithProfiles);
-        setFeedsPosts(randomizedData);
-        setDisplayedPosts(randomizedData?.slice(0, PAGE_SIZE));
+
+        if (isRefresh || pageNumber === 1) {
+          setFeedsPosts(randomizedData);
+        } else {
+          setFeedsPosts((prev) => [...prev, ...randomizedData]);
+        }
+
+        setPage(pagination?.page || pageNumber);
+        setTotalPages(totalPagesResponse || 1);
+        // setFeedsPosts(randomizedData);
+        // setDisplayedPosts(randomizedData?.slice(0, PAGE_SIZE));
         // setFeedsPosts(postResponseWithProfiles);
       }
     } catch (error) {
       console.log("getAllFeeds error", error?.response);
       setLoading(false);
+      setLoadingMore(false);
     }
   };
 
@@ -251,19 +219,10 @@ const GridsScreen = () => {
   };
 
   const loadMore = () => {
-    if (loadingMore || displayedPosts?.length >= feedsPosts?.length) {
+    if (loadingMore || page >= totalPages) {
       return;
     }
-
-    setLoadingMore(true);
-    setTimeout(() => {
-      const nextPage = feedsPosts?.slice(
-        displayedPosts?.length,
-        displayedPosts?.length + PAGE_SIZE
-      );
-      setDisplayedPosts((prev) => [...prev, ...nextPage]);
-      setLoadingMore(false);
-    }, 1000);
+    getAllFeeds(page + 1);
   };
 
   useEffect(() => {
@@ -277,16 +236,9 @@ const GridsScreen = () => {
     }, [])
   );
 
-  const onRefresh = async () => {
-    setLoading(true);
-    try {
-      // await getAllPosts();
-      await getAllFeeds();
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
+  const onRefresh = () => {
+    setPage(1);
+    getAllFeeds(1, true);
   };
 
   const renderSkeletons = () => {
@@ -370,7 +322,7 @@ const GridsScreen = () => {
       {loading && <ScrollView>{renderSkeletons()}</ScrollView>}
 
       <FlatList
-        data={displayedPosts}
+        data={feedsPosts}
         keyExtractor={(_, i) => i.toString()}
         renderItem={({ item, index }) => (
           <GridsCard props={item} isActive={index === currentIndex} />
@@ -391,6 +343,13 @@ const GridsScreen = () => {
         decelerationRate="fast"
         refreshControl={
           <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+        }
+        onEndReached={loadMore}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={
+          loadingMore ? (
+            <ActivityIndicator size="small" color={COLORS.rendezvousRed} />
+          ) : null
         }
       />
 

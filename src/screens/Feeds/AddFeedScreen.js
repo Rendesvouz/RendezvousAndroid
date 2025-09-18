@@ -127,8 +127,9 @@ const AddFeedScreen = ({ navigation }) => {
     });
 
     //   reels data
-    reelsFormData?.append("caption", "Rendezvous Feed");
-    reelsFormData?.append("content", feedContent);
+    reelsFormData?.append("caption", feedContent);
+    // reelsFormData?.append('content', feedContent);
+    reelsFormData?.append("duration", "30");
 
     const reelsFileName = `feedReel-${Date.now()}.${media?.mime.split("/")[1]}`;
     reelsFormData.append("reel_url", {
@@ -136,15 +137,15 @@ const AddFeedScreen = ({ navigation }) => {
       name: reelsFileName,
       type: media.mime,
     });
-    reelsFormData.append("reel_theumbnail", {
+    reelsFormData.append("reel_thumbnail", {
       uri: media.uri,
       name: reelsFileName,
       type: media.mime,
     });
 
-    const endpoint = media.type === "video" ? "feeds/reels" : "feeds/post";
+    const endpoint = media.type === "video" ? "feeds/post-reels" : "feeds/post";
     const uploadData = media?.type === "image" ? formData : reelsFormData;
-
+    console.log("endpoint", endpoint, uploadData);
     try {
       await axiosInstance({
         url: endpoint,
