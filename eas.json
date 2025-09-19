@@ -6,12 +6,14 @@
   "build": {
     "preview": {
       "android": {
+        "image": "sdk-54",
         "buildType": "apk"
       }
     },
     "preview2": {
       "android": {
-        "gradleCommand": ":app:assembleRelease"
+        "gradleCommand": ":app:assembleRelease",
+        "image": "sdk-54"
       }
     },
     "preview3": {
@@ -22,7 +24,8 @@
     },
     "production": {
       "android": {
-        "buildType": "app-bundle"
+        "buildType": "app-bundle",
+        "image": "sdk-54"
       },
       "autoIncrement": true
     }
